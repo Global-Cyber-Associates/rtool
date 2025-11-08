@@ -14,7 +14,7 @@ const configPath = path.join(__dirname, "../config.json");
 function getMongoURI() {
   try {
     const config = JSON.parse(fs.readFileSync(configPath, "utf8"));
-    return config.mongoURI || "";
+    return config.mongo_uri || "";
   } catch {
     return "";
   }

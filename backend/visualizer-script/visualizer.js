@@ -6,13 +6,11 @@ import ScanResult from "../models/VisualizerScanner.js";
 import SystemInfo from "../models/SystemInfo.js";
 import VisualizerData from "../models/VisualizerData.js";
 
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const configPath = path.resolve(__dirname, "../config.json");
 const config = JSON.parse(fs.readFileSync(configPath, "utf-8"));
-const MONGO_URI = config.mongoURI;
-
+const MONGO_URI = config.mongo_uri;
 
 let connected = false;
 async function connectDB() {
@@ -37,28 +35,35 @@ export async function runVisualizerUpdate() {
       return;
     }
 
-    // 2️⃣ Fetch system info (for agent-installed systems)
+    // 2️⃣ Fetch system info and build mappings
     const systems = await SystemInfo.find();
     const ipToHostname = new Map();
+    const ipToAgentId = new Map();
     const systemIPs = new Set();
 
     systems.forEach((sys) => {
-      (sys.wlan_ip || []).forEach((ipObj) => {
-        const ip = (ipObj.address || "").trim();
+      // Handle both new and old structures safely
+      const wlanData = sys.data?.wlan_info || sys.wlan_ip || [];
+      const hostname = sys.data?.hostname || sys.hostname || "Unknown";
+      const agentId = sys.data?.agent_id || sys.agentId || "unknown";
+
+      wlanData.forEach((iface) => {
+        const ip = (iface.address || "").trim();
         if (ip) {
           systemIPs.add(ip);
-          ipToHostname.set(ip, sys.hostname || "Unknown");
+          ipToHostname.set(ip, hostname);
+          ipToAgentId.set(ip, agentId);
         }
       });
     });
 
-    // 3️⃣ Filter only devices that are *alive* (ping successful)
+    // 3️⃣ Filter only alive devices
     const aliveDevices = allScans.filter(
       (dev) =>
-        dev.isAlive === true ||             // Explicit alive field
-        dev.ping_only === true ||           // Or ping-only but alive
-        dev.status === "alive" ||           // Or textual status
-        dev.pingSuccess === true            // In case stored differently
+        dev.isAlive === true ||
+        dev.ping_only === true ||
+        dev.status === "alive" ||
+        dev.pingSuccess === true
     );
 
     if (!aliveDevices.length) {
@@ -71,14 +76,16 @@ export async function runVisualizerUpdate() {
       const ip = (dev.ips?.[0] || "N/A").trim();
       const hasAgent = systemIPs.has(ip);
       const hostname = hasAgent ? ipToHostname.get(ip) || "Unknown" : "Unknown";
+      const agentId = hasAgent ? ipToAgentId.get(ip) || "unknown" : "unknown";
 
       return {
+        agentId,
         ip,
         mac: dev.mac || "Unknown",
+        vendor: dev.vendor || "Unknown",
         hostname,
-        ping_only: !!dev.ping_only,
-        noAgent: ip === "N/A" ? true : !hasAgent,
-        lastSeen: new Date(),
+        noAgent: !hasAgent,
+        createdAt: new Date(),
       };
     });
 

@@ -4,3 +4,5 @@ psutil
 python-nmap
 pywin32
 wmi
+socketio
+python-socketio
