@@ -3,7 +3,6 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import User from "../models/User.js";
-import { addLog } from "../utils/logger.js"; // ✅ import logger
 
 dotenv.config();
 

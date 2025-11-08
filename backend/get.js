@@ -1,4 +1,3 @@
-// get.js
 import Agent from "./models/Agent.js";
 import SystemInfo from "./models/SystemInfo.js";
 import InstalledApps from "./models/InstalledApps.js";
@@ -8,6 +7,8 @@ import TaskInfo from "./models/TaskInfo.js";
 
 export async function fetchData({ type, agentId }) {
   try {
+    console.log(`📡 Fetching [${type}] for agent: ${agentId || "ALL"}`);
+
     let Model;
 
     switch (type) {
@@ -27,23 +28,79 @@ export async function fetchData({ type, agentId }) {
         Model = TaskInfo;
         break;
       case "agents":
-        return await Agent.find({});
+        console.log("➡ Fetching all agents...");
+        const agents = await Agent.find({});
+        console.log(`✅ Found ${agents.length} agents`);
+        return {
+          success: true,
+          message: "Agents fetched successfully",
+          data: agents,
+        };
       default:
-        return [];
+        console.warn(`⚠ Invalid type requested: ${type}`);
+        return {
+          success: false,
+          message: "Invalid data type",
+          data: [],
+        };
     }
 
-    // Fetch based on agentId or all
     let result;
+
     if (agentId) {
+      console.log(`🔍 Looking for latest ${type} entry for agent ${agentId}...`);
       const doc = await Model.findOne({ agentId }).sort({ timestamp: -1 });
-      result = doc ? [doc] : [];
+
+      if (!doc) {
+        console.warn(`❌ No ${type} data found for ${agentId}`);
+        return {
+          success: false,
+          message: `No ${type} data found for agent ${agentId}`,
+          data: [],
+        };
+      }
+
+      if (type === "task_info") {
+        console.log("🔧 Combining task_info with system_info...");
+        const systemInfo = await SystemInfo.findOne({ agentId }).sort({ timestamp: -1 });
+        const combined = {
+          agentId: doc.agentId,
+          device: systemInfo
+            ? {
+                hostname: systemInfo.data.hostname,
+                os_type: systemInfo.data.os_type,
+                os_version: systemInfo.data.os_version,
+              }
+            : null,
+          data: doc.data,
+          timestamp: doc.timestamp,
+        };
+
+        console.log(`✅ Combined task_info result for ${agentId}:`, JSON.stringify(combined, null, 2));
+        result = [combined];
+      } else {
+        console.log(`✅ Found ${type} document for ${agentId}`);
+        result = [doc];
+      }
     } else {
+      console.log(`📋 Fetching all ${type} records...`);
       result = await Model.find({});
+      console.log(`✅ Found ${result.length} records`);
     }
 
-    return result;
+    console.log(`📤 Returning ${type} data for ${agentId || "ALL"}`);
+    return {
+      success: true,
+      message: `${type} data fetched successfully`,
+      data: result,
+    };
   } catch (err) {
-    console.error(`❌ Failed to fetch data [${type}] for agent ${agentId}:`, err);
-    return [];
+    console.error(`🔥 Error fetching [${type}] for ${agentId}:`, err);
+    return {
+      success: false,
+      message: "Internal server error while fetching data",
+      error: err.message,
+      data: [],
+    };
   }
 }

@@ -1,9 +1,8 @@
-// src/components/Devices.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../navigation/sidenav.jsx";
-import socket from "../../utils/socket.js"; // your socket connection
-import './devices.css';
+import socket from "../../utils/socket.js";
+import "./devices.css";
 
 const Devices = () => {
   const [agents, setAgents] = useState([]);
@@ -12,24 +11,27 @@ const Devices = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Request agents from socket
+    // Request all agents
     socket.emit("get_data", { type: "agents" }, (response) => {
-      if (response?.error) {
-        setError(response.error);
-      } else {
-        // Ensure it is always an array
-        setAgents(Array.isArray(response) ? response : []);
+      if (!response?.success) {
+        setError(response?.message || "Failed to fetch agents.");
+        setLoading(false);
+        return;
       }
+
+      const data = Array.isArray(response.data) ? response.data : [];
+      setAgents(data);
       setLoading(false);
     });
 
-    // Listen for real-time agent updates
+    // Listen for live updates (optional)
     socket.on("agent_update", (updatedAgent) => {
       setAgents((prev) => {
-        const idx = prev.findIndex(a => a.agentId === updatedAgent.agentId);
+        const idx = prev.findIndex((a) => a.agentId === updatedAgent.agentId);
         if (idx >= 0) {
-          prev[idx] = updatedAgent;
-          return [...prev];
+          const updated = [...prev];
+          updated[idx] = updatedAgent;
+          return updated;
         } else {
           return [...prev, updatedAgent];
         }
@@ -41,34 +43,40 @@ const Devices = () => {
 
   if (loading) return <div className="devices-container">Loading agents...</div>;
   if (error) return <div className="devices-container">{error}</div>;
-  if (!agents.length) return <div className="devices-container">No agents connected.</div>;
+  if (!agents.length)
+    return <div className="devices-container">No agents found.</div>;
 
   return (
     <div className="device-page">
       <Sidebar />
       <div className="devices-container">
-        <h1 className="devices-title">Connected Agents ({agents.length})</h1>
+        <h1 className="devices-title">Devices with agents</h1>
 
         <div className="device-list">
-          {agents.map(agent => (
+          {agents.map((agent) => (
             <div
-              key={agent.agentId}
+              key={agent._id}
               className="device-card"
               onClick={() => navigate(`/devices/${agent.agentId}`)}
-              style={{ cursor: "pointer" }}
             >
-              {/* Left: Icon and basic info */}
               <div className="device-left">
                 <div className="device-icon">🖥️</div>
                 <div className="device-info-wrapper">
-                  <div className="device-name">Agent ID: {agent.agentId}</div>
+                  <div className="device-name">{agent.agentId}</div>
                   <div className="device-info">
-                    <p>IP: {agent.ip || "unknown"}</p>
+                    <p>
+                      <strong>IP:</strong> {agent.ip || "unknown"}
+                    </p>
+                    <p>
+                      <strong>Last Seen:</strong>{" "}
+                      {agent.lastSeen
+                        ? new Date(agent.lastSeen).toLocaleString()
+                        : "N/A"}
+                    </p>
                   </div>
                 </div>
               </div>
 
-              {/* Right: Action buttons */}
               <div className="device-actions">
                 <button
                   className="action-btn"
@@ -98,6 +106,16 @@ const Devices = () => {
                   }}
                 >
                   Scan
+                </button>
+
+                <button
+                  className="action-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/apps/${agent.agentId}`);
+                  }}
+                >
+                  Installed Apps
                 </button>
               </div>
             </div>

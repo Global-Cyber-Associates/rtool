@@ -10,6 +10,7 @@ import Features from "./components/Features/features.jsx";
 import Scan from "./components/scan/scan.jsx";
 import TaskManager from "./components/devices/Taskmanager/taskmanager.jsx";
 import UsbControl from "./components/usb/usb.jsx";
+import InstalledApps from "./components/devices/installedApps/installedapps.jsx"; 
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/devices" element={<Devices />} />
         <Route path="/devices/:id" element={<DeviceDetail />} />
         <Route path="/tasks/:id" element={<TaskManager />} />
+        <Route path="/apps/:id" element={<InstalledApps />} />
         <Route path="/logs" element={<Logs />} />
         <Route path="/issues" element={<Issues />} />
         <Route path="/features" element={<Features />} />

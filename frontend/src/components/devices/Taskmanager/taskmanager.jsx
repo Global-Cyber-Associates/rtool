@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import socket from "../../../utils/socket";
 import "./taskmanager.css";
 
 const TaskManager = () => {
-  const agentId = "agent_001"; // fixed agentId for now
+  const { id } = useParams(); // /tasks/:id
   const [tasks, setTasks] = useState({ applications: [], background_processes: [] });
   const [device, setDevice] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -12,21 +12,29 @@ const TaskManager = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Emit 'get_data' with a callback
-    socket.emit("get_data", { type: "task_info", agentId }, (data) => {
-      if (!data || !data[0]?.data) {
-        setError("No task info received for this agent.");
+    if (!id) {
+      setError("No agent ID specified in URL.");
+      setLoading(false);
+      return;
+    }
+
+    // 🔹 Initial fetch via socket
+    socket.emit("get_data", { type: "task_info", agentId: id }, (res) => {
+      console.log("🔍 Initial Task Info:", res);
+
+      if (!res?.success || !res?.data?.length) {
+        setError(`No task info received for ${id}`);
         setLoading(false);
         return;
       }
 
-      const doc = data[0]; // fetchData returns an array
+      const doc = res.data[0];
 
       setDevice({
         hostname: doc.device?.hostname || `Agent ${doc.agentId}`,
-        os_type: doc.device?.os_type,
-        os_version: doc.device?.os_version,
-        machine_id: doc.agentId
+        os_type: doc.device?.os_type || "Unknown OS",
+        os_version: doc.device?.os_version || "",
+        machine_id: doc.agentId,
       });
 
       setTasks({
@@ -37,17 +45,29 @@ const TaskManager = () => {
       setLoading(false);
     });
 
-    // Handle socket connection errors
+    // 🔹 Listen for live task updates
+    socket.on("task_info_update", (update) => {
+      if (update.agentId === id) {
+        console.log("⚡ Live update received:", update);
+
+        setTasks({
+          applications: update.data.applications || [],
+          background_processes: update.data.background_processes || [],
+        });
+      }
+    });
+
     socket.on("connect_error", (err) => {
-      console.error("Socket error:", err);
+      console.error("Socket connection error:", err);
       setError("Failed to connect to real-time service.");
       setLoading(false);
     });
 
     return () => {
       socket.off("connect_error");
+      socket.off("task_info_update");
     };
-  }, [agentId]);
+  }, [id]);
 
   if (loading) return <div className="pc-container">Loading Task Manager...</div>;
   if (error) return <div className="pc-container">{error}</div>;
@@ -65,8 +85,12 @@ const TaskManager = () => {
           </div>
         </div>
         <div className="header-right">
-          <p><strong>OS:</strong> {device?.os_type} {device?.os_version}</p>
-          <p><strong>ID:</strong> {device?.machine_id}</p>
+          <p>
+            <strong>OS:</strong> {device?.os_type} {device?.os_version}
+          </p>
+          <p>
+            <strong>ID:</strong> {device?.machine_id}
+          </p>
         </div>
       </div>
 
@@ -86,7 +110,9 @@ const TaskManager = () => {
             {tasks.applications.length ? (
               tasks.applications.map((app) => (
                 <div key={app.pid + app.name} className="task-row">
-                  <span className="task-name">{app.name} {app.title ? `- ${app.title}` : ""}</span>
+                  <span className="task-name">
+                    {app.name} {app.title ? `- ${app.title}` : ""}
+                  </span>
                   <span>{app.pid}</span>
                   <span>{app.cpu_percent}%</span>
                   <span>{app.memory_percent}%</span>
