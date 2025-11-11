@@ -45,13 +45,15 @@ const Dashboard = () => {
           fetch("http://localhost:5000/api/system"),
         ]);
 
-        if (!vizRes.ok || !sysRes.ok) {
-          throw new Error("Failed to fetch data from API");
-        }
+        if (!vizRes.ok || !sysRes.ok) throw new Error("Failed to fetch data");
 
-        const [vizRaw, sysRaw] = await Promise.all([vizRes.json(), sysRes.json()]);
+        const [vizRaw, sysRaw] = await Promise.all([
+          vizRes.json(),
+          sysRes.json(),
+        ]);
         const vizData = Array.isArray(vizRaw) ? vizRaw : [];
 
+        // group latest per IP
         const latestVisualizer = Object.values(
           vizData.reduce((acc, d) => {
             const ip = d.ip;
@@ -64,9 +66,8 @@ const Dashboard = () => {
               !existing ||
               (newDate && existingDate && newDate > existingDate) ||
               (newDate && !existingDate)
-            ) {
+            )
               acc[ip] = d;
-            }
             return acc;
           }, {})
         );
@@ -106,22 +107,35 @@ const Dashboard = () => {
 
   const unmanagedDevices = visualizerData.filter((d) => d.noAgent === true);
 
-  // ✅ Router detection — supports .1, .2, .250, .253, .254
+  // ✅ Router detection — includes .1, .2, .250, .253, .254
   const ROUTER_IP_ENDINGS = [1, 2, 250, 253, 254];
   const routers = unmanagedDevices.filter((d) => {
     if (!d.ip) return false;
-
-    const subnet = d.ip.split(".").slice(0, 3).join(".");
-    const agentSubnetMatch = agentIPs.some(
-      (aip) => aip.split(".").slice(0, 3).join(".") === subnet
-    );
-    if (!agentSubnetMatch) return false;
-
     const lastOctet = Number(d.ip.split(".")[3]);
-    return ROUTER_IP_ENDINGS.includes(lastOctet);
+
+    // No agents → classify directly
+    if (ROUTER_IP_ENDINGS.includes(lastOctet) && agentIPs.length === 0)
+      return true;
+
+    // With agents → check same subnet
+    if (ROUTER_IP_ENDINGS.includes(lastOctet) && agentIPs.length > 0) {
+      const subnet = d.ip.split(".").slice(0, 3).join(".");
+      const agentSubnetMatch = agentIPs.some(
+        (aip) => aip.split(".").slice(0, 3).join(".") === subnet
+      );
+      return agentSubnetMatch;
+    }
+
+    return false;
   });
 
-  const unmanagedNonRouters = unmanagedDevices.filter(
+  // ✅ Unknown = unmanaged but not routers
+  const unknownDevices = unmanagedDevices.filter(
+    (d) => !routers.some((r) => r.ip === d.ip)
+  );
+
+  // ✅ All Devices = every visualized device except routers
+  const allDevices = visualizerData.filter(
     (d) => !routers.some((r) => r.ip === d.ip)
   );
 
@@ -153,6 +167,10 @@ const Dashboard = () => {
           <>
             {/* KPI Summary */}
             <div className="stats-grid">
+              <div className="stat-card gray">
+                <h2>All Devices</h2>
+                <p>{allDevices.length}</p>
+              </div>
               <div className="stat-card green">
                 <h2>Active Agent Devices</h2>
                 <p>{activeAgents.length}</p>
@@ -162,13 +180,43 @@ const Dashboard = () => {
                 <p>{inactiveAgents.length}</p>
               </div>
               <div className="stat-card orange">
-                <h2>Unmanaged Devices</h2>
-                <p>{unmanagedNonRouters.length}</p>
+                <h2>Unknown Devices</h2>
+                <p>{unknownDevices.length}</p>
               </div>
               <div className="stat-card blue">
                 <h2>Routers</h2>
                 <p>{routers.length}</p>
               </div>
+            </div>
+
+            {/* All Devices Table */}
+            <div className="table-container">
+              <h2>All Devices (Excluding Routers)</h2>
+              <table className="activity-table">
+                <thead>
+                  <tr>
+                    <th>IP</th>
+                    <th>MAC</th>
+                    <th>Hostname</th>
+                    <th>Agent Installed</th>
+                    <th>Detected At</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {allDevices.map((d) => (
+                    <tr key={d._id || d.ip}>
+                      <td>{d.ip}</td>
+                      <td>{d.mac || "-"}</td>
+                      <td>{d.hostname || "-"}</td>
+                      <td>{d.noAgent ? "No" : "Yes"}</td>
+                      <td>
+                        {parseDate(d.createdAt || d.timestamp)?.toLocaleString() ||
+                          "-"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
 
             {/* Active Agent Table */}
@@ -216,59 +264,9 @@ const Dashboard = () => {
               </table>
             </div>
 
-            {/* Inactive Agent Table */}
+            {/* Unknown Devices Table */}
             <div className="table-container">
-              <h2>Inactive Agent Devices</h2>
-              <table className="activity-table">
-                <thead>
-                  <tr>
-                    <th>Hostname</th>
-                    <th>Last Known IP</th>
-                    <th>OS</th>
-                    <th>Last Seen</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {inactiveAgents.map((sys) => {
-                    const sdata = sys.data || sys || {};
-                    const ips = getAgentIPs(sys);
-                    const lastSeenDate = parseDate(
-                      sys.data?.timestamp ||
-                        sys.timestamp ||
-                        sys.collected_at ||
-                        sys.updatedAt
-                    );
-                    return (
-                      <tr
-                        key={
-                          sys._id?.$oid ||
-                          sys._id ||
-                          sdata.machine_id ||
-                          ips.join(",")
-                        }
-                      >
-                        <td>{sdata.hostname || "-"}</td>
-                        <td>{ips.join(", ") || "-"}</td>
-                        <td>
-                          {(sdata.os_type || "-") +
-                            " " +
-                            (sdata.os_release || "")}
-                        </td>
-                        <td>
-                          {lastSeenDate
-                            ? lastSeenDate.toLocaleString()
-                            : "-"}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-
-            {/* Unmanaged Devices Table */}
-            <div className="table-container">
-              <h2>Unmanaged (No Agent) Devices</h2>
+              <h2>Unknown Devices</h2>
               <table className="activity-table">
                 <thead>
                   <tr>
@@ -278,7 +276,7 @@ const Dashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {unmanagedNonRouters.map((d) => {
+                  {unknownDevices.map((d) => {
                     const created = parseDate(
                       d.createdAt || d.created_at || d.timestamp
                     );
@@ -286,9 +284,7 @@ const Dashboard = () => {
                       <tr key={d._id?.$oid || d._id || d.ip}>
                         <td>{d.ip}</td>
                         <td>{d.mac || "-"}</td>
-                        <td>
-                          {created ? created.toLocaleString() : "-"}
-                        </td>
+                        <td>{created ? created.toLocaleString() : "-"}</td>
                       </tr>
                     );
                   })}
@@ -316,9 +312,7 @@ const Dashboard = () => {
                       <tr key={r._id?.$oid || r._id || r.ip}>
                         <td>{r.ip}</td>
                         <td>{r.mac || "-"}</td>
-                        <td>
-                          {created ? created.toLocaleString() : "-"}
-                        </td>
+                        <td>{created ? created.toLocaleString() : "-"}</td>
                       </tr>
                     );
                   })}
