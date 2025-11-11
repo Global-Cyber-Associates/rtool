@@ -10,50 +10,52 @@ export default function FloorGrid({ floor, updateDevices }) {
   const [cols, setCols] = useState(5);
   const [rows, setRows] = useState(3);
 
-  // Fetch devices via socket on mount
   useEffect(() => {
-    const getDevices = async () => {
+    const init = async () => {
+      // Wait for socket to connect
+      if (!socket.connected) {
+        await new Promise((resolve) => socket.once("connect", resolve));
+      }
+
+      // Fetch initial devices once
       try {
         const res = await fetchData("visualizer_data");
         const data = res?.data || [];
-        arrangeInGrid(data, cols);
+        const formatted = formatDevices(data, cols);
+        setDevices(formatted);
+        updateDevices(formatted);
       } catch (err) {
         console.error("❌ Failed to fetch devices via socket:", err);
       }
     };
 
-    getDevices();
+    init();
 
-    // Listen for real-time updates from backend
-    socket.on("visualizer_update", (deviceUpdate) => {
+    // Listen for real-time updates
+    const handleUpdate = (deviceUpdate) => {
       setDevices((prev) => {
-        const exists = prev.find((d) => d.ip === deviceUpdate.ip);
+        const exists = prev.find((d) => d.id === deviceUpdate.id || d.ip === deviceUpdate.ip);
         if (exists) {
-          // Update existing device
-          return prev.map((d) => (d.ip === deviceUpdate.ip ? { ...d, ...deviceUpdate } : d));
+          return prev.map((d) =>
+            d.id === deviceUpdate.id || d.ip === deviceUpdate.ip ? { ...d, ...deviceUpdate } : d
+          );
         } else {
-          // Add new device
           return [...prev, deviceUpdate];
         }
       });
-    });
+    };
+
+    socket.on("visualizer_update", handleUpdate);
 
     return () => {
-      socket.off("visualizer_update");
+      socket.off("visualizer_update", handleUpdate);
     };
-  }, []);
+  }, [cols]); // only depend on cols if you want initial grid placement to respect it
 
-  useEffect(() => {
-    arrangeInGrid(devices, cols);
-  }, [cols, rows]);
-
-  const arrangeInGrid = (data, colCount = 5) => {
-    if (!data || data.length === 0) return;
-
-    const formatted = data.map((d, i) => {
+  const formatDevices = (data, colCount) => {
+    return data.map((d, i) => {
       const ip = d.ip || "N/A";
       const isRouter = ip.endsWith(".0.1") || ip.endsWith(".1.1");
-
       return {
         id: d._id || d.id,
         name: d.hostname || "Unknown",
@@ -65,17 +67,13 @@ export default function FloorGrid({ floor, updateDevices }) {
         y: Math.floor(i / colCount) * 160 + 40,
       };
     });
-
-    setDevices(formatted);
-    updateDevices(formatted);
   };
 
   const updatePosition = (id, x, y) => {
-    const updated = devices.map((d) => (d.id === id ? { ...d, x, y } : d));
-    setDevices(updated);
-    updateDevices(updated);
-
-    // Optionally send updated positions back to backend for persistence
+    setDevices((prev) =>
+      prev.map((d) => (d.id === id ? { ...d, x, y } : d))
+    );
+    updateDevices(devices);
     socket.emit("update_device_position", { id, x, y });
   };
 
@@ -97,7 +95,7 @@ export default function FloorGrid({ floor, updateDevices }) {
           />
         </label>
 
-        <label className="V-grid-label">
+        {/* <label className="V-grid-label">
           Rows:
           <input
             type="number"
@@ -106,7 +104,7 @@ export default function FloorGrid({ floor, updateDevices }) {
             value={rows}
             onChange={(e) => setRows(Number(e.target.value))}
           />
-        </label>
+        </label> */}
       </div>
 
       <div className="V-grid" style={{ backgroundSize: `${gridSize}px ${gridSize}px` }}>
