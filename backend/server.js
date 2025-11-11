@@ -12,7 +12,6 @@ import usbRoutes from "./api/usb.js";
 
 import "./visualizer-script/visualizerScanner.js";
 
-
 const configPath = path.resolve("./config.json");
 const config = JSON.parse(fs.readFileSync(configPath, "utf8"));
 
