@@ -10,9 +10,9 @@ const Sidebar = ({ onToggle }) => {
     { label: "Dashboard", path: "/" },
     { label: "Visualizer", path: "/visualizer" },
     { label: "Devices", path: "/devices" },
-    { label: "Logs & Activity", path: "/logs" },
+    { label: "Logs", path: "/logs" },
     { label: "Features", path: "/features" },
-    { label: "Scan", path: "/scan" },
+    { label: "Scanner", path: "/scan" },
     { label: "USB Control", path: "/usb" },
   ];
 
