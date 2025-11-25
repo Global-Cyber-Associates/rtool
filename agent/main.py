@@ -2,20 +2,20 @@ import time
 import traceback
 import threading
 import pythoncom
+import subprocess
+import json
+import os
+import sys
 
 from functions.system import get_system_info
 from functions.ports import scan_ports
 from functions.taskmanager import collect_process_info
 from functions.installed_apps import get_installed_apps
-from functions.sender import send_data
+from functions.sender import send_data, send_raw_network_scan
 from functions.usbMonitor import monitor_usb, connect_socket, sio
 
 
 def start_usb_monitor():
-    """
-    Start the USB monitor in a separate thread.
-    Initializes COM for WMI to avoid errors in background threads.
-    """
     pythoncom.CoInitialize()
     try:
         connect_socket()
@@ -34,40 +34,58 @@ def start_usb_monitor():
         pythoncom.CoUninitialize()
 
 
-def run_scans():
-    print("[⚙️] Running all scans...")
+# ---------------- NETWORK SCANNER ----------------
+def start_network_scanner():
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    scanner_path = os.path.abspath(
+        os.path.join(base_dir, "visualizer-scanner", "scanner_service.py")
+    )
 
+    print("SCANNER PATH =", scanner_path)
+
+    return subprocess.Popen(
+        [sys.executable, scanner_path],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,    # ⭐ Capture all scanner errors
+        text=True
+    )
+
+
+def read_scanner_output(process):
+    print("[📡] Scanner listener ACTIVE. Waiting for lines...")
+    for line in process.stdout:
+        line = line.strip()
+        if not line:
+            continue
+
+        print("[SCANNER OUTPUT RAW] ->", line)  # ⭐ Debug print
+
+        try:
+            devices = json.loads(line)
+            send_raw_network_scan(devices)
+            print("[SCANNER JSON SENT] ->", len(devices), "devices")
+        except Exception as e:
+            print("SCANNER JSON ERROR:", e)
+            print("LINE WAS:", line)
+
+
+# ---------------- MAIN AGENT SCANS ----------------
+def run_scans():
     try:
-        # --- 1. System Info ---
-        print("[🧠] Collecting system information...")
         sys_info = get_system_info()
         send_data("system_info", sys_info)
-        print("    ✔ System info collected and sent.")
 
-        # --- 2. Port Scan ---
-        print("[🌐] Scanning ports 1-1024 on localhost...")
         port_data = scan_ports("127.0.0.1", "1-1024")
         send_data("port_scan", port_data)
-        print("    ✔ Port scan completed and sent.")
 
-        # --- 3. Task Manager ---
-        print("[🧩] Collecting running processes...")
         process_data = collect_process_info()
         send_data("task_info", process_data)
-        print("    ✔ Process info collected and sent.")
 
-        # --- 4. Installed Apps ---
-        print("[💻] Gathering installed applications...")
         app_data = get_installed_apps()
         send_data("installed_apps", {"apps": app_data, "count": len(app_data)})
-        print(f"    ✔ Found {len(app_data)} installed apps.")
 
-        # --- 5. USB Devices ---
-        print("[🔌] Checking connected USB devices...")
-        # The USB monitor is running separately, so this just triggers a status send
         if hasattr(sio, "latest_usb_status"):
             send_data("usb_devices", {"connected_devices": []})
-        print("    ✔ USB monitor is running in background.")
 
     except Exception as e:
         print(f"[❌] Error during scans: {e}")
@@ -75,13 +93,14 @@ def run_scans():
 
 
 if __name__ == "__main__":
-    # Start USB monitor in background thread
-    usb_thread = threading.Thread(target=start_usb_monitor, daemon=True)
-    usb_thread.start()
-    print("[ℹ️] USB monitor thread started.")
+    # USB monitor
+    threading.Thread(target=start_usb_monitor, daemon=True).start()
 
-    # Main scan loop
+    # NETWORK SCANNER ⭐
+    scanner_process = start_network_scanner()
+    threading.Thread(target=read_scanner_output, args=(scanner_process,), daemon=True).start()
+
+    # AGENT SCANS
     while True:
         run_scans()
-        print("[⏳] Waiting 60 seconds before next scan...\n")
         time.sleep(5)

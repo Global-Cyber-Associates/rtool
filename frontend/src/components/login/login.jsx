@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./login.css";
 
-const backendUrl = window.__BACKEND_URL;
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 function Login({ onLogin }) {
   const [username, setUsername] = useState("");

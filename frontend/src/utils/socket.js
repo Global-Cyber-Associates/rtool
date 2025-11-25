@@ -1,7 +1,7 @@
 
 import { io } from "socket.io-client";
 
-const backendUrl = window.__BACKEND_URL;
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 console.log("Backend URL:", backendUrl);
 
 const socket = io(backendUrl, {

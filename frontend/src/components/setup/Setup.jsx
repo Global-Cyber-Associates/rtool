@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Setup.css";
 
-const backendUrl = window.__BACKEND_URL;
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 const Setup = () => {
   const [mongoURI, setMongoURI] = useState("");

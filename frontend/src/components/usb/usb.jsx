@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "../navigation/sidenav";
 import "./usb.css";
 
-const BACKEND_URL = window.__BACKEND_URL;
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const UsbControl = () => {
   const [usbData, setUsbData] = useState([]);

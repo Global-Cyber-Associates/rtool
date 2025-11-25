@@ -3,7 +3,7 @@ import "./dashboard.css";
 import Sidebar from "../navigation/sidenav.jsx";
 
 // ✅ Correct env var
-const BACKEND_URL = window.__BACKEND_URL;
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Dashboard = () => {
   const [visualizerData, setVisualizerData] = useState([]);

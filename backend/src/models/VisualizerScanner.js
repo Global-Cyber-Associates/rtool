@@ -1,16 +1,14 @@
 import mongoose from "mongoose";
 
-const deviceSchema = new mongoose.Schema({
-  agentId: { type: String, required: true, index: true, ref: "Agent" },
-  mac: { type: String, default: null },
-  ips: [{ type: String }],
-  vendor: { type: String, default: "Unknown" },
-  mobile: { type: Boolean, default: false },
-  ping_only: { type: Boolean, default: false },
-  lastSeen: { type: Date, default: Date.now },
-});
+const scannerDeviceSchema = new mongoose.Schema(
+  {
+    ip: { type: String, required: true, unique: true, index: true },
+    mac: { type: String, default: null },
+    vendor: { type: String, default: null },
+    ping_only: { type: Boolean, default: true },
+    lastSeen: { type: Date, default: Date.now }
+  },
+  { timestamps: true } // ⭐ add this for createdAt / updatedAt
+);
 
-// Optional: create a compound index on first IP, but not unique
-deviceSchema.index({ "ips.0": 1 });
-
-export default mongoose.model("VisualizerScanner", deviceSchema);
+export default mongoose.model("VisualizerScanner", scannerDeviceSchema);

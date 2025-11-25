@@ -3,7 +3,7 @@ import { io } from "socket.io-client";
 import "./logs.css";
 import Sidebar from "../navigation/sidenav.jsx";
 
-const BACKEND_URL = window.__BACKEND_URL;
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const SOCKET_URL = `${BACKEND_URL}`;
 

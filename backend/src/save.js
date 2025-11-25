@@ -4,6 +4,13 @@ import InstalledApps from "./models/InstalledApps.js";
 import PortScanData from "./models/PortScan.js";
 import TaskInfo from "./models/TaskInfo.js";
 
+// ⭐ Network scanner model
+import VisualizerScanner from "./models/VisualizerScanner.js";
+
+
+// =====================================================
+// ORIGINAL FUNCTION (UNCHANGED)
+// =====================================================
 export async function saveAgentData(payload) {
   try {
     if (!payload || !payload.type || !payload.data || !payload.agentId) {
@@ -14,7 +21,6 @@ export async function saveAgentData(payload) {
     const { type, agentId, data } = payload;
     const timestamp = payload.timestamp || new Date().toISOString();
 
-    // 1️⃣ Create or update Agent entry
     try {
       await Agent.findOneAndUpdate(
         { agentId },
@@ -34,13 +40,11 @@ export async function saveAgentData(payload) {
       return;
     }
 
-    // 2️⃣ Skip usb_devices entirely
     if (type === "usb_devices") {
-      console.log("ℹ️ USB data is handled separately. Skipping save here.");
+      console.log("ℹ️ USB data skipped.");
       return;
     }
 
-    // 3️⃣ Select the correct model
     let Model;
     switch (type) {
       case "system_info":
@@ -56,13 +60,12 @@ export async function saveAgentData(payload) {
         Model = TaskInfo;
         break;
       default:
-        console.warn(`⚠️ Unknown data type: ${type}. Ignoring.`);
+        console.warn(`⚠️ Unknown data type: ${type}`);
         return;
     }
 
     const doc = { agentId, timestamp, type, data };
 
-    // 4️⃣ Save to MongoDB
     try {
       await Model.findOneAndUpdate(
         { agentId },
@@ -73,7 +76,56 @@ export async function saveAgentData(payload) {
     } catch (err) {
       console.error(`❌ Failed to save [${type}] for agent ${agentId}:`, err);
     }
+
   } catch (err) {
     console.error("❌ Failed to save agent data:", err);
+  }
+}
+
+
+
+// =====================================================
+// ⭐ UPDATED NETWORK SCAN HANDLER (REALTIME SYNC)
+// =====================================================
+export async function saveNetworkScan(devicesList) {
+  try {
+    console.log("📡 saveNetworkScan CALLED. devices =", devicesList?.length);
+
+    if (!Array.isArray(devicesList)) {
+      console.error("❌ network_scan_raw invalid payload");
+      return;
+    }
+
+    // 1️⃣ Extract only the alive IPs from this scan
+    const aliveIPs = devicesList.map(d => d.ip.trim());
+
+    // 2️⃣ REMOVE ALL old/stale IPs not in current scan
+    await VisualizerScanner.deleteMany({
+      ip: { $nin: aliveIPs }
+    });
+
+    // 3️⃣ UPSERT all current alive devices
+    for (const dev of devicesList) {
+      if (!dev.ip) continue;
+      const ip = dev.ip.trim();
+
+      await VisualizerScanner.findOneAndUpdate(
+        { ip },
+        {
+          $set: {
+            ip,
+            mac: dev.mac || null,
+            vendor: dev.vendor || null,
+            ping_only: dev.ping_only ?? true,
+            lastSeen: new Date(),
+            updatedAt: new Date(),
+          }
+        },
+        { upsert: true }
+      );
+    }
+
+  } catch (err) {
+    console.error("❌ Failed to save network scan:", err);
   }
 }
