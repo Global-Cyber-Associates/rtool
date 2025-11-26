@@ -95,7 +95,7 @@ def main():
         except Exception as e:
             pass
 
-        time.sleep(300)
+        time.sleep(0.2)
 
 
 if __name__ == "__main__":
