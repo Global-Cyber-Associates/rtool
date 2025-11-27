@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 import subprocess
 import json
-import time
 import os
 import sys
 from collections import deque
 
+# More stable, less flicker:
 STABILITY_COUNT = 3
 
 def main():
-    # ABSOLUTE PATH FIX
     base_dir = os.path.dirname(os.path.abspath(__file__))
     scanner_path = os.path.join(base_dir, "scanner_service.py")
 
@@ -17,7 +16,6 @@ def main():
         print("❌ scanner_service.py NOT FOUND:", scanner_path, flush=True)
         return
 
-    # Start scanner with correct path
     process = subprocess.Popen(
         [sys.executable, scanner_path],
         stdout=subprocess.PIPE,
@@ -47,7 +45,6 @@ def main():
                 last_stable = current
 
     process.terminate()
-
 
 if __name__ == "__main__":
     main()
