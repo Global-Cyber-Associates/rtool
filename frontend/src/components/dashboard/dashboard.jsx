@@ -1,389 +1,197 @@
-import React, { useEffect, useState, useRef, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import "./dashboard.css";
 import Sidebar from "../navigation/sidenav.jsx";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const vizFingerprint = (d) => {
-  const t = d.createdAt || d.created_at || d.timestamp || "";
-  return `${d.ip || ""}::${String(t)}`;
-};
-
-const sysFingerprint = (s) => {
-  const data = s.data || s;
-  const hostname = data.hostname || "";
-  const ip =
-    data.ip ||
-    data.address ||
-    (data.wlan_info && data.wlan_info[0]?.address) ||
-    "";
-  return `${hostname}::${ip}`;
-};
-
 const Dashboard = () => {
-  const [visualizerData, setVisualizerData] = useState([]);
-  const [systemInfo, setSystemInfo] = useState([]);
+  const [snapshot, setSnapshot] = useState(null);
   const [lastUpdated, setLastUpdated] = useState(null);
 
-  const mountedRef = useRef(true);
-  const prevVizFingerRef = useRef("");
-  const prevSysFingerRef = useRef("");
-
   useEffect(() => {
-    mountedRef.current = true;
-    return () => {
-      mountedRef.current = false;
-    };
-  }, []);
+    let interval = null;
+    let aborter = null;
 
-  const parseDate = (v) => {
-    if (!v) return null;
-    if (typeof v === "object") {
-      if (v.$date) return new Date(v.$date);
-      if (v["$date"]) return new Date(v["$date"]);
-      if (v.$numberLong) return new Date(Number(v.$numberLong));
-      if (v["$numberLong"]) return new Date(Number(v["$numberLong"]));
-    }
-    return new Date(v);
-  };
-
-  useEffect(() => {
-    let intervalId = null;
-    let ongoing = null;
-
-    const fetchData = async () => {
+    const fetchSnap = async () => {
       try {
-        if (ongoing) ongoing.abort();
+        if (aborter) aborter.abort();
+        aborter = new AbortController();
 
-        const controller = new AbortController();
-        ongoing = controller;
+        const res = await fetch(`${BACKEND_URL}/api/dashboard`, {
+          signal: aborter.signal,
+        });
 
-        const [vizRes, sysRes] = await Promise.all([
-          fetch(`${BACKEND_URL}/api/visualizer-data`, {
-            signal: controller.signal,
-          }),
-          fetch(`${BACKEND_URL}/api/system`, {
-            signal: controller.signal,
-          }),
-        ]);
+        if (!res.ok) throw new Error("Dashboard fetch failed");
+        const snap = await res.json();
 
-        if (!vizRes.ok || !sysRes.ok)
-          throw new Error("Failed fetching dashboard data");
-
-        const [vizRaw, sysRaw] = await Promise.all([
-          vizRes.json(),
-          sysRes.json(),
-        ]);
-
-        const vizData = Array.isArray(vizRaw) ? vizRaw : [];
-        const systemArr = Array.isArray(sysRaw) ? sysRaw : [];
-
-        const latestVisualizer = Object.values(
-          vizData.reduce((acc, d) => {
-            const ip = d.ip;
-            if (!ip) return acc;
-
-            const existing = acc[ip];
-            const newDate = parseDate(
-              d.createdAt || d.created_at || d.timestamp
-            );
-            const existingDate =
-              existing && parseDate(existing.createdAt || existing.timestamp);
-
-            if (
-              !existing ||
-              (newDate && existingDate && newDate > existingDate) ||
-              (newDate && !existingDate)
-            )
-              acc[ip] = d;
-            return acc;
-          }, {})
-        );
-
-        const vizFinger = latestVisualizer
-          .map((v) => vizFingerprint(v))
-          .sort()
-          .join("|");
-
-        const sysFinger = systemArr
-          .map((s) => sysFingerprint(s))
-          .sort()
-          .join("|");
-
-        if (mountedRef.current && vizFinger !== prevVizFingerRef.current) {
-          setVisualizerData(latestVisualizer);
-          prevVizFingerRef.current = vizFinger;
-        }
-
-        if (mountedRef.current && sysFinger !== prevSysFingerRef.current) {
-          setSystemInfo(systemArr);
-          prevSysFingerRef.current = sysFinger;
-        }
-
-        if (mountedRef.current) setLastUpdated(new Date());
+        setSnapshot(snap);
+        setLastUpdated(new Date());
       } catch (err) {
-        if (err.name !== "AbortError") {
-          console.error("Dashboard fetch error:", err);
-        }
-      } finally {
-        ongoing = null;
+        if (err.name !== "AbortError") console.error(err);
       }
     };
 
-    fetchData();
-    intervalId = setInterval(fetchData, 3000);
+    fetchSnap();
+    interval = setInterval(fetchSnap, 1500);
 
     return () => {
-      if (intervalId) clearInterval(intervalId);
-      if (ongoing) ongoing.abort();
+      if (aborter) aborter.abort();
+      clearInterval(interval);
     };
   }, []);
 
-  const getAgentIPs = (sys) => {
-    if (!sys) return [];
-    const data = sys.data || sys;
-    const wlanArray = Array.isArray(data.wlan_info)
-      ? data.wlan_info.map((w) => w.address).filter(Boolean)
-      : [];
-    const ipCandidates = [
-      data.ip,
-      data.address,
-      data.wlan_ip?.[0]?.address,
-      ...wlanArray,
-    ].filter(Boolean);
-    return Array.from(new Set(ipCandidates));
-  };
+  if (!snapshot) {
+    return (
+      <div className="dashboard">
+        <Sidebar />
+        <div className="dashboard-container">
+          <h1 className="dashboard-title">Loading dashboard...</h1>
+        </div>
+      </div>
+    );
+  }
 
-  const agentIPs = useMemo(
-    () => Array.from(new Set(systemInfo.flatMap((s) => getAgentIPs(s)))),
-    [systemInfo]
-  );
-
-  const activeAgents = useMemo(
-    () => visualizerData.filter((d) => !d.noAgent && agentIPs.includes(d.ip)),
-    [visualizerData, agentIPs]
-  );
-
-  const inactiveAgents = useMemo(
-    () =>
-      systemInfo.filter((sys) => {
-        const ips = getAgentIPs(sys);
-        if (ips.length === 0) return false;
-        return !ips.some((ip) => visualizerData.some((v) => v.ip === ip));
-      }),
-    [systemInfo, visualizerData]
-  );
-
-  const unmanagedDevices = useMemo(
-    () => visualizerData.filter((d) => d.noAgent === true),
-    [visualizerData]
-  );
-
-  const ROUTER_IP_ENDINGS = [1, 250, 253, 254];
-
-  const routers = useMemo(() => {
-    return unmanagedDevices.filter((d) => {
-      if (!d.ip) return false;
-
-      const lastOctet = Number(d.ip.split(".")[3]);
-
-      if (ROUTER_IP_ENDINGS.includes(lastOctet) && agentIPs.length === 0)
-        return true;
-
-      if (ROUTER_IP_ENDINGS.includes(lastOctet) && agentIPs.length > 0) {
-        const subnet = d.ip.split(".").slice(0, 3).join(".");
-        const agentSubnetMatch = agentIPs.some(
-          (aip) => aip.split(".").slice(0, 3).join(".") === subnet
-        );
-        return agentSubnetMatch;
-      }
-      return false;
-    });
-  }, [unmanagedDevices, agentIPs]);
-
-  const unknownDevices = useMemo(
-    () => unmanagedDevices.filter((d) => !routers.some((r) => r.ip === d.ip)),
-    [unmanagedDevices, routers]
-  );
-
-  const allDevices = useMemo(
-    () => visualizerData.filter((d) => !routers.some((r) => r.ip === d.ip)),
-    [visualizerData, routers]
-  );
-
-  const findSystemByIp = (ip) =>
-    systemInfo.find((s) => getAgentIPs(s).includes(ip));
+  const {
+    summary,
+    allDevices,
+    activeAgents,
+    inactiveAgents,
+    unknownDevices,
+    routers,
+  } = snapshot;
 
   return (
     <div className="dashboard">
       <Sidebar />
       <div className="dashboard-container">
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h1 className="dashboard-title">Network & Device Overview</h1>
+
           <div style={{ fontSize: "0.9rem", color: "#666" }}>
-            {lastUpdated
-              ? `Last update: ${new Date(lastUpdated).toLocaleString()}`
-              : "Not updated yet"}
+            Last update: {lastUpdated?.toLocaleString()}
           </div>
         </div>
 
-        <>
-          {/* KPI Summary */}
-          <div className="stats-grid">
-            <div className="stat-card gray">
-              <h2>All Devices</h2>
-              <p>{allDevices.length}</p>
-            </div>
-            <div className="stat-card green">
-              <h2>Active Agent Devices</h2>
-              <p>{activeAgents.length}</p>
-            </div>
-            <div className="stat-card red">
-              <h2>Inactive Agent Devices</h2>
-              <p>{inactiveAgents.length}</p>
-            </div>
-            <div className="stat-card orange">
-              <h2>Unknown Devices</h2>
-              <p>{unknownDevices.length}</p>
-            </div>
-            <div className="stat-card blue">
-              <h2>Routers</h2>
-              <p>{routers.length}</p>
-            </div>
+        {/* KPI Summary */}
+        <div className="stats-grid">
+          <div className="stat-card gray">
+            <h2>All Devices</h2>
+            <p>{summary.all}</p>
           </div>
-
-          {/* All Devices Table */}
-          <div className="table-container">
-            <h2>All Devices (Excluding Routers)</h2>
-            <table className="activity-table">
-              <thead>
-                <tr>
-                  <th>IP</th>
-                  <th>Hostname</th>
-                  <th>Agent Installed</th>
-                  <th>Detected At</th>
-                </tr>
-              </thead>
-              <tbody>
-                {allDevices.map((d) => (
-                  <tr key={d._id || d.ip}>
-                    <td>{d.ip}</td>
-                    <td>{d.hostname || "-"}</td>
-                    <td>{d.noAgent ? "No" : "Yes"}</td>
-                    <td>
-                      {parseDate(
-                        d.createdAt || d.timestamp
-                      )?.toLocaleString() || "-"}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="stat-card green">
+            <h2>Active Agents</h2>
+            <p>{summary.active}</p>
           </div>
-
-          {/* Active Agent Table */}
-          <div className="table-container">
-            <h2>Active Agent Devices</h2>
-            <table className="activity-table">
-              <thead>
-                <tr>
-                  <th>Agent ID</th>
-                  <th>Hostname</th>
-                  <th>IP</th>
-                  <th>CPU Cores</th>
-                  <th>RAM Usage</th>
-                  <th>OS</th>
-                </tr>
-              </thead>
-              <tbody>
-                {activeAgents.map((d) => {
-                  const sys = findSystemByIp(d.ip);
-                  const sdata = sys?.data || sys || {};
-                  return (
-                    <tr key={d.ip}>
-                      <td>{sys?.agentId || "-"}</td>
-                      <td>{sdata.hostname || "-"}</td>
-                      <td>{d.ip}</td>
-                      <td>
-                        {sdata.cpu?.logical_cores ??
-                          sdata.cpu?.physical_cores ??
-                          "-"}
-                      </td>
-                      <td>
-                        {typeof sdata.memory?.ram_percent === "number"
-                          ? `${sdata.memory.ram_percent}%`
-                          : "-"}
-                      </td>
-                      <td>
-                        {(sdata.os_type || "-") +
-                          " " +
-                          (sdata.os_release || "")}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+          <div className="stat-card red">
+            <h2>Inactive Agents</h2>
+            <p>{summary.inactive}</p>
           </div>
-
-          {/* Unknown Devices */}
-          <div className="table-container">
+          <div className="stat-card orange">
             <h2>Unknown Devices</h2>
-            <table className="activity-table">
-              <thead>
-                <tr>
-                  <th>IP</th>
-                  <th>Detected At</th>
-                </tr>
-              </thead>
-              <tbody>
-                {unknownDevices.map((d) => {
-                  const created = parseDate(
-                    d.createdAt || d.created_at || d.timestamp
-                  );
-                  return (
-                    <tr key={d._id?.$oid || d._id || d.ip}>
-                      <td>{d.ip}</td>
-                      <td>{created ? created.toLocaleString() : "-"}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+            <p>{summary.unknown}</p>
           </div>
-
-          {/* Routers */}
-          <div className="table-container">
+          <div className="stat-card blue">
             <h2>Routers</h2>
-            <table className="activity-table">
-              <thead>
-                <tr>
-                  <th>IP</th>
-                  <th>Detected At</th>
-                </tr>
-              </thead>
-              <tbody>
-                {routers.map((r) => {
-                  const created = parseDate(
-                    r.createdAt || r.created_at || r.timestamp
-                  );
-                  return (
-                    <tr key={r._id?.$oid || r._id || r.ip}>
-                      <td>{r.ip}</td>
-                      <td>{created ? created.toLocaleString() : "-"} </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+            <p>{summary.routers}</p>
           </div>
-        </>
+        </div>
+
+        {/* All Devices Table */}
+        <div className="table-container">
+          <h2>All Devices</h2>
+          <table className="activity-table">
+            <thead>
+              <tr>
+                <th>IP</th>
+                <th>Hostname</th>
+                <th>Agent</th>
+                <th>Detected At</th>
+              </tr>
+            </thead>
+            <tbody>
+              {allDevices.map((d) => (
+                <tr key={d.ip}>
+                  <td>{d.ip}</td>
+                  <td>{d.hostname || "-"}</td>
+                  <td>{d.noAgent ? "No" : "Yes"}</td>
+                  <td>{new Date(d.timestamp || d.createdAt).toLocaleString()}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Active Agents */}
+        <div className="table-container">
+          <h2>Active Agents</h2>
+          <table className="activity-table">
+            <thead>
+              <tr>
+                <th>Agent ID</th>
+                <th>Hostname</th>
+                <th>IP</th>
+                <th>CPU</th>
+                <th>RAM</th>
+                <th>OS</th>
+              </tr>
+            </thead>
+            <tbody>
+              {activeAgents.map((a) => (
+                <tr key={a.ip}>
+                  <td>{a.agentId || "-"}</td>
+                  <td>{a.hostname || "-"}</td>
+                  <td>{a.ip}</td>
+                  <td>{a.cpu || "-"}</td>
+                  <td>{a.ram || "-"}</td>
+                  <td>{a.os || "-"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Unknown */}
+        <div className="table-container">
+          <h2>Unknown Devices</h2>
+          <table className="activity-table">
+            <thead>
+              <tr>
+                <th>IP</th>
+                <th>Detected At</th>
+              </tr>
+            </thead>
+            <tbody>
+              {unknownDevices.map((d) => (
+                <tr key={d.ip}>
+                  <td>{d.ip}</td>
+                  <td>{new Date(d.timestamp).toLocaleString()}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Routers */}
+        <div className="table-container">
+          <h2>Routers</h2>
+          <table className="activity-table">
+            <thead>
+              <tr>
+                <th>IP</th>
+                <th>Detected At</th>
+              </tr>
+            </thead>
+            <tbody>
+              {routers.map((r) => (
+                <tr key={r.ip}>
+                  <td>{r.ip}</td>
+                  <td>{new Date(r.timestamp).toLocaleString()}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
       </div>
     </div>
   );
