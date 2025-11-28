@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import "./sidenav.css";
 
-import Logo from "../../../public/gca.png";
+import Logo from "../../assets/gca.png";
 import { getRole } from "../../utils/authService"; // ⭐ IMPORT ROLE
 
 const Sidebar = ({ onToggle }) => {
