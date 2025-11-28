@@ -15,6 +15,7 @@ from functions.sender import send_data, send_raw_network_scan
 from functions.usbMonitor import monitor_usb, connect_socket, sio
 
 
+# ---------------- USB MONITOR ----------------
 def start_usb_monitor():
     pythoncom.CoInitialize()
     try:
@@ -34,39 +35,43 @@ def start_usb_monitor():
         pythoncom.CoUninitialize()
 
 
-# ---------------- NETWORK SCANNER ----------------
+
+# ---------------- NETWORK SCANNER (USES STABILIZER) ----------------
 def start_network_scanner():
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    scanner_path = os.path.abspath(
-        os.path.join(base_dir, "visualizer-scanner", "scanner_service.py")
+    stabilizer_path = os.path.abspath(
+        os.path.join(base_dir, "visualizer-scanner", "stabilizer.py")
     )
 
-    print("SCANNER PATH =", scanner_path)
+    print("STABILIZER PATH =", stabilizer_path)
 
     return subprocess.Popen(
-        [sys.executable, scanner_path],
+        [sys.executable, stabilizer_path],
         stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,    # ⭐ Capture all scanner errors
+        stderr=subprocess.STDOUT,    # Capture stabilizer errors
         text=True
     )
 
 
+
 def read_scanner_output(process):
-    print("[📡] Scanner listener ACTIVE. Waiting for lines...")
+    print("[📡] Stabilizer listener ACTIVE. Waiting for stable lines...")
+
     for line in process.stdout:
         line = line.strip()
         if not line:
             continue
 
-        print("[SCANNER OUTPUT RAW] ->", line)  # ⭐ Debug print
+        print("[STABILIZER RAW] ->", line)  # Debug print, safe to remove
 
         try:
             devices = json.loads(line)
             send_raw_network_scan(devices)
-            print("[SCANNER JSON SENT] ->", len(devices), "devices")
+            print("[STABLE JSON SENT] ->", len(devices), "devices")
         except Exception as e:
-            print("SCANNER JSON ERROR:", e)
+            print("STABILIZER JSON ERROR:", e)
             print("LINE WAS:", line)
+
 
 
 # ---------------- MAIN AGENT SCANS ----------------
@@ -92,15 +97,17 @@ def run_scans():
         print(traceback.format_exc())
 
 
+
+# ---------------- MAIN ENTRY ----------------
 if __name__ == "__main__":
-    # USB monitor
+    # USB monitor thread
     threading.Thread(target=start_usb_monitor, daemon=True).start()
 
-    # NETWORK SCANNER ⭐
+    # NETWORK SCANNER → now runs stabilizer.py
     scanner_process = start_network_scanner()
     threading.Thread(target=read_scanner_output, args=(scanner_process,), daemon=True).start()
 
-    # AGENT SCANS
+    # Main agent periodic scans
     while True:
         run_scans()
-        time.sleep(300)
+        time.sleep(3)
