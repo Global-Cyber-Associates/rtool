@@ -15,6 +15,16 @@ from functions.sender import send_data, send_raw_network_scan
 from functions.usbMonitor import monitor_usb, connect_socket, sio
 
 
+# ---------------- PATH HANDLER (WORKS FOR EXE + PYTHON) ----------------
+def resource_path(relative_path):
+    """
+    Returns correct path for both script & PyInstaller EXE.
+    """
+    if hasattr(sys, "_MEIPASS"):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)), relative_path)
+
+
 # ---------------- USB MONITOR ----------------
 def start_usb_monitor():
     pythoncom.CoInitialize()
@@ -36,19 +46,19 @@ def start_usb_monitor():
 
 
 
-# ---------------- NETWORK SCANNER (USES STABILIZER) ----------------
+# ---------------- NETWORK SCANNER (SAFE FOR EXE) ----------------
 def start_network_scanner():
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    stabilizer_path = os.path.abspath(
-        os.path.join(base_dir, "visualizer-scanner", "stabilizer.py")
-    )
+    stabilizer_path = resource_path("visualizer-scanner/stabilizer.py")
 
     print("STABILIZER PATH =", stabilizer_path)
 
+    # IMPORTANT:
+    # Never use sys.executable for launching stabilizer
+    # (to avoid recursive agent.exe spawning)
     return subprocess.Popen(
-        [sys.executable, stabilizer_path],
+        ["python", stabilizer_path],   # FIXED — safe, no recursion
         stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,    # Capture stabilizer errors
+        stderr=subprocess.STDOUT,
         text=True
     )
 
@@ -62,7 +72,7 @@ def read_scanner_output(process):
         if not line:
             continue
 
-        print("[STABILIZER RAW] ->", line)  # Debug print, safe to remove
+        print("[STABILIZER RAW] ->", line)
 
         try:
             devices = json.loads(line)
@@ -98,16 +108,43 @@ def run_scans():
 
 
 
+# ---------------- SINGLE INSTANCE LOCK (PREVENT MULTIPLE AGENTS) ----------------
+def already_running():
+    import psutil
+    current = psutil.Process().pid
+    exe_name = os.path.basename(sys.executable).lower()
+
+    count = 0
+    for p in psutil.process_iter(['pid', 'name']):
+        try:
+            if p.info['name'] and exe_name in p.info['name'].lower():
+                count += 1
+        except:
+            pass
+
+    return count > 1
+
+
+
 # ---------------- MAIN ENTRY ----------------
 if __name__ == "__main__":
+    # Prevent multiple agents from running
+    try:
+        import psutil
+        if already_running():
+            print("[⚠️] Another agent instance already running. Exiting.")
+            sys.exit(0)
+    except ImportError:
+        print("[⚠️] psutil missing — cannot enforce single instance lock.")
+
     # USB monitor thread
     threading.Thread(target=start_usb_monitor, daemon=True).start()
 
-    # NETWORK SCANNER → now runs stabilizer.py
+    # NETWORK SCANNER (SAFE MODE)
     scanner_process = start_network_scanner()
     threading.Thread(target=read_scanner_output, args=(scanner_process,), daemon=True).start()
 
-    # Main agent periodic scans
+    # Main periodic scans
     while True:
         run_scans()
         time.sleep(3)

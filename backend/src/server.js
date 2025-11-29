@@ -250,7 +250,7 @@ async function start() {
     // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     // ⭐ START DASHBOARD WORKER AFTER MONGO CONNECTION
     // Runs every 1.5 seconds (adjustable)
-    runDashboardWorker(4500);
+    runDashboardWorker(4000);
     console.log("📊 Dashboard Worker running...");
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
