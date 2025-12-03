@@ -20,165 +20,136 @@ OPEN_EXISTING = 3
 IOCTL_DISMOUNT_VOLUME = 0x00090020
 IOCTL_STORAGE_EJECT_MEDIA = 0x2D4808
 
-# Place cache next to the executable/script so EXE has a writable location.
+# Cache and paths
 def _data_dir():
     if getattr(sys, "frozen", False):
-        # When frozen, put cache next to exe (same folder where you will place .env etc.)
         return os.path.dirname(sys.executable)
     return os.path.dirname(os.path.abspath(__file__))
 
 CACHE_FILE = os.path.join(_data_dir(), "usb_cache.json")
+BACKEND_PENDING_TIMEOUT = 10  # seconds
 EJECT_DELAY = 3
 kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
 
-# ------------------------------------------------------------
-# CACHE MANAGEMENT (with timestamp)
-# ------------------------------------------------------------
 usb_cache = {}
 
 def load_cache():
     global usb_cache
-    if not os.path.exists(CACHE_FILE):
-        usb_cache = {}
-        return
     try:
+        if not os.path.exists(CACHE_FILE):
+            usb_cache = {}
+            return
         with open(CACHE_FILE, "r", encoding="utf-8") as f:
-            data = f.read().strip()
-            usb_cache = json.loads(data) if data else {}
-    except Exception as e:
-        logging.error(f"[⚠️] Cache corrupted or unreadable → resetting ({e})")
+            usb_cache = json.loads(f.read() or "{}")
+    except:
         usb_cache = {}
-        try:
-            save_cache()
-        except Exception as se:
-            logging.error(f"[⚠️] Failed writing fresh cache: {se}")
+        save_cache()
 
 def save_cache():
     try:
         with open(CACHE_FILE, "w", encoding="utf-8") as f:
             json.dump(usb_cache, f, indent=2)
-    except Exception as e:
-        logging.error(f"[⚠️] Failed to save cache {CACHE_FILE}: {e}")
+    except:
+        pass
 
 load_cache()
 
-# ------------------------------------------------------------
-# USB Approval Management
-# ------------------------------------------------------------
 def set_status(serial, status):
     usb_cache[serial] = {"status": status, "timestamp": time.time()}
     save_cache()
     logging.info(f"[💾] Status updated → {serial}: {status}")
 
-# ------------------------------------------------------------
-# Ejection Helpers
-# ------------------------------------------------------------
+# Ejection helpers
 def open_volume(letter):
-    path = f"\\\\.\\{letter}:"
-    handle = kernel32.CreateFileW(
-        path,
-        GENERIC_READ | GENERIC_WRITE,
-        FILE_SHARE_READ | FILE_SHARE_WRITE,
-        None,
-        OPEN_EXISTING,
-        0,
-        None,
-    )
-    if handle == -1:
-        raise ctypes.WinError(ctypes.get_last_error())
-    return handle
+    try:
+        return kernel32.CreateFileW(f"\\\\.\\{letter}:", GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, None, OPEN_EXISTING, 0, None)
+    except:
+        return -1
 
 def dismount_and_eject(handle):
-    bytes_returned = wintypes.DWORD()
     try:
-        kernel32.DeviceIoControl(handle, IOCTL_DISMOUNT_VOLUME, None, 0, None, 0, ctypes.byref(bytes_returned), None)
-    except Exception as e:
-        logging.debug(f"[⚠️] Dismount failed: {e}")
-    try:
-        kernel32.DeviceIoControl(handle, IOCTL_STORAGE_EJECT_MEDIA, None, 0, None, 0, ctypes.byref(bytes_returned), None)
-    except Exception as e:
-        logging.debug(f"[⚠️] Eject ioctl failed: {e}")
+        br = wintypes.DWORD()
+        kernel32.DeviceIoControl(handle, IOCTL_DISMOUNT_VOLUME, None, 0, None, 0, ctypes.byref(br), None)
+        kernel32.DeviceIoControl(handle, IOCTL_STORAGE_EJECT_MEDIA, None, 0, None, 0, ctypes.byref(br), None)
+    except:
+        pass
     try:
         kernel32.CloseHandle(handle)
-    except Exception:
+    except:
         pass
 
 def force_eject_drive(letter):
     try:
-        subprocess.run(
-            ["powershell", "-Command",
-             f"(Get-WmiObject Win32_Volume -Filter \"DriveLetter='{letter}:'\").Eject()"],
-            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=False
-        )
-        logging.warning(f"[💥] Forced eject {letter}")
-    except Exception as e:
-        logging.error(f"[⚠️] Force eject failed for {letter}: {e}")
+        subprocess.run(["powershell", "-Command", f"(Get-WmiObject Win32_Volume -Filter \"DriveLetter='{letter}:'\").Eject()"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    except:
+        pass
 
 def eject_usb_device(usb):
     letter = usb.get("drive_letter")
     if not letter:
-        logging.error(f"[⚠️] No drive letter for usb entry: {usb}")
         return
     try:
         handle = open_volume(letter)
+        if handle == -1:
+            force_eject_drive(letter)
+            return
         dismount_and_eject(handle)
-        logging.info(f"[🟢] Ejected drive {letter}")
-    except Exception as e:
-        logging.debug(f"[⚠️] Open/dismount failed for {letter}: {e}")
+    except:
         force_eject_drive(letter)
 
-# ------------------------------------------------------------
-# USB Scanner
-# ------------------------------------------------------------
+# USB scanning
 def list_usb_drives():
-    drives = []
+    out = []
     try:
         c = wmi.WMI()
         for disk in c.Win32_DiskDrive(InterfaceType="USB"):
             try:
                 for part in disk.associators("Win32_DiskDriveToDiskPartition"):
                     for logical in part.associators("Win32_LogicalDiskToPartition"):
-                        serial = getattr(disk, "SerialNumber", "unknown")
-                        if serial is None:
-                            serial = "unknown"
-                        serial = str(serial).strip() if isinstance(serial, str) else "unknown"
-                        drives.append({
+                        serial = getattr(disk, "SerialNumber", "unknown") or "unknown"
+                        out.append({
                             "drive_letter": logical.DeviceID[0] if logical.DeviceID else "",
                             "vendor_id": getattr(disk, "PNPDeviceID", ""),
                             "product_id": getattr(disk, "DeviceID", ""),
                             "description": getattr(disk, "Model", ""),
-                            "serial_number": serial if serial else "unknown",
+                            "serial_number": str(serial).strip(),
                         })
-            except Exception:
-                # continue scanning remaining disks; don't let a single disk break the scan
-                logging.debug("Failed enumerating partitions for disk, continuing.")
+            except:
                 continue
-    except Exception as e:
-        logging.error(f"[⚠️] list_usb_drives() failed: {e}")
-    return drives
+    except:
+        pass
+    return out
 
-# ------------------------------------------------------------
-# Normalize backend data
-# ------------------------------------------------------------
+# Backend normalization
 def normalize_backend(devices):
     safe = []
-    if not devices or not isinstance(devices, list):
-        return safe
-    for item in devices:
+    for item in devices or []:
         if not isinstance(item, dict):
             continue
-        safe.append({
-            "serial_number": item.get("serial_number", "unknown"),
-            "status": item.get("status", "Blocked")
-        })
+        safe.append({"serial_number": item.get("serial_number", "unknown"), "status": item.get("status", "Blocked")})
     return safe
 
-# ------------------------------------------------------------
-# MAIN MONITOR LOOP
-# ------------------------------------------------------------
+# Decision logic
+def handle_backend_decision(status, serial):
+    info = usb_cache.get(serial, {})
+    timestamp = info.get("timestamp", time.time())
+
+    if status == "Allowed":
+        return "ALLOW"
+    elif status == "Pending":
+        # if pending > 10 sec, mark offline and eject
+        if time.time() - timestamp > BACKEND_PENDING_TIMEOUT:
+            set_status(serial, "Offline")
+            return "EJECT"
+        return "WAIT"
+    else:
+        # Blocked, WaitingForApproval, Offline or unknown → eject
+        return "EJECT"
+
+# Main monitor loop
 def monitor_usb(interval=3, timeout=6):
-    logging.info("🔒 USB Monitor started")
     known = set()
+    logging.info("🔒 USB Monitor started")
 
     while True:
         try:
@@ -188,16 +159,15 @@ def monitor_usb(interval=3, timeout=6):
             for usb in devices:
                 serial = usb.get("serial_number", "unknown")
                 if serial not in usb_cache:
-                    usb_cache[serial] = {"status": "Pending", "timestamp": time.time()}
-                    save_cache()
-                    logging.info(f"[📝] New USB detected → PENDING: {serial}")
+                    set_status(serial, "Pending")
 
             if devices:
                 try:
                     send_data("usb_devices", {"connected_devices": devices})
-                except Exception as e:
-                    logging.error(f"[⚠️] send_data failed: {e}")
+                except:
+                    pass
 
+            # Wait for backend response
             backend = None
             start = time.time()
             while time.time() - start < timeout:
@@ -206,38 +176,31 @@ def monitor_usb(interval=3, timeout=6):
                         backend = sio.latest_usb_status
                         sio.latest_usb_status = None
                         break
-                except Exception:
-                    # Accessing sio might fail if socket isn't ready; ignore and retry
+                except:
                     pass
                 time.sleep(0.3)
 
-            backend_devices = normalize_backend(
-                backend.get("devices", []) if isinstance(backend, dict) else []
-            )
+            backend_devs = normalize_backend(backend.get("devices", []) if isinstance(backend, dict) else [])
 
-            for dev in backend_devices:
+            for dev in backend_devs:
                 serial, status = dev.get("serial_number", "unknown"), dev.get("status", "Blocked")
-                try:
-                    set_status(serial, status)
-                except Exception as e:
-                    logging.error(f"[⚠️] set_status failed for {serial}: {e}")
+                set_status(serial, status)
 
+            # Apply decision
             for usb in devices:
                 serial = usb.get("serial_number", "unknown")
-                info = usb_cache.get(serial, {"status": "Pending"})
-                status = info.get("status", "Pending")
+                status = usb_cache.get(serial, {}).get("status", "Pending")
+                decision = handle_backend_decision(status, serial)
 
-                if status == "Allowed":
+                if decision == "ALLOW":
                     logging.info(f"[🟢] Allowed: {usb.get('drive_letter')}")
-                elif status == "Blocked":
-                    logging.info(f"[🔴] Blocked → ejecting {usb.get('drive_letter')}")
-                    try:
-                        eject_usb_device(usb)
-                    except Exception as e:
-                        logging.error(f"[⚠️] eject failed: {e}")
+                elif decision == "WAIT":
+                    logging.info(f"[⏳] Pending: {usb.get('drive_letter')} (waiting for backend)")
                 else:
-                    logging.info(f"[⏳] Pending → NOT ejecting yet: {usb.get('drive_letter')}")
+                    logging.info(f"[🔴] Ejecting: {usb.get('drive_letter')}")
+                    eject_usb_device(usb)
 
+            # Removed devices
             removed = known - serials_now
             for s in removed:
                 logging.info(f"[❌] USB removed: {s}")
@@ -247,29 +210,26 @@ def monitor_usb(interval=3, timeout=6):
 
         except Exception as e:
             logging.error(f"Loop error: {e}")
-            # small backoff to avoid tight crash loops
             time.sleep(max(1, interval))
 
-# ------------------------------------------------------------
-# ENTRY POINT (kept behavior; guarded connect_socket)
-# ------------------------------------------------------------
+# Entry point
 if __name__ == "__main__":
     try:
-        # connect_socket can fail in frozen environment; guard it so USB monitor won't crash the process
         try:
             connect_socket()
-        except Exception as e:
-            logging.error(f"[⚠️] connect_socket() failed in usbMonitor entry: {e}")
+        except:
+            pass
+
         try:
             sio.latest_usb_status = None
-        except Exception:
+        except:
             pass
 
         @sio.on("usb_validation")
         def handle_usb_validation(data):
             try:
                 sio.latest_usb_status = data
-            except Exception:
+            except:
                 pass
 
         monitor_usb()
