@@ -88,7 +88,7 @@ function Download() {
 
                 <div className="download-info">
                     <p>
-                        <strong>Note:</strong> Run the installer with administrator privileges
+                        <strong>Note:</strong> Only One system in your network should have Admin Agent
                     </p>
                 </div>
             </div>

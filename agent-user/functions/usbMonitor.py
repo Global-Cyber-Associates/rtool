@@ -7,6 +7,8 @@ import logging
 import json
 import os
 import sys
+
+from cryptography.fernet import Fernet
 from .sender import send_data, connect_socket, sio
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -27,14 +29,48 @@ def _data_dir():
         return os.path.dirname(sys.executable)
     return os.path.dirname(os.path.abspath(__file__))
 
-CACHE_FILE = os.path.join(_data_dir(), "usb_cache.json")
+# Encrypted cache filenames (next to script/exe)
+CACHE_FILE = os.path.join(_data_dir(), "usb_cache.enc")
+KEY_FILE = os.path.join(_data_dir(), "cache.key")
+
+# Behavior
+PENDING_EJECT_SECONDS = 10  # pending age threshold to eject
 EJECT_DELAY = 3
+
 kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
 
 # ------------------------------------------------------------
-# CACHE MANAGEMENT (with timestamp)
+# ENCRYPTED CACHE MANAGEMENT (Fernet)
 # ------------------------------------------------------------
 usb_cache = {}
+
+def load_key():
+    """
+    Loads (or creates) a key file next to the script.
+    Returns a Fernet instance.
+    """
+    try:
+        if not os.path.exists(KEY_FILE):
+            key = Fernet.generate_key()
+            with open(KEY_FILE, "wb") as f:
+                f.write(key)
+            logging.warning(f"[🔐] New cache key generated and saved to: {KEY_FILE}")
+            logging.warning("[🔐] Keep this file safe; without it the cache cannot be decrypted.")
+        else:
+            with open(KEY_FILE, "rb") as f:
+                key = f.read()
+
+        return Fernet(key)
+    except Exception as e:
+        logging.error(f"[⚠️] Failed to load/create cache key: {e}")
+        raise
+
+try:
+    fernet = load_key()
+except Exception:
+    # If key cannot be loaded, fall back to an in-memory Fernet (not ideal) or exit:
+    logging.error("[❌] Critical: cannot load cache key. Exiting.")
+    raise SystemExit(1)
 
 def load_cache():
     global usb_cache
@@ -42,11 +78,12 @@ def load_cache():
         usb_cache = {}
         return
     try:
-        with open(CACHE_FILE, "r", encoding="utf-8") as f:
-            data = f.read().strip()
-            usb_cache = json.loads(data) if data else {}
+        with open(CACHE_FILE, "rb") as f:
+            encrypted = f.read()
+        decrypted = fernet.decrypt(encrypted)
+        usb_cache = json.loads(decrypted.decode("utf-8")) if decrypted else {}
     except Exception as e:
-        logging.error(f"[⚠️] Cache corrupted or unreadable → resetting ({e})")
+        logging.error(f"[⚠️] Encrypted cache corrupted or unreadable → resetting ({e})")
         usb_cache = {}
         try:
             save_cache()
@@ -55,11 +92,14 @@ def load_cache():
 
 def save_cache():
     try:
-        with open(CACHE_FILE, "w", encoding="utf-8") as f:
-            json.dump(usb_cache, f, indent=2)
+        serialized = json.dumps(usb_cache).encode("utf-8")
+        encrypted = fernet.encrypt(serialized)
+        with open(CACHE_FILE, "wb") as f:
+            f.write(encrypted)
     except Exception as e:
-        logging.error(f"[⚠️] Failed to save cache {CACHE_FILE}: {e}")
+        logging.error(f"[⚠️] Failed to save encrypted cache {CACHE_FILE}: {e}")
 
+# Initialize cache
 load_cache()
 
 # ------------------------------------------------------------
@@ -84,7 +124,8 @@ def open_volume(letter):
         0,
         None,
     )
-    if handle == -1:
+    # CreateFileW may return INVALID_HANDLE_VALUE (-1) on failure
+    if handle == -1 or not handle:
         raise ctypes.WinError(ctypes.get_last_error())
     return handle
 
@@ -106,7 +147,7 @@ def dismount_and_eject(handle):
 def force_eject_drive(letter):
     try:
         subprocess.run(
-            ["powershell", "-Command",
+            ["powershell", "-NoProfile", "-Command",
              f"(Get-WmiObject Win32_Volume -Filter \"DriveLetter='{letter}:'\").Eject()"],
             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=False
         )
@@ -222,21 +263,58 @@ def monitor_usb(interval=3, timeout=6):
                 except Exception as e:
                     logging.error(f"[⚠️] set_status failed for {serial}: {e}")
 
+            now = time.time()
             for usb in devices:
                 serial = usb.get("serial_number", "unknown")
-                info = usb_cache.get(serial, {"status": "Pending"})
+                info = usb_cache.get(serial, {"status": "Pending", "timestamp": now})
                 status = info.get("status", "Pending")
 
-                if status == "Allowed":
-                    logging.info(f"[🟢] Allowed: {usb.get('drive_letter')}")
-                elif status == "Blocked":
+                # If cache explicitly says Waiting for Approval -> eject immediately
+                if status == "Waiting for Approval":
+                    logging.info(f"[🟠] Waiting for Approval → ejecting {usb.get('drive_letter')}")
+                    try:
+                        set_status(serial, "Blocked")
+                    except Exception as e:
+                        logging.error(f"[⚠️] Failed to set status to Blocked for {serial}: {e}")
+                    try:
+                        eject_usb_device(usb)
+                    except Exception as e:
+                        logging.error(f"[⚠️] eject failed: {e}")
+                    continue
+
+                # Blocked -> eject immediately
+                if status == "Blocked":
                     logging.info(f"[🔴] Blocked → ejecting {usb.get('drive_letter')}")
                     try:
                         eject_usb_device(usb)
                     except Exception as e:
                         logging.error(f"[⚠️] eject failed: {e}")
-                else:
-                    logging.info(f"[⏳] Pending → NOT ejecting yet: {usb.get('drive_letter')}")
+                    continue
+
+                # Allowed -> do nothing
+                if status == "Allowed":
+                    logging.info(f"[🟢] Allowed: {usb.get('drive_letter')}")
+                    continue
+
+                # Pending -> check age; eject if older than threshold
+                if status == "Pending":
+                    age = now - info.get("timestamp", now)
+                    if age >= PENDING_EJECT_SECONDS:
+                        logging.info(f"[⏳→🔴] Pending > {PENDING_EJECT_SECONDS}s ({int(age)}s) → ejecting {usb.get('drive_letter')}")
+                        try:
+                            set_status(serial, "Blocked")
+                        except Exception as e:
+                            logging.error(f"[⚠️] Failed to set status to Blocked for {serial}: {e}")
+                        try:
+                            eject_usb_device(usb)
+                        except Exception as e:
+                            logging.error(f"[⚠️] eject failed: {e}")
+                    else:
+                        logging.info(f"[⏳] Pending ({int(age)}s) → NOT ejecting yet: {usb.get('drive_letter')}")
+                    continue
+
+                # Unknown statuses default: do not eject but log
+                logging.info(f"[❔] Unknown status '{status}' for {serial} → not ejecting by default")
 
             removed = known - serials_now
             for s in removed:

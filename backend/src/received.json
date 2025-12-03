@@ -1,9 +1,9 @@
 {
-  "agentId": "sugumar",
-  "timestamp": "2025-11-11T06:54:09.995Z",
+  "agentId": "admin",
+  "timestamp": "2025-12-03T10:33:58.724Z",
   "devices": [
     {
-      "drive_letter": "F",
+      "drive_letter": "E",
       "vendor_id": "USBSTOR\\DISK&VEN_GENERIC&PROD_MASS_STORAGE&REV_1.99\\D88F46AD7AA752D4&0",
       "product_id": "\\\\.\\PHYSICALDRIVE1",
       "description": "Generic Mass Storage USB Device",
