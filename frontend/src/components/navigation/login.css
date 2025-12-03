@@ -1,0 +1,140 @@
+/* Full page background */
+.login-container {
+  height: 94.5vh; 
+  width: 97.35vw;
+  background: linear-gradient(135deg, #0a2a43, #0d3d6b);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* White card */
+.login-card {
+  background: #ffffff;
+  width: 100%;
+  max-width: 420px;
+  padding: 25px 35px 45px 35px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+  text-align: center;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+/* Logo */
+.login-logo {
+  height: 55px;    /* smaller */
+  width: 50px;     /* smaller */
+  margin-bottom: 10px;
+}
+
+/* Main title (VisuN) */
+.login-title {
+  font-size: 28px;     /* reduced from 36 */
+  margin: 0;
+  color: #003366;
+  font-weight: 700;
+}
+
+/* AI tag */
+.login-title2 {
+  font-size: 10px;     /* reduced */
+  margin: 0;
+  margin-left: 75px;   /* adjusted */
+  margin-bottom: 20px;
+  color: #222;
+  font-weight: 600;
+  opacity: 0.75;
+}
+
+/* Login subtitle */
+.login-subtitle {
+  margin-bottom: 30px;
+  color: #003366;     /* stronger color for more visibility */
+  font-size: 18px;    /* increased from 14 */
+  font-weight: 600;
+}
+
+/* Error box */
+.login-error {
+  background: #ffe5e5;
+  color: #d60000;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 18px;
+  font-size: 14px;
+  border-left: 4px solid #d60000;
+}
+
+/* Input groups */
+.form-group {
+  margin-bottom: 18px;
+  text-align: left;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #003366;
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+.form-group input {
+  width: 94.5%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #c7c7c7;
+  font-size: 15px;
+  transition: 0.2s ease;
+}
+
+.form-group input:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 6px rgba(0, 123, 255, 0.35);
+}
+
+/* Login button */
+.login-btn {
+  width: 100%;
+  padding: 13px;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.login-btn:hover {
+  background: #0056b3;
+  transform: translateY(-1px);
+}
+
+/* Small footer-style text */
+.login-footer {
+  position: absolute;
+  bottom: 65px;
+  font-size: 11px;
+  color: #e0e0e0;
+  opacity: 0.7;
+  text-align: center;
+  width: 100%;
+  letter-spacing: 0.3px;
+}
+
+
+/* smooth fade animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -2,6 +2,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../../utils/authService";
+import logo from "../../assets/gca.png";
+import "./login.css";
 
 function Login() {
   const navigate = useNavigate();
@@ -17,7 +19,6 @@ function Login() {
     if (res.token) {
       const role = sessionStorage.getItem("role");
 
-      // Redirect based on role
       if (role === "admin") navigate("/admin/dashboard");
       else navigate("/dashboard");
     } else {
@@ -26,48 +27,43 @@ function Login() {
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: "60px auto", padding: 20 }}>
-      <h2>Login</h2>
+    <div className="login-container">
+      <div className="login-card">
+        <img src={logo} alt="GCA Logo" className="login-logo" />
 
-      {error && <div style={{ color: "red", marginBottom: 10 }}>{error}</div>}
+        <h2 className="login-title">VisuN</h2>
+        <h4 className="login-title2"> @ powered by AI</h4>
+        <p className="login-subtitle">Please login to continue</p>
 
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: 15 }}>
-          <label>Email</label>
-          <input
-            type="email"
-            value={email}
-            required
-            onChange={(e) => setEmail(e.target.value)}
-            style={{ width: "100%", padding: 8 }}
-          />
-        </div>
+        {error && <div className="login-error">{error}</div>}
 
-        <div style={{ marginBottom: 15 }}>
-          <label>Password</label>
-          <input
-            type="password"
-            value={password}
-            required
-            onChange={(e) => setPassword(e.target.value)}
-            style={{ width: "100%", padding: 8 }}
-          />
-        </div>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Email</label>
+            <input
+              type="email"
+              value={email}
+              required
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
 
-        <button
-          type="submit"
-          style={{
-            width: "100%",
-            padding: "10px",
-            background: "#007bff",
-            color: "#fff",
-            border: "none",
-            cursor: "pointer",
-          }}
-        >
-          Login
-        </button>
-      </form>
+          <div className="form-group">
+            <label>Password</label>
+            <input
+              type="password"
+              value={password}
+              required
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+
+          <button type="submit" className="login-btn">
+            Login
+          </button>
+        </form>
+      </div>
+      <div className="login-footer">© 2025 Global Cyber Associates</div>
     </div>
   );
 }
