@@ -5,7 +5,14 @@ import Sidebar from "../navigation/sidenav.jsx";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Dashboard = () => {
-  const [snapshot, setSnapshot] = useState(null);
+  const [snapshot, setSnapshot] = useState({
+    summary: { all: 0, active: 0, inactive: 0, unknown: 0, routers: 0 },
+    allDevices: [],
+    activeAgents: [],
+    inactiveAgents: [],
+    unknownDevices: [],
+    routers: [],
+  });
   const [lastUpdated, setLastUpdated] = useState(null);
 
   useEffect(() => {
@@ -39,17 +46,6 @@ const Dashboard = () => {
       clearInterval(interval);
     };
   }, []);
-
-  if (!snapshot) {
-    return (
-      <div className="dashboard">
-        <Sidebar />
-        <div className="dashboard-container">
-          <h1 className="dashboard-title">Loading dashboard...</h1>
-        </div>
-      </div>
-    );
-  }
 
   const {
     summary,

@@ -46,6 +46,7 @@ const Scan = () => {
         if (!res.ok) return;
         const data = await res.json();
         setPreviousScan(data);
+        setDevices(mapScannerResponseToDevices(data));
       } catch (err) {
         console.warn("No previous scan:", err.message);
       }

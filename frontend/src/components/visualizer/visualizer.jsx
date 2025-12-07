@@ -40,17 +40,17 @@ export default function Visualizer() {
         prev.map((f) =>
           f.id === 1
             ? {
-                ...f,
-                devices: f.devices.map((d) =>
-                  d.ip === deviceUpdate.ip
-                    ? {
-                        ...d,
-                        ...deviceUpdate,
-                        name: deviceUpdate.agentId || d.agentId || "Unknown", // 🔥 force agentId display
-                      }
-                    : d
-                ),
-              }
+              ...f,
+              devices: f.devices.map((d) =>
+                d.ip === deviceUpdate.ip
+                  ? {
+                    ...d,
+                    ...deviceUpdate,
+                    name: deviceUpdate.agentId || d.agentId || "Unknown", // 🔥 force agentId display
+                  }
+                  : d
+              ),
+            }
             : f
         )
       );
@@ -87,15 +87,12 @@ export default function Visualizer() {
           />
         </div>
 
-        {loading ? (
-          <div className="loading">Fetching devices...</div>
-        ) : (
-          <FloorGrid
-            key={activeFloor}
-            floor={floors.find((f) => f.id === activeFloor)}
-            updateDevices={(devices) => updateFloorDevices(activeFloor, devices)}
-          />
-        )}
+        <FloorGrid
+          key={activeFloor}
+          floor={floors.find((f) => f.id === activeFloor)}
+          updateDevices={(devices) => updateFloorDevices(activeFloor, devices)}
+        />
+        {loading && <div className="loading-overlay">Fetching devices...</div>}
       </div>
     </div>
   );

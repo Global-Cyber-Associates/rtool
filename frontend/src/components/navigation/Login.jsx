@@ -61,6 +61,16 @@ function Login() {
           <button type="submit" className="login-btn">
             Login
           </button>
+
+          <div className="download-section">
+            <button
+              type="button"
+              className="download-link-btn"
+              onClick={() => navigate("/download")}
+            >
+              Download Agent
+            </button>
+          </div>
         </form>
       </div>
       <div className="login-footer">© 2025 Global Cyber Associates</div>

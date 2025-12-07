@@ -138,3 +138,25 @@
     transform: translateY(0);
   }
 }
+
+/* Download Section */
+.download-section {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.download-link-btn {
+  background: transparent;
+  border: none;
+  color: #007bff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 5px;
+  transition: color 0.2s;
+}
+
+.download-link-btn:hover {
+  color: #0056b3;
+}

@@ -12,6 +12,7 @@ dotenv.config();
 
 import { saveAgentData, saveNetworkScan, saveVulnerabilityScan } from "./save.js";
 import { runVisualizerUpdate } from "./visualizer-script/visualizer.js";
+import { seedUsers } from "./seed.js";
 
 import * as GetData from "./get.js";
 import { checkUsbStatus } from "./controllers/usbhandler.js";
@@ -244,6 +245,9 @@ async function start() {
   try {
     await connectMongo(config.mongo_uri);
     console.log("✅ MongoDB connected");
+
+    // Seed default users
+    await seedUsers();
 
     setInterval(runVisualizerUpdate, 3500);
 

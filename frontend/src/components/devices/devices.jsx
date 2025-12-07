@@ -77,16 +77,18 @@ const Devices = () => {
     return () => socket.off("agent_update");
   }, []);
 
-  if (loading) return <div className="devices-container">Loading agents...</div>;
-  if (error) return <div className="devices-container">{error}</div>;
-  if (!agents.length)
-    return <div className="devices-container">No agents found.</div>;
-
   return (
     <div className="device-page">
       <Sidebar />
       <div className="devices-container">
         <h1 className="devices-title">Devices with agents</h1>
+
+        {loading && <div style={{ padding: "20px", color: "#ccc" }}>Loading agents...</div>}
+        {error && <div style={{ padding: "20px", color: "#ff5757" }}>{error}</div>}
+
+        {!loading && !error && agents.length === 0 && (
+          <div style={{ padding: "20px", color: "#ccc" }}>No agents found.</div>
+        )}
 
         <div className="device-list">
           {agents.map((agent) => {
@@ -174,7 +176,7 @@ const Devices = () => {
                     gap: "10px",
                   }}
                 >
-                  
+
 
                   <button
                     className="action-btn"
@@ -184,8 +186,8 @@ const Devices = () => {
                     }}
                   >
                     Task Manager
-                    </button>
-                 
+                  </button>
+
 
                   <button
                     className="action-btn"
@@ -205,8 +207,8 @@ const Devices = () => {
                   >
                     Disconnect
                   </button>
-                 
-                  
+
+
                   <button disabled
                     className="action-btn"
                     onClick={(e) => {
