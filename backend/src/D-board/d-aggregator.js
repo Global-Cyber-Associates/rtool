@@ -5,7 +5,7 @@ import SystemInfo from "../models/SystemInfo.js";
 import Dashboard from "../models/Dashboard.js";
 
 // -----------------------------------------
-// Helper: Parse weird Mongo timestamps
+// Helper: Parse timestamps safely
 // -----------------------------------------
 function parseDate(v) {
   if (!v) return null;
@@ -17,7 +17,7 @@ function parseDate(v) {
 }
 
 // -----------------------------------------
-// Extract all possible IPs from a system doc
+// Extract all possible IPs from a SystemInfo doc
 // -----------------------------------------
 function extractIPs(sys) {
   if (!sys) return [];
@@ -38,12 +38,13 @@ function extractIPs(sys) {
 }
 
 // -----------------------------------------
-// The worker function
+// MAIN WORKER
 // -----------------------------------------
 async function runDashboardWorker(interval = 4500) {
   console.log(`📊 Dashboard Worker running every ${interval}ms`);
 
   const ROUTER_ENDINGS = [1, 250, 253, 254];
+  const ACTIVE_TIMEOUT = 15000; // 15 sec timeout for active agents
 
   const loop = async () => {
     try {
@@ -51,12 +52,12 @@ async function runDashboardWorker(interval = 4500) {
       const sysRaw = await SystemInfo.find({}).lean();
 
       if (!vizRaw.length && !sysRaw.length) {
-        console.log("📭 No visualizer/system data yet — skipping");
+        console.log("📭 No data yet — skipping");
         return;
       }
 
       // -----------------------------------------
-      // Build latest visualizer per IP
+      // Latest VisualizerData per IP
       // -----------------------------------------
       const latest = {};
       vizRaw.forEach((d) => {
@@ -74,56 +75,110 @@ async function runDashboardWorker(interval = 4500) {
       const visualizerData = Object.values(latest);
 
       // -----------------------------------------
-      // Extract agent IPs
+      // Build SystemInfo map by IP
       // -----------------------------------------
-      const agentIPSet = new Set();
-      sysRaw.forEach((s) => extractIPs(s).forEach((ip) => agentIPSet.add(ip)));
-
-      // -----------------------------------------
-      // Classify devices
-      // -----------------------------------------
-      const activeAgents = visualizerData.filter(
-        (d) => !d.noAgent && agentIPSet.has(d.ip)
-      );
-
-      const inactiveAgents = sysRaw.filter((s) => {
-        const ips = extractIPs(s);
-        if (!ips.length) return false;
-        return ips.every((ip) => !visualizerData.some((v) => v.ip === ip));
+      const sysByIP = {};
+      sysRaw.forEach((s) => {
+        extractIPs(s).forEach((ip) => {
+          sysByIP[ip] = s;
+        });
       });
 
+      const now = Date.now();
+
+      // -----------------------------------------
+      // ACTIVE AGENTS = Recent SystemInfo + VisualizerData
+      // -----------------------------------------
+      const activeAgents = sysRaw
+        .filter((s) => {
+          const lastSeen = new Date(s.timestamp).getTime();
+          const isFresh = now - lastSeen <= ACTIVE_TIMEOUT;
+
+          const ips = extractIPs(s);
+          const seenInViz = ips.some((ip) =>
+            visualizerData.some((v) => v.ip === ip && !v.noAgent)
+          );
+
+          return isFresh && seenInViz;
+        })
+        .map((s) => {
+          const ip = extractIPs(s)[0];
+          const viz = visualizerData.find((v) => v.ip === ip) || {};
+
+          return {
+            ...viz,
+            system: s.data,
+            cpu: s.data.cpu,
+            memory: s.data.memory,
+            os: s.data.os_type,
+            lastSeen: s.timestamp,
+          };
+        });
+
+      // -----------------------------------------
+      // INACTIVE AGENTS = SystemInfo exists, but expired OR not in visualizer
+      // -----------------------------------------
+      const inactiveAgents = sysRaw.filter((s) => {
+        const lastSeen = new Date(s.timestamp).getTime();
+        const expired = now - lastSeen > ACTIVE_TIMEOUT;
+
+        const ips = extractIPs(s);
+        const seenInViz = ips.some((ip) =>
+          visualizerData.some((v) => v.ip === ip && !v.noAgent)
+        );
+
+        return expired || !seenInViz;
+      });
+
+      const inactiveAsDevices = inactiveAgents.map((s) => {
+        const ip = extractIPs(s)[0];
+        return {
+          ip,
+          hostname: s.data.hostname || "Unknown",
+          agentId: s.agentId,
+          noAgent: false,
+          cpu: s.data.cpu,
+          memory: s.data.memory,
+          os: s.data.os_type,
+          timestamp: s.timestamp,
+          system: s.data,
+        };
+      });
+
+      // -----------------------------------------
+      // Unknown unmanaged visualizer devices
+      // -----------------------------------------
       const unmanaged = visualizerData.filter((d) => d.noAgent === true);
 
       const routers = unmanaged.filter((d) => {
         const last = Number(d.ip.split(".")[3]);
-        const hasAgents = agentIPSet.size > 0;
+        const subnet = d.ip.split(".").slice(0, 3).join(".");
+        const agentSubnets = sysRaw.map((s) =>
+          extractIPs(s)[0]?.split(".").slice(0, 3).join(".")
+        );
 
-        if (ROUTER_ENDINGS.includes(last) && !hasAgents) return true;
-
-        if (ROUTER_ENDINGS.includes(last) && hasAgents) {
-          const subnet = d.ip.split(".").slice(0, 3).join(".");
-          return [...agentIPSet].some(
-            (x) => x.split(".").slice(0, 3).join(".") === subnet
-          );
-        }
-
-        return false;
+        return ROUTER_ENDINGS.includes(last) && agentSubnets.includes(subnet);
       });
 
       const unknownDevices = unmanaged.filter(
         (d) => !routers.some((r) => r.ip === d.ip)
       );
 
-      const allDevices = visualizerData.filter(
-        (d) => !routers.some((r) => r.ip === d.ip)
-      );
+      // -----------------------------------------
+      // Final ALL DEVICES = visualizer devices (except routers) + inactive agents
+      // -----------------------------------------
+      const allDevices = [
+        ...visualizerData.filter((d) => !routers.some((r) => r.ip === d.ip)),
+        ...inactiveAsDevices,
+      ];
 
       // -----------------------------------------
-      // Build snapshot object
+      // FINAL SNAPSHOT
       // -----------------------------------------
       const snapshot = {
         _id: "dashboard_latest",
         timestamp: new Date(),
+
         summary: {
           all: allDevices.length,
           active: activeAgents.length,
@@ -131,6 +186,7 @@ async function runDashboardWorker(interval = 4500) {
           unknown: unknownDevices.length,
           routers: routers.length,
         },
+
         allDevices,
         activeAgents,
         inactiveAgents,
@@ -138,7 +194,6 @@ async function runDashboardWorker(interval = 4500) {
         unknownDevices,
       };
 
-      // Save (upsert)
       await Dashboard.updateOne(
         { _id: "dashboard_latest" },
         { $set: snapshot },
@@ -146,16 +201,13 @@ async function runDashboardWorker(interval = 4500) {
       );
 
       console.log("✅ Dashboard snapshot updated");
-
     } catch (err) {
       console.error("❌ Dashboard Worker Error:", err);
     }
   };
 
-  // Run instantly, then on interval
   await loop();
   setInterval(loop, interval);
 }
 
-// ⭐ ESM default export
 export default runDashboardWorker;
