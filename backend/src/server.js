@@ -31,6 +31,7 @@ import userRoutes from "./api/users.js";
 import { initIO } from "./socket-nvs.js";
 
 import VisualizerScanner from "./models/VisualizerScanner.js";
+import VisualizerData from "./models/VisualizerData.js"; // ⭐ NEW: Import VisualizerData
 
 import runDashboardWorker from "./D-board/d-aggregator.js";
 import dashboardRoutes from "./api/d-board.js";
@@ -239,12 +240,16 @@ io.on("connection", (socket) => {
       }
     }
 
-    // ⭐ If ADMIN disconnected → wipe VisualizerScanner
+    // ⭐ If ADMIN disconnected → wipe VisualizerScanner & VisualizerData
     if (socket.id === global.ADMIN_SOCKET) {
       console.log("🧹 Admin disconnected → clearing VisualizerScanner...");
       await VisualizerScanner.deleteMany({});
+
+      console.log("🧹 Admin disconnected → clearing VisualizerData (Persistent)...");
+      await VisualizerData.deleteMany({});
+
       global.ADMIN_SOCKET = null;
-      console.log("🧼 VisualizerScanner wiped.");
+      console.log("🧼 VisualizerScanner & VisualizerData wiped.");
     }
   });
 });
@@ -306,6 +311,12 @@ async function start() {
   try {
     await connectMongo(config.mongo_uri);
     console.log("✅ MongoDB connected");
+
+    // ⭐ STARTUP CLEANUP: Wipe old scan data
+    console.log("🧹 Clearing stale scanner data...");
+    await VisualizerScanner.deleteMany({});
+    await VisualizerData.deleteMany({});
+    console.log("✨ Visualizer collections wiped for fresh start.");
 
     await seedUsers();
 
