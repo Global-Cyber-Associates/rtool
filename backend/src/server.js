@@ -166,6 +166,12 @@ io.on("connection", (socket) => {
         return;
       }
 
+      // ⭐ Re-register if missing (Server Restart handling)
+      if (!global.ACTIVE_AGENTS[payload.agentId]) {
+        global.ACTIVE_AGENTS[payload.agentId] = socket.id;
+        console.log(`♻️ Auto-registered agent on data: ${payload.agentId}`);
+      }
+
       payload.ip = ip;
 
       try {
