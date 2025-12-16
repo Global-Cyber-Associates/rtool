@@ -59,23 +59,23 @@ def start_usb_monitor():
 # SOCKET THREAD
 # ============================
 def start_socket():
-    safe_print("[SOCKET] Starting socket...")
-    try:
-        connect_socket()
+    while True:
+        try:
+            safe_print("[SOCKET] connecting...")
+            connect_socket()
+            
+            if sio.connected:
+                safe_print("[SOCKET] Connected.")
+                sio.wait()
+                safe_print("[SOCKET] socket.wait() returned (disconnected).")
+            else:
+                safe_print("[SOCKET] Not connected, retrying in 5s...")
 
-        @sio.event
-        def connect():
-            safe_print("[SOCKET CONNECTED]")
-
-        @sio.event
-        def disconnect():
-            safe_print("[SOCKET DISCONNECTED]")
-
-        sio.wait()
-
-    except Exception as e:
-        safe_print("[SOCKET ERROR]", e)
-        traceback.print_exc()
+        except Exception as e:
+            safe_print("[SOCKET ERROR]", e)
+            traceback.print_exc()
+        
+        time.sleep(5)
 
 
 # ============================
