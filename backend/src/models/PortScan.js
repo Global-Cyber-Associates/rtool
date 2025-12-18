@@ -36,4 +36,7 @@ const portScanSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// ⭐ Compound index for fast lookups
+portScanSchema.index({ tenantId: 1, agentId: 1 });
+
 export default mongoose.model("PortScan", portScanSchema);

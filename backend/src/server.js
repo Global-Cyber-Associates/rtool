@@ -1,41 +1,47 @@
-//backend/src/server.js
+// backend/src/server.js
 import express from "express";
 import http from "http";
 import cors from "cors";
 import fs from "fs";
 import path from "path";
 import { Server } from "socket.io";
-import { connectMongo } from "./db.js";
-
+import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 
-import { saveAgentData, saveNetworkScan, saveVulnerabilityScan } from "./save.js";
+import { connectMongo } from "./db.js";
+
+import {
+  saveAgentData,
+  saveNetworkScan,
+  saveVulnerabilityScan,
+} from "./save.js";
+
 import { runVisualizerUpdate } from "./visualizer-script/visualizer.js";
 import { seedUsers } from "./seed.js";
 
 import * as GetData from "./get.js";
 import { checkUsbStatus } from "./controllers/usbhandler.js";
+
 import usbRoutes from "./api/usb.js";
 import visualizerDataRoute from "./api/visualizerData.js";
 import systemRoutes from "./api/system.js";
-import { getLogsSnapshot } from "./controllers/logsController.js";
 import logsStatusRoute from "./api/logs.js";
-
-import { isRouterIP } from "./utils/networkHelpers.js";
-import LogsStatus from "./models/Log.js";
-import Agent from "./models/Agent.js";
+import dashboardRoutes from "./api/d-board.js";
 import authRoutes from "./api/auth.js";
 import userRoutes from "./api/users.js";
 
-import { initIO } from "./socket-nvs.js";
+import { getLogsSnapshot } from "./controllers/logsController.js";
+import { isRouterIP } from "./utils/networkHelpers.js";
 
+import LogsStatus from "./models/Log.js";
+import Agent from "./models/Agent.js";
+import Tenant from "./models/Tenant.js";
 import VisualizerScanner from "./models/VisualizerScanner.js";
-import VisualizerData from "./models/VisualizerData.js"; // ⭐ NEW: Import VisualizerData
+import VisualizerData from "./models/VisualizerData.js";
 
+import { initIO } from "./socket-nvs.js";
 import runDashboardWorker from "./D-board/d-aggregator.js";
-import dashboardRoutes from "./api/d-board.js";
-
 
 // -----------------------------------------------------
 // CONFIG
@@ -47,9 +53,8 @@ const app = express();
 app.use(cors({ origin: config.cors_origin || "*" }));
 app.use(express.json());
 
-
 // -----------------------------------------------------
-// ROUTES (REST APIs)
+// ROUTES
 // -----------------------------------------------------
 app.use("/api/visualizer-data", visualizerDataRoute);
 app.use("/api", systemRoutes);
@@ -59,7 +64,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 
-app.get("/api/auth/debug", (req, res) =>
+app.get("/api/auth/debug", (_req, res) =>
   res.json({ msg: "AUTH ROUTES ACTIVE" })
 );
 
@@ -67,9 +72,8 @@ app.get("/health", (_req, res) =>
   res.json({ status: "ok", ts: new Date().toISOString() })
 );
 
-
 // -----------------------------------------------------
-// CREATE SERVER + SOCKET.IO
+// SERVER + SOCKET.IO
 // -----------------------------------------------------
 const server = http.createServer(app);
 
@@ -79,259 +83,244 @@ const io = new Server(server, {
   pingInterval: 5000,
 });
 
-// Register IO globally
 initIO(io);
 
 const logPath = path.join(process.cwd(), "agent_data_log.json");
 
 global.ACTIVE_AGENTS = {};
-global.ADMIN_SOCKET = null;   // ⭐ Admin auto-detection
-
+global.ACTIVE_TENANTS = new Set(); // Track active tenants for visualizer updates
 
 // -----------------------------------------------------
-// SOCKET.IO EVENTS
+// SOCKET EVENTS
 // -----------------------------------------------------
+// -----------------------------------------------------
+// SOCKET MIDDLEWARE: AUTHENTICATION
+// -----------------------------------------------------
+io.use(async (socket, next) => {
+  try {
+    const token =
+      socket.handshake.auth?.token || socket.handshake.headers?.token;
+
+    if (!token) {
+      return next(new Error("Authentication error: No token provided"));
+    }
+
+    // 1️⃣ Try as USER (JWT)
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      if (decoded && decoded.tenantId) {
+        socket.user = decoded;
+        socket.tenantId = decoded.tenantId;
+        socket.isAgent = false;
+        return next();
+      }
+    } catch (e) {
+      // Not a JWT or invalid, proceed to check as Agent Key
+    }
+
+    // 2️⃣ Try as AGENT (Enrollment Key)
+    const tenant = await Tenant.findOne({ enrollmentKey: token });
+    if (tenant) {
+      socket.tenantId = tenant._id.toString();
+      socket.isAgent = true;
+      return next();
+    }
+
+    return next(new Error("Authentication error: Invalid credentials"));
+  } catch (err) {
+    console.error("Socket auth error:", err);
+    return next(new Error("Authentication error"));
+  }
+});
+
 io.on("connection", (socket) => {
   const ip =
     socket.handshake.headers["x-forwarded-for"]?.split(",")[0] ||
     socket.handshake.address ||
     "unknown";
 
-  console.log(`🔌 Agent connected: ${socket.id} (${ip})`);
+  const type = socket.isAgent ? "🤖 Agent" : "👤 User";
+  console.log(`🔌 Connected: ${socket.id} (${ip}) - ${type} [Tenant: ${socket.tenantId}]`);
 
+  if (socket.tenantId) {
+    global.ACTIVE_TENANTS.add(socket.tenantId.toString());
+  }
+
+  // -------------------------------
   // AGENT REGISTRATION
+  // -------------------------------
   socket.on("register_agent", async (agentId) => {
     if (!agentId) return;
-    console.log("🆔 Agent registered:", agentId, "socket:", socket.id);
+
     global.ACTIVE_AGENTS[agentId] = socket.id;
 
-    // ⭐ MARK ONLINE
-    try {
-      await Agent.findOneAndUpdate(
-        { agentId },
-        {
-          $set: {
-            status: "online",
-            lastSeen: new Date(),
-            socketId: socket.id,
-            ip: ip
-          }
+    await Agent.findOneAndUpdate(
+      { agentId, tenantId: socket.tenantId }, // Ensure tenant binding
+      {
+        $set: {
+          tenantId: socket.tenantId,
+          status: "online",
+          lastSeen: new Date(),
+          socketId: socket.id,
+          ip,
         },
-        { upsert: true }
-      );
-    } catch (err) {
-      console.error("❌ Failed to mark agent online:", err);
-    }
+      },
+      { upsert: true }
+    );
   });
 
-  // RAW NETWORK SCAN → IDENTIFIES ADMIN
+  // -------------------------------
+  // RAW NETWORK SCAN (TENANT SCOPED)
+  // -------------------------------
   socket.on("network_scan_raw", async (devicesList) => {
-    console.log("📡 RAW SCAN RECEIVED:", devicesList?.length);
-
-    // ⭐ This socket is the admin
-    global.ADMIN_SOCKET = socket.id;
-
-    await saveNetworkScan(devicesList);
+    if (!socket.tenantId) return;
+    await saveNetworkScan(devicesList, socket.tenantId);
   });
 
-  // RAW VULNERABILITY SCAN
   socket.on("network_vulnscan_raw", async (scanObject) => {
-    try {
-      console.log("🛡️ Received vulnerability scan result");
-      await saveVulnerabilityScan(scanObject);
-      console.log("🛡️ Vulnerability scan saved.");
-    } catch (err) {
-      console.error("❌ Failed to save vulnerability scan:", err);
-    }
+    if (!socket.tenantId) return;
+    await saveVulnerabilityScan(scanObject, socket.tenantId);
   });
 
-  // FRONTEND GET_DATA
+  // -----------------------------------------------------
+  // ⭐ FRONTEND GET_DATA — TENANT AWARE (STEP 6G)
+  // -----------------------------------------------------
+  // -----------------------------------------------------
+  // ⭐ FRONTEND GET_DATA — TENANT AWARE
+  // -----------------------------------------------------
   socket.on("get_data", async (params, callback) => {
     try {
-      const result = await GetData.fetchData(params);
+      // Auth already handled at connection, but let's re-verify socket.tenantId exists
+      if (!socket.tenantId) {
+        return callback({
+          success: false,
+          message: "Tenant context missing in token",
+          data: [],
+        });
+      }
+
+      const result = await GetData.fetchData({
+        ...params,
+        tenantId: socket.tenantId, // Use socket's trusted tenantId
+      });
+
       callback(result);
     } catch (err) {
-      console.error("❌ Error fetching data:", err);
-      callback({ success: false, message: "Failed", data: [] });
+      console.error("❌ get_data error:", err.message);
+      callback({
+        success: false,
+        message: "Failed to fetch data",
+        data: [],
+      });
     }
   });
 
+  // -------------------------------
   // AGENT DATA
+  // -------------------------------
   socket.on("agent_data", async (payload) => {
     try {
-      if (!payload?.type || !payload?.data || !payload?.agentId) {
-        socket.emit("agent_response", {
-          success: false,
-          message: "Invalid payload format",
-        });
-        return;
-      }
+      if (!payload?.type || !payload?.data || !payload?.agentId) return;
 
-      // ⭐ Re-register if missing (Server Restart handling)
-      if (!global.ACTIVE_AGENTS[payload.agentId]) {
-        global.ACTIVE_AGENTS[payload.agentId] = socket.id;
-        console.log(`♻️ Auto-registered agent on data: ${payload.agentId}`);
-      }
-
+      global.ACTIVE_AGENTS[payload.agentId] = socket.id;
       payload.ip = ip;
+      // Inject tenantId for verification
+      payload.tenantId = socket.tenantId;
 
       try {
         const logs = fs.existsSync(logPath)
           ? JSON.parse(fs.readFileSync(logPath, "utf8"))
           : [];
-
         logs.push({ timestamp: new Date().toISOString(), payload });
         fs.writeFileSync(
           logPath,
-          JSON.stringify(logs.slice(-200), null, 2),
-          "utf8"
+          JSON.stringify(logs.slice(-200), null, 2)
         );
-      } catch (err) {
-        console.error("❌ Failed to log agent data:", err);
-      }
+      } catch { }
 
       if (payload.type === "usb_devices") {
-        const connected = payload.data.connected_devices || [];
-        const deviceStatus = await checkUsbStatus(payload.agentId, connected);
-        socket.emit("usb_validation", { devices: deviceStatus });
+        const devices = payload.data.connected_devices || [];
+        const status = await checkUsbStatus(payload.agentId, devices);
+        socket.emit("usb_validation", { devices: status });
         return;
       }
 
-      await saveAgentData(payload);
+      await saveAgentData(payload, socket.tenantId);
 
       socket.emit("agent_response", {
         success: true,
-        message: `${payload.type} saved successfully`,
+        message: `${payload.type} saved`,
       });
-
     } catch (err) {
-      console.error("❌ Error handling agent data:", err);
-      socket.emit("agent_response", {
-        success: false,
-        message: "Failed to save agent data",
-        error: err.message,
-      });
+      console.error("❌ agent_data error:", err);
     }
   });
 
-
-  // -----------------------------------------------------
-  // UPDATED DISCONNECT HANDLER (admin disconnects → wipe scanner)
-  // -----------------------------------------------------
-  socket.on("disconnect", async (reason) => {
-    console.log(`⚠️ Agent disconnected: ${socket.id} (${reason})`);
-
-    // Remove from active agents
-    for (const [agentId, id] of Object.entries(global.ACTIVE_AGENTS)) {
-      if (id === socket.id) {
+  // -------------------------------
+  // DISCONNECT
+  // -------------------------------
+  socket.on("disconnect", async () => {
+    for (const [agentId, sid] of Object.entries(global.ACTIVE_AGENTS)) {
+      if (sid === socket.id) {
         delete global.ACTIVE_AGENTS[agentId];
-        console.log(`🗑️ Removed offline agent: ${agentId}`);
-
-        // ⭐ MARK OFFLINE
-        try {
-          await Agent.findOneAndUpdate(
-            { agentId },
-            { $set: { status: "offline", lastSeen: new Date() } }
-          );
-        } catch (err) {
-          console.error("❌ Failed to mark agent offline:", err);
-        }
-        break;
+        await Agent.findOneAndUpdate(
+          { agentId },
+          { $set: { status: "offline", lastSeen: new Date() } }
+        );
       }
     }
 
-    // ⭐ If ADMIN disconnected → wipe VisualizerScanner & VisualizerData
-    if (socket.id === global.ADMIN_SOCKET) {
-      console.log("🧹 Admin disconnected → clearing VisualizerScanner...");
-      await VisualizerScanner.deleteMany({});
-
-      console.log("🧹 Admin disconnected → clearing VisualizerData (Persistent)...");
-      await VisualizerData.deleteMany({});
-
-      global.ADMIN_SOCKET = null;
-      console.log("🧼 VisualizerScanner & VisualizerData wiped.");
-    }
+    // We don't remove from ACTIVE_TENANTS immediately to avoid flicker, 
+    // or we could implementing reference counting. 
+    // For now, let's leave it; the visualizer loop isn't harmful if no data changes.
   });
 });
 
-
 // -----------------------------------------------------
-// VISUALIZER UPDATE LOOP (Updated)
+// VISUALIZER LOOP (SAFE TO PAUSE)
 // -----------------------------------------------------
 setInterval(async () => {
-  if (!global.ADMIN_SOCKET) {
-    console.log("⏭️ Admin offline → skipping visualizer update");
-    return;
-  }
-
-  try {
-    await runVisualizerUpdate();
-  } catch (err) {
-    console.error("Visualizer update error:", err);
+  // Iterate over all active tenants
+  for (const tenantId of global.ACTIVE_TENANTS) {
+    await runVisualizerUpdate(tenantId);
   }
 }, 3500);
 
-
 // -----------------------------------------------------
-// LOAD scanRunRouter AFTER initIO(io)
+// LOAD scanRunRouter
 // -----------------------------------------------------
 import scanRunRouter from "./api/scanRun.js";
 app.use("/api/scan", scanRunRouter);
-
 
 // -----------------------------------------------------
 // LOG SNAPSHOT LOOP
 // -----------------------------------------------------
 setInterval(async () => {
-  try {
-    let snapshot = await getLogsSnapshot();
+  const snapshot = await getLogsSnapshot();
 
-    snapshot.unknownDevices = snapshot.unknownDevices.filter(
-      (dev) => !isRouterIP(dev.ip, dev.hostname, dev.vendor)
-    );
+  snapshot.unknownDevices = snapshot.unknownDevices.filter(
+    (d) => !isRouterIP(d.ip, d.hostname, d.vendor)
+  );
 
-    await LogsStatus.findOneAndUpdate(
-      {},
-      { $set: snapshot },
-      { upsert: true }
-    );
-
-    io.emit("logs_status_update", snapshot);
-    console.log("[🧠] Logs snapshot updated");
-  } catch (err) {
-    console.error("❌ logs broadcast error:", err);
-  }
+  await LogsStatus.findOneAndUpdate({}, { $set: snapshot }, { upsert: true });
+  io.emit("logs_status_update", snapshot);
 }, 5000);
-
 
 // -----------------------------------------------------
 // START SERVER
 // -----------------------------------------------------
 async function start() {
-  try {
-    await connectMongo(config.mongo_uri);
-    console.log("✅ MongoDB connected");
+  await connectMongo(config.mongo_uri);
 
-    // ⭐ STARTUP CLEANUP: Wipe old scan data
-    console.log("🧹 Clearing stale scanner data...");
-    await VisualizerScanner.deleteMany({});
-    await VisualizerData.deleteMany({});
-    console.log("✨ Visualizer collections wiped for fresh start.");
+  // await VisualizerScanner.deleteMany({}); // Don't wipe on restart, or do? Maybe keep state.
+  // await VisualizerData.deleteMany({});
 
-    await seedUsers();
+  await seedUsers();
+  runDashboardWorker(4000);
 
-    runDashboardWorker(4000);
-    console.log("📊 Dashboard Worker running...");
-
-    server.listen(config.socket_port || 5000, "0.0.0.0", () =>
-      console.log(
-        `🚀 Socket server running on port ${config.socket_port || 5000}`
-      )
-    );
-  } catch (err) {
-    console.error("💥 Failed to start server:", err);
-    process.exit(1);
-  }
+  server.listen(config.socket_port || 5000, "0.0.0.0", () =>
+    console.log(`🚀 Server running on ${config.socket_port || 5000}`)
+  );
 }
 
 start();

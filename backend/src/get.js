@@ -8,26 +8,41 @@ import TaskInfo from "./models/TaskInfo.js";
 import VisualizerData from "./models/VisualizerData.js";
 import VisualizerScanner from "./models/VisualizerScanner.js";
 
-export async function fetchData({ type, agentId }) {
+/**
+ * NOTE:
+ * tenantId is now MANDATORY.
+ * It is injected from server.js (socket get_data handler)
+ */
+export async function fetchData({ type, agentId, tenantId }) {
   try {
-    console.log(`📡 Fetching [${type}] for agent: ${agentId || "ALL"}`);
+    if (!tenantId) {
+      return {
+        success: false,
+        message: "Tenant context missing",
+        data: [],
+      };
+    }
+
+    console.log(
+      `📡 Fetching [${type}] for tenant=${tenantId} agent=${agentId || "ALL"}`
+    );
 
     // =========================================================================
-    // ⭐ OVERRIDE HANDLER FOR VISUALIZER DATA
+    // ⭐ VISUALIZER DATA (TENANT SAFE)
     // =========================================================================
     if (type === "visualizer_data") {
-      console.log("📡 Building visualizer dataset...");
+      console.log("📡 Building tenant-safe visualizer dataset...");
 
-      // Load raw scanner devices
-      const scans = await VisualizerScanner.find({});
-      // Load all system info from agents
-      const systems = await SystemInfo.find({});
+      // Load only THIS TENANT's scanner devices
+      const scans = await VisualizerScanner.find({ tenantId });
+
+      // Load only THIS TENANT's system info
+      const systems = await SystemInfo.find({ tenantId });
 
       const systemIPs = new Set();
       const ipToAgent = new Map();
       const ipToHostname = new Map();
 
-      // Build agent mapping
       systems.forEach((sys) => {
         const wlanInfo = sys.data?.wlan_info || [];
         const agentId = sys.agentId || "unknown";
@@ -43,13 +58,12 @@ export async function fetchData({ type, agentId }) {
         });
       });
 
-      // Merge raw scan + agent info
       const output = scans.map((dev) => {
         const ip = dev.ip?.trim();
         const isAgent = systemIPs.has(ip);
 
         return {
-          id: dev._id.toString(),      // ⭐ REQUIRED FOR FRONTEND
+          id: dev._id.toString(),
           ip,
           mac: dev.mac || "Unknown",
           vendor: dev.vendor || "Unknown",
@@ -67,9 +81,8 @@ export async function fetchData({ type, agentId }) {
     }
 
     // =========================================================================
-    // ⭐ ORIGINAL LOGIC (UNTOUCHED)
+    // ⭐ STANDARD MODEL ROUTES (TENANT FILTERED)
     // =========================================================================
-
     let Model;
 
     switch (type) {
@@ -89,16 +102,16 @@ export async function fetchData({ type, agentId }) {
         Model = TaskInfo;
         break;
 
-      case "agents":
-        const agents = await Agent.find({});
+      case "agents": {
+        const agents = await Agent.find({ tenantId });
         return {
           success: true,
           message: "Agents fetched successfully",
           data: agents,
         };
+      }
 
       default:
-        console.warn(`⚠ Invalid type requested: ${type}`);
         return {
           success: false,
           message: "Invalid data type",
@@ -108,8 +121,14 @@ export async function fetchData({ type, agentId }) {
 
     let result;
 
+    // =========================================================================
+    // ⭐ AGENT-SPECIFIC READ
+    // =========================================================================
     if (agentId) {
-      const doc = await Model.findOne({ agentId }).sort({ timestamp: -1 });
+      const doc = await Model.findOne({
+        tenantId,
+        agentId,
+      }).sort({ timestamp: -1 });
 
       if (!doc) {
         return {
@@ -119,8 +138,13 @@ export async function fetchData({ type, agentId }) {
         };
       }
 
+      // Special handling for task_info (device info merge)
       if (type === "task_info") {
-        const systemInfo = await SystemInfo.findOne({ agentId }).sort({ timestamp: -1 });
+        const systemInfo = await SystemInfo.findOne({
+          tenantId,
+          agentId,
+        }).sort({ timestamp: -1 });
+
         const combined = {
           agentId: doc.agentId,
           device: systemInfo
@@ -133,12 +157,17 @@ export async function fetchData({ type, agentId }) {
           data: doc.data,
           timestamp: doc.timestamp,
         };
+
         result = [combined];
       } else {
         result = [doc];
       }
-    } else {
-      result = await Model.find({});
+    }
+    // =========================================================================
+    // ⭐ TENANT-WIDE READ
+    // =========================================================================
+    else {
+      result = await Model.find({ tenantId });
     }
 
     return {
@@ -146,9 +175,8 @@ export async function fetchData({ type, agentId }) {
       message: `${type} data fetched successfully`,
       data: result,
     };
-
   } catch (err) {
-    console.error(`🔥 Error fetching [${type}] for ${agentId}:`, err);
+    console.error(`🔥 Error fetching [${type}]:`, err);
     return {
       success: false,
       message: "Internal server error",

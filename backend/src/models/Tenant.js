@@ -13,6 +13,11 @@ const tenantSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    enrollmentKey: {
+      type: String,
+      unique: true,
+      index: true,
+    },
   },
   { timestamps: true }
 );

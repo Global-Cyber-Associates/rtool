@@ -9,28 +9,26 @@ const AgentSchema = new mongoose.Schema(
       index: true,
     },
 
-    // ⭐ MULTI-TENANT KEY
+    // ⭐ MULTI-TENANT LINK
     tenantId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Tenant",
       required: true,
       index: true,
+      immutable: true, // ❗ agent cannot change tenant
     },
 
     socketId: { type: String },
     ip: { type: String },
-    mac: { type: String },
-
-    lastSeen: {
-      type: Date,
-      default: Date.now,
-    },
 
     status: {
       type: String,
       enum: ["online", "offline"],
       default: "offline",
     },
+
+    lastSeen: { type: Date, default: Date.now },
+    mac: { type: String },
   },
   { timestamps: true }
 );

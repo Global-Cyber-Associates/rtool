@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../../utils/authService";
+import { updateSocketToken } from "../../utils/socket";
 import logo from "../../assets/gca.png";
 import "./login.css";
 
@@ -18,6 +19,7 @@ function Login() {
 
     if (res.token) {
       const role = sessionStorage.getItem("role");
+      updateSocketToken(res.token);
 
       if (role === "admin") navigate("/admin/dashboard");
       else navigate("/dashboard");

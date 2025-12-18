@@ -58,7 +58,9 @@ def disconnect():
 def connect_socket():
     try:
         if not sio.connected:
-            sio.connect(SERVER_URL)
+            token = os.getenv("TENANT_KEY")
+            auth_payload = {"token": token} if token else {}
+            sio.connect(SERVER_URL, auth=auth_payload)
     except Exception as e:
         logging.error(f"[⚠️] Socket connection failed: {e}")
 

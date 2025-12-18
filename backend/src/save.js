@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 import Agent from "./models/Agent.js";
 import SystemInfo from "./models/SystemInfo.js";
 import InstalledApps from "./models/InstalledApps.js";
@@ -5,25 +7,25 @@ import PortScanData from "./models/PortScan.js";
 import TaskInfo from "./models/TaskInfo.js";
 import VisualizerScanner from "./models/VisualizerScanner.js";
 import ScanResult from "./models/ScanResult.js";
-import mongoose from "mongoose";
 
-// ⭐ DEFAULT TENANT (fallback for agents)
-const DEFAULT_TENANT_ID = new mongoose.Types.ObjectId(
-  "694114ce93766c317e31ff5a"
-);
+// (DEFAULT TENANT REMOVED)
 
 // =====================================================
-// ⭐ RESOLVE AGENT + TENANT
+// 🔒 RESOLVE AGENT + TENANT (SINGLE SOURCE OF TRUTH)
 // =====================================================
-async function resolveAgentAndTenant(payload) {
+async function resolveAgent(payload) {
   const { agentId } = payload;
 
   let agent = await Agent.findOne({ agentId });
 
+  // First time agent → must have valid tenantId passed
   if (!agent) {
+    if (!payload.tenantId) {
+      throw new Error("Cannot register new agent without tenantId");
+    }
     agent = await Agent.create({
       agentId,
-      tenantId: DEFAULT_TENANT_ID,
+      tenantId: payload.tenantId,
       socketId: payload.socket_id || null,
       ip: payload.ip || "unknown",
       lastSeen: new Date(),
@@ -36,25 +38,37 @@ async function resolveAgentAndTenant(payload) {
 }
 
 // =====================================================
-// ⭐ SAVE AGENT DATA (PHASE-1 SAFE VERSION)
+// ⭐ SAVE AGENT DATA (TENANT ENFORCED)
 // =====================================================
-export async function saveAgentData(payload) {
+export async function saveAgentData(payload, tenantId) {
   try {
     if (!payload?.type || !payload?.data || !payload?.agentId) {
-      console.error("❌ Invalid payload");
+      console.error("❌ Invalid agent payload");
       return;
     }
 
     const { type, agentId, data } = payload;
     const timestamp = payload.timestamp || new Date().toISOString();
 
-    // Resolve agent + tenant
-    const agent = await resolveAgentAndTenant(payload);
-    const tenantId = agent.tenantId;
+    // 1️⃣ Resolve agent + tenant
+    // We pass tenantId to resolveAgent to ensure new agents are bound correctly
+    const agent = await resolveAgent({ ...payload, tenantId });
 
-    // Update agent heartbeat
+    // Verify tenant match if agent already existed
+    if (agent.tenantId.toString() !== tenantId.toString()) {
+      console.warn(`⚠️ Agent ${agentId} tried to report for wrong tenant ${tenantId} (actual: ${agent.tenantId})`);
+      // We could throw here, but for now let's just enforce the agent's actual tenant
+      // Or better: update the agent's record if we trust the new binding? 
+      // No, agent.tenantId is immutable.
+      // So we must use agent.tenantId.
+    }
+
+    // Use the reliable tenantId from the DB (or the one just created)
+    const finalTenantId = agent.tenantId;
+
+    // 2️⃣ Update agent heartbeat (tenant-safe)
     await Agent.findOneAndUpdate(
-      { agentId , tenantId},
+      { agentId, tenantId: finalTenantId },
       {
         $set: {
           socketId: payload.socket_id || null,
@@ -66,9 +80,10 @@ export async function saveAgentData(payload) {
       }
     );
 
-    // Skip USB payloads
+    // 3️⃣ USB handled elsewhere
     if (type === "usb_devices") return;
 
+    // 4️⃣ Resolve model
     let Model;
     switch (type) {
       case "system_info":
@@ -84,18 +99,17 @@ export async function saveAgentData(payload) {
         Model = TaskInfo;
         break;
       default:
+        console.warn(`⚠️ Unknown agent data type: ${type}`);
         return;
     }
 
-    // 🔑 IMPORTANT:
-    // We DO NOT filter by tenantId yet
-    // We ONLY write tenantId
+    // 5️⃣ TENANT + AGENT scoped upsert
     await Model.findOneAndUpdate(
-      { agentId },
+      { tenantId: finalTenantId, agentId },
       {
         $set: {
+          tenantId: finalTenantId,
           agentId,
-          tenantId,
           timestamp,
           type,
           data,
@@ -103,40 +117,40 @@ export async function saveAgentData(payload) {
       },
       { upsert: true }
     );
-
   } catch (err) {
     console.error("❌ saveAgentData failed:", err);
   }
 }
 
 // =====================================================
-// ⭐ SAVE NETWORK SCAN (PHASE-1 SAFE)
+// ⭐ NETWORK SCAN (ADMIN / TENANT ONLY)
 // =====================================================
-export async function saveNetworkScan(
-  devicesList,
-  tenantId = DEFAULT_TENANT_ID
-) {
+export async function saveNetworkScan(devicesList, tenantId) {
   try {
     if (!Array.isArray(devicesList)) return;
+
+    if (!tenantId) return;
 
     const aliveIPs = devicesList
       .map((d) => d.ip?.trim())
       .filter(Boolean);
 
-    // NOTE: VisualizerScanner schema must have tenantId later
+    // Remove stale devices for this tenant
     await VisualizerScanner.deleteMany({
+      tenantId,
       ip: { $nin: aliveIPs },
     });
 
+    // Upsert current scan
     for (const dev of devicesList) {
       if (!dev.ip) continue;
 
       await VisualizerScanner.findOneAndUpdate(
-        { ip: dev.ip.trim() },
+        { tenantId, ip: dev.ip.trim() },
         {
           $set: {
-            ip: dev.ip.trim(),
             tenantId,
+            ip: dev.ip.trim(),
             mac: dev.mac || null,
             vendor: dev.vendor || null,
             ping_only: dev.ping_only ?? true,
@@ -152,14 +166,13 @@ export async function saveNetworkScan(
 }
 
 // =====================================================
-// ⭐ SAVE VULNERABILITY SCAN (PHASE-1 SAFE)
+// ⭐ VULNERABILITY SCAN (TENANT SAFE)
 // =====================================================
-export async function saveVulnerabilityScan(
-  scanObject,
-  tenantId = DEFAULT_TENANT_ID
-) {
+export async function saveVulnerabilityScan(scanObject, tenantId) {
   try {
     if (!scanObject?.hosts) return;
+
+    if (!tenantId) return;
 
     const order = ["Info", "Low", "Medium", "High", "Critical"];
     const impacts = scanObject.hosts.map(
@@ -169,12 +182,12 @@ export async function saveVulnerabilityScan(
     const overall_impact =
       impacts.length > 0
         ? impacts.sort(
-            (a, b) => order.indexOf(b) - order.indexOf(a)
-          )[0]
+          (a, b) => order.indexOf(b) - order.indexOf(a)
+        )[0]
         : "Info";
 
     await ScanResult.findOneAndUpdate(
-      {},
+      { tenantId },
       {
         $set: {
           tenantId,

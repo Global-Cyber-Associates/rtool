@@ -44,19 +44,20 @@ const wlanSchema = new mongoose.Schema(
 
 const systemInfoSchema = new mongoose.Schema(
   {
-    // ⭐ MULTI-TENANT KEY
-    tenantId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Tenant",
-      required: true,
-      index: true,
-    },
-
     agentId: {
       type: String,
       required: true,
       index: true,
       ref: "Agent",
+    },
+
+    // ⭐ MULTI-TENANT FIELD
+    tenantId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Tenant",
+      required: true,
+      index: true,
+      immutable: true,
     },
 
     timestamp: {
@@ -86,5 +87,8 @@ const systemInfoSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+// ⭐ Critical compound index
+systemInfoSchema.index({ tenantId: 1, agentId: 1 });
 
 export default mongoose.model("SystemInfo", systemInfoSchema);

@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const UsbDeviceSchema = new mongoose.Schema(
   {
-    // ⭐ MULTI-TENANT KEY (SCHEMA ONLY)
+    // ⭐ MULTI-TENANT KEY
     tenantId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Tenant",
@@ -14,6 +14,7 @@ const UsbDeviceSchema = new mongoose.Schema(
       type: String,
       required: true,
       index: true,
+      ref: "Agent",
     },
 
     data: {
@@ -46,11 +47,8 @@ const UsbDeviceSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// ⭐ Tenant-safe uniqueness
-UsbDeviceSchema.index(
-  { tenantId: 1, agentId: 1 },
-  { unique: true }
-);
+// ⭐ Tenant + Agent scoped
+UsbDeviceSchema.index({ tenantId: 1, agentId: 1 }, { unique: true });
 
 // ✅ Prevent duplicate model registration
 export default mongoose.models.UsbDevice ||
