@@ -47,177 +47,164 @@ async function runDashboardWorker(interval = 4500) {
   const routerEndings = [1, 250, 253, 254];
 
   const loop = async () => {
-    try {
-      // 1. Fetch Raw Data
-      const agents = await Agent.find({}).lean();
-      const sysRaw = await SystemInfo.find({}).lean();
-      const vizRaw = await VisualizerData.find({}).lean();
+    // 0. Iterate Active Tenants
+    const tenants = global.ACTIVE_TENANTS ? [...global.ACTIVE_TENANTS] : []; // defensive copy
 
-      // 2. Map System Info by AgentId
-      const sysByAgentId = {};
-      sysRaw.forEach((sys) => {
-        if (sys.agentId) sysByAgentId[sys.agentId] = sys;
-      });
+    // If no active tenants, we might still want to process if we want background updates, 
+    // but typically we only care about active ones.
+    // However, for correct "Dashboard" loading on login, we might need data even if socket just connected.
+    // Let's assume ACTIVE_TENANTS includes anyone with socket open (User or Agent).
 
-      // 3. Classify Agents (Active vs Inactive) using Agent.status
-      const activeAgents = [];
-      const inactiveAgents = [];
+    for (const tenantId of tenants) {
+      try {
+        // 1. Fetch Scoped Data
+        const agents = await Agent.find({ tenantId }).lean();
+        const sysRaw = await SystemInfo.find({ tenantId }).lean();
+        const vizRaw = await VisualizerData.find({ tenantId }).lean();
 
-      agents.forEach((agent) => {
-        const sys = sysByAgentId[agent.agentId] || {};
-        const sysData = sys.data || {};
+        // 2. Map System Info by AgentId
+        const sysByAgentId = {};
+        sysRaw.forEach((sys) => {
+          if (sys.agentId) sysByAgentId[sys.agentId] = sys;
+        });
 
-        // Merge agent + system info
-        const richAgent = {
-          agentId: agent.agentId,
-          ip: agent.ip || sysData.ip || "unknown",
-          hostname: sysData.hostname || "Unknown",
-          status: agent.status || "offline",
-          lastSeen: agent.lastSeen,
-          cpu: sysData.cpu,
-          memory: sysData.memory,
-          os: sysData.os_type,
-          system: sysData,
-          mac: agent.mac || sysData.mac || null,  // ⭐ NEW: Include MAC
-          timestamp: agent.lastSeen // ⭐ NEW: Populate timestamp for "Detected At"
+        // 3. Classify Agents
+        const activeAgents = [];
+        const inactiveAgents = [];
+
+        agents.forEach((agent) => {
+          const sys = sysByAgentId[agent.agentId] || {};
+          const sysData = sys.data || {};
+
+          // Merge
+          const richAgent = {
+            agentId: agent.agentId,
+            ip: agent.ip || sysData.ip || "unknown",
+            hostname: sysData.hostname || "Unknown",
+            status: agent.status || "offline",
+            lastSeen: agent.lastSeen,
+            cpu: sysData.cpu,
+            memory: sysData.memory,
+            os: sysData.os_type,
+            system: sysData,
+            mac: agent.mac || sysData.mac || null,
+            timestamp: agent.lastSeen,
+            tenantId // Keep context
+          };
+
+          if (agent.status === 'online') {
+            activeAgents.push(richAgent);
+          } else {
+            inactiveAgents.push(richAgent);
+          }
+        });
+
+        // 4. Build "All Devices" Map
+        const allDevicesMap = new Map();
+
+        // Helper to add device
+        const addOrUpdateDevice = (device, isAgent) => {
+          // Try to find existing by MAC
+          if (device.mac && allDevicesMap.has(device.mac)) {
+            const existing = allDevicesMap.get(device.mac);
+            if (isAgent) {
+              allDevicesMap.set(device.mac, { ...existing, ...device, source: 'agent', noAgent: false });
+            } else {
+              if (existing.source !== 'agent') {
+                allDevicesMap.set(device.mac, { ...existing, ...device });
+              }
+            }
+            return;
+          }
+
+          // Try to find existing by IP
+          if (device.ip && device.ip !== 'unknown' && allDevicesMap.has(device.ip)) {
+            const existing = allDevicesMap.get(device.ip);
+            if (isAgent) {
+              allDevicesMap.set(device.ip, { ...existing, ...device, source: 'agent', noAgent: false });
+            } else {
+              if (existing.source !== 'agent') {
+                allDevicesMap.set(device.ip, { ...existing, ...device });
+              }
+            }
+            return;
+          }
+
+          // New
+          let key = device.mac || device.ip;
+          if ((!key || key === 'unknown') && isAgent) {
+            key = device.agentId;
+          }
+          if (key && key !== 'unknown') {
+            allDevicesMap.set(key, { ...device, source: isAgent ? 'agent' : 'scanner', noAgent: !isAgent });
+          }
         };
 
-        if (agent.status === 'online') {
-          activeAgents.push(richAgent);
-        } else {
-          inactiveAgents.push(richAgent);
-        }
-      });
+        // A. ADD AGENTS
+        [...activeAgents, ...inactiveAgents].forEach(a => addOrUpdateDevice(a, true));
 
-      // 4. Build "All Devices" (Union of Agents & Scanned Devices)
-      //    Strategy: Map keys using MAC if available, else IP.
+        // B. ADD SCANNER DATA
+        const routers = [];
+        const unknownDevices = [];
 
-      const allDevicesMap = new Map(); // Key: MAC or IP, Value: Device Object
+        vizRaw.forEach(scan => {
+          if (!scan.ip) return;
+          const device = {
+            ip: scan.ip,
+            hostname: scan.hostname || "Unknown",
+            mac: scan.mac || null,
+            vendor: scan.vendor || "Unknown",
+            createdAt: scan.createdAt || scan.timestamp,
+            timestamp: scan.createdAt || scan.timestamp,
+            tenantId
+          };
+          addOrUpdateDevice(device, false);
+        });
 
-      // Helper to add device
-      const addOrUpdateDevice = (device, isAgent) => {
-        // Try to find existing by MAC
-        if (device.mac && allDevicesMap.has(device.mac)) {
-          const existing = allDevicesMap.get(device.mac);
-          // Agent always overwrites generic scan
-          if (isAgent) {
-            allDevicesMap.set(device.mac, { ...existing, ...device, source: 'agent', noAgent: false });
+        // Re-process map
+        const finalDevices = Array.from(allDevicesMap.values());
+
+        finalDevices.forEach(d => {
+          if (d.source === 'agent') return;
+          const lastOctet = Number(d.ip.split('.').pop());
+          if (routerEndings.includes(lastOctet)) {
+            routers.push(d);
           } else {
-            // If existing is agent, keep agent data but maybe update lastSeen from scan
-            // If existing is scan, update with newer scan
-            if (existing.source !== 'agent') {
-              allDevicesMap.set(device.mac, { ...existing, ...device });
-            }
+            unknownDevices.push(d);
           }
-          return;
-        }
+        });
 
-        // Try to find existing by IP (if MAC didn't match or wasn't present)
-        if (device.ip && device.ip !== 'unknown' && allDevicesMap.has(device.ip)) {
-          const existing = allDevicesMap.get(device.ip);
+        const allDevices = finalDevices;
 
-          // If one has MAC and other doesn't, or both have same MAC (handled above), or different MACs (IP conflict?)
-          // If existing has MAC and new doesn't -> keep existing (it's better identified)
-          // If new has MAC and old doesn't -> replace/update
-
-          if (isAgent) {
-            // Agent wins IP slot
-            allDevicesMap.set(device.ip, { ...existing, ...device, source: 'agent', noAgent: false });
-          } else {
-            // Scanner found IP. 
-            if (existing.source !== 'agent') {
-              allDevicesMap.set(device.ip, { ...existing, ...device });
-            }
-          }
-          return;
-        }
-
-        // No match, add new (Uniquely Keyed)
-        // Prefer MAC, then IP. Fallback to agentId if agent.
-        let key = device.mac || device.ip;
-
-        if ((!key || key === 'unknown') && isAgent) {
-          key = device.agentId;
-        }
-
-        if (key && key !== 'unknown') {
-          allDevicesMap.set(key, { ...device, source: isAgent ? 'agent' : 'scanner', noAgent: !isAgent });
-        }
-      };
-
-      // A. ADD AGENTS
-      [...activeAgents, ...inactiveAgents].forEach(a => addOrUpdateDevice(a, true));
-
-      // B. ADD SCANNER DATA
-      const routers = [];
-      const unknownDevices = [];
-
-      vizRaw.forEach(scan => {
-        if (!scan.ip) return;
-
-        const device = {
-          ip: scan.ip,
-          hostname: scan.hostname || "Unknown",
-          mac: scan.mac || null,
-          vendor: scan.vendor || "Unknown",
-          createdAt: scan.createdAt || scan.timestamp,
-          timestamp: scan.createdAt || scan.timestamp, // ⭐ ADDED for "Detected At"
+        // 5. Final Snapshot
+        const snapshot = {
+          tenantId, // ⭐ Scoped
+          timestamp: new Date(),
+          summary: {
+            all: allDevices.length,
+            active: activeAgents.length,
+            inactive: inactiveAgents.length,
+            unknown: unknownDevices.length,
+            routers: routers.length,
+          },
+          allDevices,
+          activeAgents,
+          inactiveAgents,
+          routers,
+          unknownDevices,
         };
 
-        addOrUpdateDevice(device, false);
-      });
+        await Dashboard.findOneAndUpdate(
+          { tenantId },
+          { $set: snapshot },
+          { upsert: true }
+        );
 
-      // Re-process map to separate routers/unknowns based on final list
-      const finalDevices = Array.from(allDevicesMap.values());
+        // console.log(`✅ Dashboard updated for tenant ${tenantId}`);
 
-      // Filter Routers/Unknowns derived from the final list
-      // (Only those that are NOT agents)
-      finalDevices.forEach(d => {
-        if (d.source === 'agent') return; // Agents aren't "unknown" or "routers" needing classification here typically
-
-        const lastOctet = Number(d.ip.split('.').pop());
-        if (routerEndings.includes(lastOctet)) {
-          routers.push(d);
-        } else {
-          unknownDevices.push(d);
-        }
-      });
-
-      // All Devices = Agents + Unknowns + Routers (basically everything in map)
-      // But usually dashboard wants "All Devices" list.
-      const allDevices = finalDevices;
-
-      // -----------------------------------------
-      // FINAL SNAPSHOT
-      // -----------------------------------------
-      const snapshot = {
-        _id: "dashboard_latest",
-        timestamp: new Date(),
-
-        summary: {
-          all: allDevices.length,
-          active: activeAgents.length,
-          inactive: inactiveAgents.length,
-          unknown: unknownDevices.length,
-          routers: routers.length,
-        },
-
-        allDevices,
-        activeAgents,
-        inactiveAgents,
-        routers,
-        unknownDevices,
-      };
-
-      await Dashboard.updateOne(
-        { _id: "dashboard_latest" },
-        { $set: snapshot },
-        { upsert: true }
-      );
-
-      console.log("✅ Dashboard snapshot updated");
-    } catch (err) {
-      console.error("❌ Dashboard Worker Error:", err);
+      } catch (err) {
+        console.error(`❌ Dashboard loop error for tenant ${tenantId}:`, err);
+      }
     }
   };
 

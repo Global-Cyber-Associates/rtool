@@ -49,7 +49,9 @@ const Dashboard = () => {
         if (aborter) aborter.abort();
         aborter = new AbortController();
 
+        const token = sessionStorage.getItem("token");
         const res = await fetch(`${BACKEND_URL}/api/dashboard`, {
+          headers: { "Authorization": `Bearer ${token}` },
           signal: aborter.signal,
         });
 

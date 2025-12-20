@@ -4,9 +4,14 @@ import Dashboard from "../models/Dashboard.js";
 
 export async function getDashboard(req, res) {
   try {
-    const snapshot = await Dashboard.findById("dashboard_latest").lean();
+    const { tenantId } = req.user;
+    const snapshot = await Dashboard.findOne({ tenantId }).lean();
     if (!snapshot) {
-      return res.status(404).json({ message: "Dashboard not ready" });
+      // Return empty structure if not ready yet
+      return res.json({
+        summary: { all: 0, active: 0, inactive: 0, unknown: 0, routers: 0 },
+        allDevices: [], activeAgents: [], inactiveAgents: [], routers: [], unknownDevices: []
+      });
     }
     res.json(snapshot);
   } catch (err) {
@@ -17,13 +22,16 @@ export async function getDashboard(req, res) {
 
 export async function getSummary(req, res) {
   try {
-    const doc = await Dashboard.findById(
-      "dashboard_latest",
+    const { tenantId } = req.user;
+    const doc = await Dashboard.findOne(
+      { tenantId },
       "summary timestamp"
     ).lean();
 
     if (!doc) {
-      return res.status(404).json({ message: "Dashboard not ready" });
+      return res.json({
+        summary: { all: 0, active: 0, inactive: 0, unknown: 0, routers: 0 }
+      });
     }
 
     res.json(doc);
