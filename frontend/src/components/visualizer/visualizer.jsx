@@ -16,7 +16,7 @@ export default function Visualizer() {
     setLoading(true);
     const token = sessionStorage.getItem("token");
 
-    fetch(`http://localhost:5000/api/visualizer-data`, {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/visualizer-data`, {
         headers: {
             "Authorization": `Bearer ${token}`
         }

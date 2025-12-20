@@ -13,7 +13,10 @@ const UsbControl = () => {
   const fetchUsbData = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${BACKEND_URL}/api/usb`);
+      const token = sessionStorage.getItem("token");
+      const res = await fetch(`${BACKEND_URL}/api/usb`, {
+        headers: { "Authorization": `Bearer ${token}` }
+      });
       const data = await res.json();
       setUsbData(data);
     } catch (err) {
@@ -51,9 +54,13 @@ const UsbControl = () => {
   // Handle status change for a specific user and device
   const handleStatusChange = async (username, serial, newStatus) => {
     try {
+      const token = sessionStorage.getItem("token");
       await fetch(`${BACKEND_URL}/api/usb/status`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify({ username, serial, status: newStatus }),
       });
 

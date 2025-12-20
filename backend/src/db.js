@@ -28,6 +28,10 @@ export async function connectMongo(uri, opts = {}) {
         await mongoose.connection.collections["agents"].dropIndex("agentId_1");
         console.log("⚠️ Dropped legacy index 'agentId_1'");
       }
+      if (mongoose.connection.collections["visualizerscanners"]) {
+        await mongoose.connection.collections["visualizerscanners"].dropIndex("ip_1");
+        console.log("⚠️ Dropped legacy index 'ip_1' on visualizerscanners");
+      }
     } catch (e) {
       // Ignore if index doesn't exist
     }

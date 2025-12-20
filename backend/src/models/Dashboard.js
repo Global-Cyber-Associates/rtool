@@ -2,7 +2,8 @@ import mongoose from "mongoose";
 
 const DashboardSchema = new mongoose.Schema(
   {
-    _id: { type: String, default: "dashboard_latest" },
+    // _id will be auto-generated or composite
+    tenantId: { type: mongoose.Schema.Types.ObjectId, ref: "Tenant", index: true },
 
     timestamp: Date,
 

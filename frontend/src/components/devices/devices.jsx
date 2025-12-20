@@ -16,7 +16,7 @@ const Devices = () => {
     // --- Fetch agents ---
     // --- Fetch agents via API ---
     const token = sessionStorage.getItem("token");
-    fetch("http://localhost:5000/api/agents", {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/agents`, {
       headers: { "Authorization": `Bearer ${token}` }
     })
     .then(res => res.json())
