@@ -77,7 +77,7 @@ const Sidebar = ({ onToggle, isOpen: controlledIsOpen }) => {
           {/* Logo */}
           <div className="sidebar-header">
             <img src={Logo} alt="GCA" className="sidebar-logo" />
-            {isOpen && <h1 className="company-name">VisuN</h1>}
+            {isOpen && <h1 className="company-name">Global Cyber Associates</h1>}
           </div>
 
           {/* NAV LINKS */}

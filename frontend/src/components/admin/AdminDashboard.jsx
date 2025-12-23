@@ -117,7 +117,7 @@ function AdminDashboard() {
                   <td>{ten.ownerEmail}</td>
                   <td style={{ fontFamily: 'monospace', fontSize: '0.8rem' }}>{ten.enrollmentKey}</td>
                   <td>
-                    <div className="stat-card">
+                    <div className="stat-card-admin">
                       <Smartphone size={14} style={{ marginRight: '5px' }} />
                       {ten.deviceCount} Devices
                     </div>

@@ -12,7 +12,8 @@
   padding: 15px 10px;
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), left 0.3s ease;
   z-index: 900;
-  overflow: hidden; /* Controlled overflow on sections instead */
+  overflow: hidden;
+  /* Controlled overflow on sections instead */
 }
 
 .sidebar.open {
@@ -35,8 +36,9 @@
 .sidebar-top-section::-webkit-scrollbar {
   width: 3px;
 }
+
 .sidebar-top-section::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.05);
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 10px;
 }
 
@@ -44,9 +46,9 @@
   .sidebar.open {
     width: 240px;
     z-index: 1001;
-    box-shadow: 10px 0 30px rgba(0,0,0,0.6);
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.6);
   }
-  
+
   .sidebar.closed {
     width: 0;
     left: -70px;
@@ -60,15 +62,14 @@
   align-items: center;
   gap: 12px;
   padding: 10px 10px;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
+  margin-top: 30px;
   min-height: 40px;
 }
 
 .sidebar-logo {
-  width: 28px;
-  height: 28px;
-  min-width: 28px;
-  object-fit: contain;
+  width: 70px;
+  height: 50px;
 }
 
 .company-name {
@@ -76,7 +77,8 @@
   font-weight: 800;
   color: #fff;
   letter-spacing: 1px;
-  white-space: nowrap;
+  white-space: wrap;
+  line-height: 1.2;
 }
 
 /* ===== Nav Links ===== */
