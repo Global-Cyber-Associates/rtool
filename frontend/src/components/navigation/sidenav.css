@@ -1,5 +1,6 @@
 /* ===== Sidebar ===== */
 .sidebar {
+  position: fixed;
   top: 0;
   left: 0;
   height: 100vh;
@@ -8,10 +9,10 @@
   color: #a8dadc;
   display: flex;
   flex-direction: column;
-  padding: 20px 15px;
-  transition: width 0.3s ease-in-out, left 0.3s ease;
-  z-index: 1000;
-  overflow-y: auto;
+  padding: 15px 10px;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), left 0.3s ease;
+  z-index: 900;
+  overflow: hidden; /* Controlled overflow on sections instead */
 }
 
 .sidebar.open {
@@ -19,19 +20,66 @@
 }
 
 .sidebar.closed {
-  width: 0;
-  padding: 0;
-  border-right: none;
+  width: 70px;
+  padding: 15px 10px;
 }
 
-.sidebar-title {
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: #0077b6;
-  margin-bottom: 25px;
-  text-align: center;
+.sidebar-top-section {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 2px;
 }
 
+/* Scrollbar for nav list */
+.sidebar-top-section::-webkit-scrollbar {
+  width: 3px;
+}
+.sidebar-top-section::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+  .sidebar.open {
+    width: 240px;
+    z-index: 1001;
+    box-shadow: 10px 0 30px rgba(0,0,0,0.6);
+  }
+  
+  .sidebar.closed {
+    width: 0;
+    left: -70px;
+    padding: 0;
+    border: none;
+  }
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 10px;
+  margin-bottom: 20px;
+  min-height: 40px;
+}
+
+.sidebar-logo {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  object-fit: contain;
+}
+
+.company-name {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+/* ===== Nav Links ===== */
 .sidebar-nav {
   list-style: none;
   padding: 0;
@@ -39,41 +87,92 @@
 }
 
 .sidebar-nav li {
-  margin-bottom: 12px;
+  margin-bottom: 4px;
 }
 
 .nav-link {
   display: flex;
   align-items: center;
-  font-size: 0.95rem;
-  font-weight: 500;
   color: #a8dadc;
   text-decoration: none;
   padding: 10px 12px;
-  border-radius: 10px;
-  transition: all 0.25s ease-in-out;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  gap: 12px;
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.nav-link.mini {
+  justify-content: center;
+  padding: 10px 0;
+  gap: 0;
+}
+
+.nav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+}
+
+.nav-label {
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
 .nav-link:hover {
-  background-color: #1b263b;
+  background-color: rgba(255, 255, 255, 0.05);
   color: #fff;
-  transform: translateX(4px);
 }
 
 .nav-link.active {
-  background: linear-gradient(90deg, #0077b6 0%, #457b9d 100%);
+  background: #1e8ef1;
   color: #fff;
-  box-shadow: 0 0 10px rgba(0, 119, 182, 0.4);
+  box-shadow: 0 4px 10px rgba(31, 142, 241, 0.2);
 }
 
-/* ===== Main Content ===== */
-.main-content {
-  flex: 1;
-  padding: 25px;
-  min-height: 100vh;
-  transition: margin-left 0.3s ease;
-  background: #0b1e2d;
+.logout-btn:hover {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+/* ===== Account Section ===== */
+.sidebar-account-section {
+  padding-top: 15px;
+  margin-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.account-info {
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.account-name {
   color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.account-email {
+  color: #64748b;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.account-nav {
+  margin-top: 5px;
 }
 
 /* ===== Toggle Button ===== */
@@ -81,113 +180,29 @@
   position: fixed;
   top: 15px;
   left: 15px;
-  background: #0b1e2d;
-  border: 2px solid #1b263b;
+  background: #1b263b;
+  border: 1px solid #334155;
   color: #a8dadc;
-  border-radius: 10px;
-  padding: 6px 8px;
+  border-radius: 8px;
+  padding: 8px;
   cursor: pointer;
-  z-index: 1100;
+  z-index: 1000;
   transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .sidebar-toggle:hover {
-  background: #1b263b;
+  background: #2c3e55;
   color: #fff;
 }
 
-/* ===== Scrollbar ===== */
-.sidebar::-webkit-scrollbar {
-  width: 6px;
-}
-.sidebar::-webkit-scrollbar-thumb {
-  background: #457b9d;
-  border-radius: 3px;
-}
-.sidebar::-webkit-scrollbar-thumb:hover {
-  background: #0077b6;
-}
-
-.sidebar-header {
-  display: flex;
-  align-items: center;
-  padding: 1rem;
-  gap: 0.5rem;
-  margin-top: 20px;
-}
-
-.sidebar-logo {
-  width: 40px; /* adjust as needed */
-  height: 40px;
-  object-fit: contain;
-}
-
-.company-name {
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: #fff; /* adjust to your sidebar text color */
-}
-
-/* ===== Responsive ===== */
-@media (max-width: 768px) {
-  .sidebar {
-    left: -260px;
-  }
-
-  .sidebar.open {
-    left: 0;
-    width: 240px;
-  }
-
-  .main-content {
-    margin-left: 0 !important;
+/* Small screens adjustments */
+@media (max-width: 1024px) {
+  .sidebar.closed {
+    width: 0;
+    padding: 0;
+    left: -240px;
   }
 }
-
-.sidebar-logout {
-  margin-top: auto;
-  padding: 15px;
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.logout-btn {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: transparent;
-  border: none;
-  color: #fff;
-  padding: 10px;
-  cursor: pointer;
-  font-size: 14px;
-  border-radius: 6px;
-}
-
-.logout-btn:hover {
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.sidebar-user {
-  padding: 12px 15px;
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-  color: #fff;
-}
-
-.user-name {
-  font-weight: 600;
-  font-size: 14px;
-}
-
-.user-email {
-  font-size: 12px;
-  opacity: 0.8;
-}
-
-.user-role {
-  margin-top: 4px;
-  font-size: 11px;
-  font-weight: 600;
-  color: #1f8ef1;
-}
-

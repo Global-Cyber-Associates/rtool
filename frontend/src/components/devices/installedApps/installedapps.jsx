@@ -23,11 +23,11 @@ const InstalledApps = () => {
         });
 
         if (!res.ok) throw new Error("Failed to fetch");
-        
+
         const json = await res.json();
         if (json.success && json.data) {
-           // Handle both single doc and aggregated structure if needed, but API returns single doc
-           setApps(json.data.data?.apps || []);
+          // Handle both single doc and aggregated structure if needed, but API returns single doc
+          setApps(json.data.data?.apps || []);
         }
       } catch (err) {
         console.error("Fetch error:", err);
@@ -44,8 +44,8 @@ const InstalledApps = () => {
   );
 
   return (
-    <div className="usb-control-container dark">
-      <div className="usb-main">
+    <div className="installed-apps-wrapper">
+      <div className="installed-apps-content-inner">
         <div className="usb-header">
           <div className="header-left">
             <button className="back-btn" onClick={() => navigate(-1)}>← Back</button>
@@ -93,10 +93,10 @@ const InstalledApps = () => {
                     <td>
                       {app.install_date
                         ? new Date(
-                            app.install_date.length === 8
-                              ? `${app.install_date.slice(0, 4)}-${app.install_date.slice(4, 6)}-${app.install_date.slice(6, 8)}`
-                              : app.install_date
-                          ).toLocaleDateString()
+                          app.install_date.length === 8
+                            ? `${app.install_date.slice(0, 4)}-${app.install_date.slice(4, 6)}-${app.install_date.slice(6, 8)}`
+                            : app.install_date
+                        ).toLocaleDateString()
                         : "Unknown"}
                     </td>
                   </tr>
@@ -116,10 +116,10 @@ const InstalledApps = () => {
                 <p><b>Install Date:</b>{" "}
                   {selectedApp.install_date
                     ? new Date(
-                        selectedApp.install_date.length === 8
-                          ? `${selectedApp.install_date.slice(0, 4)}-${selectedApp.install_date.slice(4, 6)}-${selectedApp.install_date.slice(6, 8)}`
-                          : selectedApp.install_date
-                      ).toLocaleDateString()
+                      selectedApp.install_date.length === 8
+                        ? `${selectedApp.install_date.slice(0, 4)}-${selectedApp.install_date.slice(4, 6)}-${selectedApp.install_date.slice(6, 8)}`
+                        : selectedApp.install_date
+                    ).toLocaleDateString()
                     : "Unknown"}
                 </p>
                 <p><b>Registry Key:</b> <span className="long-text">{selectedApp.registry_key || "N/A"}</span></p>

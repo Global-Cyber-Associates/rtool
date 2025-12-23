@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiGet, apiPut, apiDelete } from "../../utils/api";
+import Sidebar from "../navigation/sidenav.jsx";
+import TopNav from "../navigation/topnav.jsx";
 import "./ManageUsers.css";
 
 function ManageUsers() {
@@ -54,68 +56,70 @@ function ManageUsers() {
   };
 
   return (
-    <div className="manage-users">
-      <div className="header-row">
-        <h2>Manage Users</h2>
-        <button
-          className="add-user-btn"
-          onClick={() => navigate("/admin/create-user")}
-        >
-          + Add New User
-        </button>
-      </div>
+    <div className="manage-users-content">
+      <div className="manage-users">
+        <div className="header-row">
+          <h2>Manage Users</h2>
+          <button
+            className="add-user-btn"
+            onClick={() => navigate("/admin/create-user")}
+          >
+            + Add New User
+          </button>
+        </div>
 
-      {message && <div className="success-msg">{message}</div>}
+        {message && <div className="success-msg">{message}</div>}
 
-      <table className="users-table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Status</th>
-            <th>Action</th>
-            <th>Delete</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {users.map((u) => (
-            <tr key={u._id} className={!u.isActive ? "disabled-row" : ""}>
-              <td>{u.name}</td>
-              <td>{u.email}</td>
-              <td>{u.role}</td>
-
-              <td>
-                <span
-                  className={u.isActive ? "status-active" : "status-disabled"}
-                >
-                  {u.isActive ? "Active" : "Disabled"}
-                </span>
-              </td>
-
-              <td>
-                <button
-                  className={u.isActive ? "disable-btn" : "enable-btn"}
-                  onClick={() => toggleStatus(u)}
-                >
-                  {u.isActive ? "Disable" : "Enable"}
-                </button>
-              </td>
-
-              <td>
-                <button
-                  className="delete-btn"
-                  disabled={u.email === loggedInEmail}
-                  onClick={() => deleteUser(u)}
-                >
-                  Delete
-                </button>
-              </td>
+        <table className="users-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th>Action</th>
+              <th>Delete</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>
+            {users.map((u) => (
+              <tr key={u._id} className={!u.isActive ? "disabled-row" : ""}>
+                <td>{u.name}</td>
+                <td>{u.email}</td>
+                <td>{u.role}</td>
+
+                <td>
+                  <span
+                    className={u.isActive ? "status-active" : "status-disabled"}
+                  >
+                    {u.isActive ? "Active" : "Disabled"}
+                  </span>
+                </td>
+
+                <td>
+                  <button
+                    className={u.isActive ? "disable-btn" : "enable-btn"}
+                    onClick={() => toggleStatus(u)}
+                  >
+                    {u.isActive ? "Disable" : "Enable"}
+                  </button>
+                </td>
+
+                <td>
+                  <button
+                    className="delete-btn"
+                    disabled={u.email === loggedInEmail}
+                    onClick={() => deleteUser(u)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

@@ -1,16 +1,7 @@
-/* Container */
-.usb-control-container.dark {
-  display: flex;
-  background: #0b1e2d;
-  color: #e2e8f0;
-  height: 100vh;
-  font-family: "Inter", "Segoe UI", sans-serif;
-}
-
-.usb-main {
+/* Main container */
+.installed-apps-wrapper {
   flex: 1;
   padding: 30px 40px;
-  overflow-y: auto;
 }
 
 /* Header */

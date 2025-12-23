@@ -1,171 +1,286 @@
-/* Download Page Styles - Dark Blue Theme */
-.download-container {
-  min-height: 100vh;
+/* frontend/src/components/download/Download.css */
+
+:root {
+  --dl-primary: #1f8ef1;
+  --dl-primary-glow: rgba(31, 142, 241, 0.3);
+  --dl-success: #00f2c3;
+  --dl-bg-dark: #0b111e;
+  --dl-card-bg: rgba(30, 41, 59, 0.65);
+  --dl-border: rgba(255, 255, 255, 0.1);
+  --dl-text-main: #f8fafc;
+  --dl-text-muted: #94a3b8;
+}
+
+.dl-minimal-wrapper {
+  padding: 0 20px;
   display: flex;
-  align-items: center;
   justify-content: center;
-  background: #0b1e2d;
-  padding: 20px;
-  font-family: "Inter", sans-serif;
+  align-items: center; /* Crucial for no-scroll: centers content vertically */
+  min-height: 100vh;
+  background: radial-gradient(circle at 50% 0%, #1e293b 0%, #0b111e 100%);
+  font-family: 'Inter', system-ui, sans-serif;
+  overflow: hidden; /* Lock the viewport */
 }
 
-.download-card {
-  background: #132639;
-  border-radius: 14px;
-  padding: 60px 40px;
-  max-width: 500px;
+.dl-minimal-container {
   width: 100%;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
-  border: 1px solid #1e3b52;
-  text-align: center;
-  animation: slideUp 0.5s ease-out;
-  transition: all 0.25s ease;
+  max-width: 1000px;
+  animation: dl-slide-up 0.4s ease-out;
 }
 
-.download-card:hover {
-  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35);
-  border-color: #457b9d;
+@keyframes dl-slide-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
+/* CONTENT GRID - Horizontal is better for no-scroll */
+.dl-minimal-content {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 30px;
+}
+
+/* Fallback for small heights or mobiles */
+@media (max-height: 700px), (max-width: 900px) {
+  .dl-minimal-wrapper {
+    align-items: flex-start;
+    padding: 30px 20px;
+    overflow-y: auto; 
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.download-icon {
-  color: #a8dadc;
-  margin-bottom: 20px;
-  animation: bounce 2s infinite;
-}
-
-@keyframes bounce {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
+  .dl-minimal-content {
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
 }
 
-.download-card h1 {
-  font-size: 32px;
-  color: #a8dadc;
-  margin-bottom: 15px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-}
-
-.download-description {
-  font-size: 16px;
-  color: #c9d6de;
-  margin-bottom: 30px;
-  line-height: 1.6;
-}
-
-.download-buttons {
+/* SECTION BASE - "Vertical Slim, Horizontal Relaxed" */
+.dl-section {
+  background: var(--dl-card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 18px;
+  padding: 22px 30px; /* Slim vertical (22), relaxed horizontal (30) */
+  border: 1px solid var(--dl-border);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  width: 100%;
-  margin-bottom: 10px;
 }
 
-.download-button {
-  background: #0077b6;
-  color: #fff;
-  border: none;
-  padding: 16px 40px;
-  font-size: 18px;
-  font-weight: 600;
+.dl-section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px; /* Tight vertical */
+}
+
+.dl-section-header .header-icon-box {
+  width: 36px;
+  height: 36px;
+  background: rgba(31, 142, 241, 0.1);
   border-radius: 8px;
-  cursor: pointer;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0, 119, 182, 0.3);
+  color: var(--dl-primary);
 }
 
-.download-button:hover {
-  background: #005f8f;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 119, 182, 0.5);
+.dl-section-header h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--dl-text-main);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-.download-button:active {
-  transform: translateY(0);
+/* FIELDS - No unnecessary space */
+.dl-field {
+  margin-bottom: 20px;
 }
 
-.download-button svg {
-  animation: downloadPulse 1.5s ease-in-out infinite;
+.dl-field-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--dl-text-muted);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
-@keyframes downloadPulse {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(3px);
-  }
+.dl-key-card {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.download-info {
-  margin-top: 40px;
-  padding-top: 30px;
-  border-top: 1px solid #1e3b52;
-  text-align: left;
+.dl-key-card code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--dl-success);
 }
 
-.download-info p {
-  font-size: 14px;
-  color: #c9d6de;
-  margin-bottom: 10px;
-  line-height: 1.6;
+.dl-input-modern {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 12px 14px;
+  color: #fff;
+  font-size: 0.9rem;
+  transition: all 0.2s;
 }
 
-.download-info strong {
-  color: #a8dadc;
+.dl-input-modern:focus {
+  outline: none;
+  border-color: var(--dl-primary);
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.dl-input-hint {
+  font-size: 0.7rem;
+  color: #f87171;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* BUTTONS */
+.dl-action-btn {
+  margin-top: 5px;
+  padding: 14px;
+  background: var(--dl-primary);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.dl-action-btn:hover:not(:disabled) {
+  background: #3197f2;
+}
+
+.dl-action-btn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+/* EXE LIST */
+.dl-exe-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dl-exe-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 14px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dl-exe-meta {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.dl-exe-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dl-exe-icon.admin { background: rgba(31, 142, 241, 0.1); color: var(--dl-primary); }
+.dl-exe-icon.user { background: rgba(0, 242, 195, 0.1); color: var(--dl-success); }
+
+.dl-exe-text h3 {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 2px;
+}
+
+.dl-exe-text p {
+  font-size: 0.75rem;
+  color: var(--dl-text-muted);
+}
+
+.dl-download-btn-small {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.dl-download-btn-small:hover {
+  background: #fff;
+  color: #0b111e;
+}
+
+/* SUPPORT BOX */
+.dl-process-card {
+  margin-top: 15px;
+  padding: 15px;
+  background: rgba(31, 142, 241, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(31, 142, 241, 0.1);
+}
+
+.dl-process-card h4 {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--dl-primary);
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.dl-process-card p {
+  font-size: 0.75rem;
+  color: var(--dl-text-muted);
+  line-height: 1.5;
+}
+
+.dl-process-card .process-highlight {
+  color: #fff;
   font-weight: 600;
 }
 
-/* Scrollbar Styling */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+/* SPINNER */
+.dl-spinner-modern {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(31, 142, 241, 0.1);
+  border-top-color: var(--dl-primary);
+  border-radius: 50%;
+  animation: dl-spin 0.8s linear infinite;
 }
 
-::-webkit-scrollbar-thumb {
-  background: #457b9d;
-  border-radius: 6px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #0077b6;
-}
-
-/* Responsive Design */
-@media (max-width: 600px) {
-  .download-card {
-    padding: 40px 30px;
-  }
-
-  .download-card h1 {
-    font-size: 26px;
-  }
-
-  .download-buttons {
-    gap: 12px;
-  }
-
-  .download-button {
-    padding: 14px 30px;
-    font-size: 16px;
-  }
+@keyframes dl-spin {
+  to { transform: rotate(360deg); }
 }

@@ -1,6 +1,5 @@
 // src/components/UsbControl.jsx
 import React, { useState, useEffect } from "react";
-import Sidebar from "../navigation/sidenav";
 import "./usb.css";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -57,7 +56,7 @@ const UsbControl = () => {
       const token = sessionStorage.getItem("token");
       await fetch(`${BACKEND_URL}/api/usb/status`, {
         method: "POST",
-        headers: { 
+        headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`
         },
@@ -69,14 +68,14 @@ const UsbControl = () => {
         prev.map((agent) =>
           agent.agentId === username
             ? {
-                ...agent,
-                data: {
-                  ...agent.data,
-                  connected_devices: agent.data.connected_devices.map((d) =>
-                    d.serial_number === serial ? { ...d, status: newStatus } : d
-                  ),
-                },
-              }
+              ...agent,
+              data: {
+                ...agent.data,
+                connected_devices: agent.data.connected_devices.map((d) =>
+                  d.serial_number === serial ? { ...d, status: newStatus } : d
+                ),
+              },
+            }
             : agent
         )
       );
@@ -87,11 +86,8 @@ const UsbControl = () => {
 
   if (loading) {
     return (
-      <div className="usb-control-container dark">
-        <Sidebar />
-        <main className="usb-main">
-          <p className="loading">Loading...</p>
-        </main>
+      <div className="usb-content-wrapper">
+        <p className="loading">Loading USB data...</p>
       </div>
     );
   }
@@ -159,22 +155,21 @@ const UsbControl = () => {
                   <td>{agentDevice ? new Date(agentDevice.last_seen).toLocaleString() : "-"}</td>
                   <td>
                     <select
-  className={`status-select ${
-    user.status === "Allowed"
-      ? "allowed"
-      : user.status === "Blocked"
-      ? "blocked"
-      : "waiting"
-  }`}
-  value={user.status}
-  onChange={(e) =>
-    handleStatusChange(user.username, selectedUsb, e.target.value)
-  }
->
-  <option value="Allowed">Allowed</option>
-  <option value="Blocked">Blocked</option>
-  <option value="WaitingForApproval">Waiting For Approval</option>
-</select>
+                      className={`status-select ${user.status === "Allowed"
+                        ? "allowed"
+                        : user.status === "Blocked"
+                          ? "blocked"
+                          : "waiting"
+                        }`}
+                      value={user.status}
+                      onChange={(e) =>
+                        handleStatusChange(user.username, selectedUsb, e.target.value)
+                      }
+                    >
+                      <option value="Allowed">Allowed</option>
+                      <option value="Blocked">Blocked</option>
+                      <option value="WaitingForApproval">Waiting For Approval</option>
+                    </select>
 
                   </td>
                 </tr>
@@ -187,19 +182,16 @@ const UsbControl = () => {
   };
 
   return (
-    <div className="usb-control-container dark">
-      <Sidebar />
-      <main className="usb-main">
-        <header className="usb-header">
-          <h1>USB Access Control</h1>
-          <p>
-            {selectedUsb
-              ? "View users and update their access statuses."
-              : "Click a USB device to see users who have access."}
-          </p>
-        </header>
-        {selectedUsb ? renderUserAccess() : renderDeviceList()}
-      </main>
+    <div className="usb-content-wrapper">
+      <header className="usb-header">
+        <h1>USB Access Control</h1>
+        <p>
+          {selectedUsb
+            ? "View users and update their access statuses."
+            : "Click a USB device to see users who have access."}
+        </p>
+      </header>
+      {selectedUsb ? renderUserAccess() : renderDeviceList()}
     </div>
   );
 };

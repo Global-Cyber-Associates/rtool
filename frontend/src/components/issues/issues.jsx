@@ -1,8 +1,6 @@
 // src/components/Issues.jsx
 import React from "react";
 import "./issues.css";
-import Sidebar from "../navigation/sidenav.jsx";
-
 
 const issues = [
   { id: 1, title: "Agent Not Responding", device: "Laptop-Dev-02", severity: "High", icon: "🚨", time: "2025-09-26T08:00:00Z" },
@@ -14,10 +12,7 @@ const issues = [
 
 const Issues = () => {
   return (
-    <div className="issues-page">
-          <Sidebar />
-
-    <div className="issues-container">
+    <div className="issues-content-wrapper">
       <h1 className="issues-title">System Issues</h1>
 
       <div className="issues-grid">
@@ -33,7 +28,6 @@ const Issues = () => {
         ))}
       </div>
     </div>
-        </div>
   );
 };
 

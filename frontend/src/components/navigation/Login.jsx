@@ -1,6 +1,6 @@
 // frontend/src/components/navigation/Login.jsx
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "../../utils/authService";
 import { updateSocketToken } from "../../utils/socket";
 import logo from "../../assets/gca.png";
@@ -64,15 +64,36 @@ function Login() {
             Login
           </button>
 
-          {/* <div className="download-section">
-            <button
-              type="button"
-              className="download-link-btn"
-              onClick={() => navigate("/download")}
+          <div className="registration-prompt" style={{ marginTop: "24px", textAlign: "center", borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "20px" }}>
+            <p style={{ color: "#a8dadc", fontSize: "0.9rem", marginBottom: "10px" }}>
+              New to VisuN?
+            </p>
+            <Link
+              to="/register"
+              className="register-link-btn"
+              style={{
+                color: "#1f8ef1",
+                fontWeight: "600",
+                textDecoration: "none",
+                fontSize: "1rem",
+                display: "inline-block",
+                padding: "8px 16px",
+                border: "1px solid #1f8ef1",
+                borderRadius: "6px",
+                transition: "all 0.2s"
+              }}
+              onMouseOver={(e) => {
+                e.target.style.background = "#1f8ef1";
+                e.target.style.color = "#fff";
+              }}
+              onMouseOut={(e) => {
+                e.target.style.background = "transparent";
+                e.target.style.color = "#1f8ef1";
+              }}
             >
-              Download Agent
-            </button>
-          </div> */}
+              Request Client Account
+            </Link>
+          </div>
         </form>
       </div>
       <div className="login-footer">© 2025 Global Cyber Associates</div>

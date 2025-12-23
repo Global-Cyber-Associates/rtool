@@ -17,8 +17,8 @@ import path from "path";
 import { fileURLToPath } from 'url';
 
 // Config
-const TENANT_NAME = "Tenant B (Test)";
-const USER_EMAIL = "user_b@test.com";
+const TENANT_NAME = "Tenant C (Test)";
+const USER_EMAIL = "userc@test.com";
 const USER_PASS = "password123";
 
 async function createTenantB() {
@@ -48,7 +48,7 @@ async function createTenantB() {
         email: USER_EMAIL,
         password: hashedPassword,
         tenantId: tenant._id,
-        role: "user"
+        role: "client"
     });
 
     console.log(`✅ Created User: ${user.email}`);

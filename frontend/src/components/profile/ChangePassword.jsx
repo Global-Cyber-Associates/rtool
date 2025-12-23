@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiPut } from "../../utils/api";
+import Sidebar from "../navigation/sidenav.jsx";
+import TopNav from "../navigation/topnav.jsx";
 import "./profile.css";
 
 function ChangePassword() {
@@ -43,37 +45,39 @@ function ChangePassword() {
   };
 
   return (
-    <div className="profile-container">
-      <h2>Change Password</h2>
+    <div className="profile-content-wrapper">
+      <div className="profile-container">
+        <h2>Change Password</h2>
 
-      {error && <div className="error-msg">{error}</div>}
-      {message && <div className="success-msg">{message}</div>}
+        {error && <div className="error-msg">{error}</div>}
+        {message && <div className="success-msg">{message}</div>}
 
-      <form onSubmit={handleSubmit} className="profile-form">
-        <div className="form-group">
-          <label>Old Password</label>
-          <input
-            type="password"
-            value={oldPassword}
-            required
-            onChange={(e) => setOldPassword(e.target.value)}
-          />
-        </div>
+        <form onSubmit={handleSubmit} className="profile-form">
+          <div className="form-group">
+            <label>Old Password</label>
+            <input
+              type="password"
+              value={oldPassword}
+              required
+              onChange={(e) => setOldPassword(e.target.value)}
+            />
+          </div>
 
-        <div className="form-group">
-          <label>New Password</label>
-          <input
-            type="password"
-            value={newPassword}
-            required
-            onChange={(e) => setNewPassword(e.target.value)}
-          />
-        </div>
+          <div className="form-group">
+            <label>New Password</label>
+            <input
+              type="password"
+              value={newPassword}
+              required
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+          </div>
 
-        <button type="submit" className="primary-btn">
-          Update Password
-        </button>
-      </form>
+          <button type="submit" className="primary-btn">
+            Update Password
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

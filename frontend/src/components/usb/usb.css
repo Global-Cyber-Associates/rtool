@@ -1,19 +1,12 @@
 /* usb.css */
 
-/* Container & main layout */
-.usb-control-container.dark {
-  display: flex;
-  background: #0b1e2d;
-  color: #e2e8f0;
-  height: 100vh;
-  font-family: "Segoe UI", sans-serif;
-}
-
-.usb-main {
+/* Main layout */
+.usb-content-wrapper {
   flex: 1;
   padding: 24px 40px;
-  overflow-y: auto;
 }
+
+
 
 .usb-header h1 {
   font-size: 1.8rem;

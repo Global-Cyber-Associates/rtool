@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./dashboard.css";
-import Sidebar from "../navigation/sidenav.jsx";
+
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -84,159 +84,156 @@ const Dashboard = () => {
   } = snapshot;
 
   return (
-    <div className="dashboard">
-      <Sidebar />
-      <div className="dashboard-container">
+    <div className="dashboard-content-wrapper">
 
-        {/* Header */}
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <h1 className="dashboard-title">Network & Device Overview</h1>
-          <div style={{ fontSize: "0.9rem", color: "#666" }}>
-            Last update: {lastUpdated?.toLocaleString()}
-          </div>
+      {/* Header */}
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <h1 className="dashboard-title">Network & Device Overview</h1>
+        <div style={{ fontSize: "0.9rem", color: "#666" }}>
+          Last update: {lastUpdated?.toLocaleString()}
         </div>
+      </div>
 
-        {/* KPI SUMMARY */}
-        <div className="stats-grid">
-          <div className="stat-card gray">
-            <h2>All Devices</h2>
-            <p>{summary.all}</p>
-          </div>
-          <div className="stat-card green">
-            <h2>Active Agents</h2>
-            <p>{summary.active}</p>
-          </div>
-          <div className="stat-card red">
-            <h2>Inactive Agents</h2>
-            <p>{summary.inactive}</p>
-          </div>
-          <div className="stat-card orange">
-            <h2>Unknown Devices</h2>
-            <p>{summary.unknown}</p>
-          </div>
-          <div className="stat-card blue">
-            <h2>Routers</h2>
-            <p>{summary.routers}</p>
-          </div>
+      {/* KPI SUMMARY */}
+      <div className="stats-grid">
+        <div className="stat-card gray">
+          <h2>All Devices</h2>
+          <p>{summary.all}</p>
         </div>
+        <div className="stat-card green">
+          <h2>Active Agents</h2>
+          <p>{summary.active}</p>
+        </div>
+        <div className="stat-card red">
+          <h2>Inactive Agents</h2>
+          <p>{summary.inactive}</p>
+        </div>
+        <div className="stat-card orange">
+          <h2>Unknown Devices</h2>
+          <p>{summary.unknown}</p>
+        </div>
+        <div className="stat-card blue">
+          <h2>Routers</h2>
+          <p>{summary.routers}</p>
+        </div>
+      </div>
 
 
 
-        {/* ================================
+      {/* ================================
             ACTIVE DEVICES TABLE
         ================================= */}
-        <div className="table-container">
-          <h2>Active Devices</h2>
-          <table className="activity-table">
-            <thead>
-              <tr>
-                <th>Agent ID</th>
-                <th>Hostname</th>
-                <th>IP</th>
-                <th>CPU</th>
-                <th>RAM</th>
-                <th>OS</th>
-                <th>Last Seen</th>
+      <div className="table-container">
+        <h2>Active Devices</h2>
+        <table className="activity-table">
+          <thead>
+            <tr>
+              <th>Agent ID</th>
+              <th>Hostname</th>
+              <th>IP</th>
+              <th>CPU</th>
+              <th>RAM</th>
+              <th>OS</th>
+              <th>Last Seen</th>
+            </tr>
+          </thead>
+          <tbody>
+            {activeAgents.map((a) => (
+              <tr key={a.ip}>
+                <td>{a.agentId || "-"}</td>
+                <td>{a.hostname || a.system?.hostname || "-"}</td>
+                <td>{a.ip}</td>
+                <td>{formatCPU(a.cpu)}</td>
+                <td>{formatRAM(a.memory)}</td>
+                <td>{formatOS(a.os)}</td>
+                <td>{formatTime(a.lastSeen)}</td>
               </tr>
-            </thead>
-            <tbody>
-              {activeAgents.map((a) => (
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* ================================
+            INACTIVE DEVICES TABLE
+        ================================= */}
+      <div className="table-container">
+        <h2>Inactive Devices</h2>
+        <table className="activity-table">
+          <thead>
+            <tr>
+              <th>Agent ID</th>
+              <th>Hostname</th>
+              <th>IP</th>
+              <th>CPU</th>
+              <th>RAM</th>
+              <th>OS</th>
+              <th>Last Seen</th>
+            </tr>
+          </thead>
+          <tbody>
+            {inactiveAgents.map((a) => {
+              return (
                 <tr key={a.ip}>
                   <td>{a.agentId || "-"}</td>
-                  <td>{a.hostname || a.system?.hostname || "-"}</td>
+                  <td>{a.hostname || "-"}</td>
                   <td>{a.ip}</td>
                   <td>{formatCPU(a.cpu)}</td>
                   <td>{formatRAM(a.memory)}</td>
                   <td>{formatOS(a.os)}</td>
-                  <td>{formatTime(a.lastSeen)}</td>
+                  <td>{formatTime(a.timestamp)}</td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
 
-        {/* ================================
-            INACTIVE DEVICES TABLE
-        ================================= */}
-        <div className="table-container">
-          <h2>Inactive Devices</h2>
-          <table className="activity-table">
-            <thead>
-              <tr>
-                <th>Agent ID</th>
-                <th>Hostname</th>
-                <th>IP</th>
-                <th>CPU</th>
-                <th>RAM</th>
-                <th>OS</th>
-                <th>Last Seen</th>
-              </tr>
-            </thead>
-            <tbody>
-              {inactiveAgents.map((a) => {
-                return (
-                  <tr key={a.ip}>
-                    <td>{a.agentId || "-"}</td>
-                    <td>{a.hostname || "-"}</td>
-                    <td>{a.ip}</td>
-                    <td>{formatCPU(a.cpu)}</td>
-                    <td>{formatRAM(a.memory)}</td>
-                    <td>{formatOS(a.os)}</td>
-                    <td>{formatTime(a.timestamp)}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-
-        {/* ================================
+      {/* ================================
             UNKNOWN DEVICES
         ================================= */}
-        <div className="table-container">
-          <h2>Unknown Devices</h2>
-          <table className="activity-table">
-            <thead>
-              <tr>
-                <th>IP</th>
-                <th>Detected At</th>
+      <div className="table-container">
+        <h2>Unknown Devices</h2>
+        <table className="activity-table">
+          <thead>
+            <tr>
+              <th>IP</th>
+              <th>Detected At</th>
+            </tr>
+          </thead>
+          <tbody>
+            {unknownDevices.map((d) => (
+              <tr key={d.ip}>
+                <td>{d.ip}</td>
+                <td>{formatTime(d.timestamp)}</td>
               </tr>
-            </thead>
-            <tbody>
-              {unknownDevices.map((d) => (
-                <tr key={d.ip}>
-                  <td>{d.ip}</td>
-                  <td>{formatTime(d.timestamp)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-        {/* ================================
+      {/* ================================
             ROUTERS
         ================================= */}
-        <div className="table-container">
-          <h2>Routers</h2>
-          <table className="activity-table">
-            <thead>
-              <tr>
-                <th>IP</th>
-                <th>Detected At</th>
+      <div className="table-container">
+        <h2>Routers</h2>
+        <table className="activity-table">
+          <thead>
+            <tr>
+              <th>IP</th>
+              <th>Detected At</th>
+            </tr>
+          </thead>
+          <tbody>
+            {routers.map((r) => (
+              <tr key={r.ip}>
+                <td>{r.ip}</td>
+                <td>{formatTime(r.timestamp || r.createdAt)}</td>
               </tr>
-            </thead>
-            <tbody>
-              {routers.map((r) => (
-                <tr key={r.ip}>
-                  <td>{r.ip}</td>
-                  <td>{formatTime(r.timestamp || r.createdAt)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
+            ))}
+          </tbody>
+        </table>
       </div>
+
     </div>
   );
 };

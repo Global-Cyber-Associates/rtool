@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../navigation/sidenav.jsx";
+import TopNav from "../navigation/topnav.jsx";
 import FloorManager from "./view/FloorManager.jsx";
 import FloorGrid from "./view/FloorGrid.jsx";
 import socket, { fetchData } from "../../utils/socket.js";
@@ -17,21 +18,21 @@ export default function Visualizer() {
     const token = sessionStorage.getItem("token");
 
     fetch(`${import.meta.env.VITE_BACKEND_URL}/api/visualizer-data`, {
-        headers: {
-            "Authorization": `Bearer ${token}`
-        }
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
     })
       .then((res) => res.json())
       .then((data) => {
         if (!Array.isArray(data)) return;
 
         const fetchedDevices = data.map((d, i) => ({
+          ...d,
           id: i + 1,
-          name: d.agentId || "Unknown",
+          name: d.agentId || d.hostname || "Unknown",
           ip: d.ip || "N/A",
           mac: d.mac || "Unknown",
           noAgent: d.noAgent,
-          icon: d.noAgent ? "⚠️" : "💻",
           x: (i % 6) * 120,
           y: Math.floor(i / 6) * 120,
         }));
@@ -53,7 +54,7 @@ export default function Visualizer() {
                   ? {
                     ...d,
                     ...deviceUpdate,
-                    name: deviceUpdate.agentId || d.agentId || "Unknown", // 🔥 force agentId display
+                    name: deviceUpdate.agentId || deviceUpdate.hostname || d.agentId || d.hostname || d.name || "Unknown", // 🔥 force agentId display
                   }
                   : d
               ),
@@ -81,26 +82,23 @@ export default function Visualizer() {
   };
 
   return (
-    <div className="visualizer-page">
-      <Sidebar />
-      <div className="visualizer-wrap">
-        <div className="visualizer-header">
-          <h1>Network Visualizer</h1>
-          <FloorManager
-            floors={floors}
-            activeFloor={activeFloor}
-            onAdd={addFloor}
-            onSwitch={setActiveFloor}
-          />
-        </div>
-
-        <FloorGrid
-          key={activeFloor}
-          floor={floors.find((f) => f.id === activeFloor)}
-          updateDevices={(devices) => updateFloorDevices(activeFloor, devices)}
+    <div className="visualizer-content-wrapper">
+      <div className="visualizer-header">
+        <h1>Network Visualizer</h1>
+        <FloorManager
+          floors={floors}
+          activeFloor={activeFloor}
+          onAdd={addFloor}
+          onSwitch={setActiveFloor}
         />
-        {loading && <div className="loading-overlay">Fetching devices...</div>}
       </div>
+
+      <FloorGrid
+        key={activeFloor}
+        floor={floors.find((f) => f.id === activeFloor)}
+        updateDevices={(devices) => updateFloorDevices(activeFloor, devices)}
+      />
+      {loading && <div className="loading-overlay">Fetching devices...</div>}
     </div>
   );
 }

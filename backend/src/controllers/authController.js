@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+import Tenant from "../models/Tenant.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -19,6 +20,13 @@ export async function login(req, res) {
     if (!user.isActive) {
       return res.status(403).json({
         message: "Account is disabled. Contact administrator.",
+      });
+    }
+
+    // 2.5️⃣ Block unapproved clients
+    if (user.role === "client" && !user.isApproved) {
+      return res.status(403).json({
+        message: "Account pending approval. Please wait for an administrator to approve your request.",
       });
     }
 
@@ -108,7 +116,9 @@ export async function changePassword(req, res) {
 // --------------------------------------------------
 export async function getMe(req, res) {
   try {
-    const user = await User.findById(req.user.id).select("-password");
+    const user = await User.findById(req.user.id)
+      .select("-password")
+      .populate("tenantId"); // ⭐ Populate tenant details (for enrollmentKey)
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -118,6 +128,46 @@ export async function getMe(req, res) {
   } catch (err) {
     res.status(500).json({
       message: "Failed to fetch profile",
+      error: err.message,
+    });
+  }
+}
+
+// --------------------------------------------------
+// ⭐ REGISTER (Client Request)
+// --------------------------------------------------
+export async function register(req, res) {
+  try {
+    const { name, email, password, companyName } = req.body;
+
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: "Name, email, and password are required" });
+    }
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "Email already registered" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = new User({
+      name,
+      email,
+      password: hashedPassword,
+      companyName,
+      role: "client",
+      isApproved: false, // Must be approved by admin
+    });
+
+    await newUser.save();
+
+    res.status(201).json({
+      message: "Registration request submitted. You will be able to login once an administrator approves your account.",
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: "Registration failed",
       error: err.message,
     });
   }

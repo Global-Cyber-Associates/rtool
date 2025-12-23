@@ -1,57 +1,78 @@
-import bcrypt from "bcrypt";
 import User from "./models/User.js";
 import Tenant from "./models/Tenant.js";
+import bcrypt from "bcrypt";
 import crypto from "crypto";
-
-const DEFAULT_TENANT_ID = "694114ce93766c317e31ff5a";
 
 export const seedUsers = async () => {
   try {
-    // 1️⃣ Ensure Default Tenant Exists
-    let tenant = await Tenant.findById(DEFAULT_TENANT_ID);
-    if (!tenant) {
-      console.log("⚠️ Default Tenant missing. Creating...");
+    console.log("🌱 Seeding Users and Tenants (Checking for existing entries)...");
+
+    // 1. Ensure System Admin Tenant exists
+    let adminTenant = await Tenant.findOne({ name: "System Administration" });
+    if (!adminTenant) {
+      console.log("Creating System Administration Tenant...");
       const key = "noc_" + crypto.randomBytes(16).toString("hex");
-      tenant = await Tenant.create({
-        _id: DEFAULT_TENANT_ID,
-        name: "Default Tenant",
-        enrollmentKey: key,
+      adminTenant = await Tenant.create({
+        name: "System Administration",
+        enrollmentKey: key
       });
-      console.log("✅ Default Tenant Created.");
-    } else if (!tenant.enrollmentKey) {
-      console.log("⚠️ Default Tenant has no key. Generating...");
-      const key = "noc_" + crypto.randomBytes(16).toString("hex");
-      tenant.enrollmentKey = key;
-      await tenant.save();
     }
 
-    console.log("\n==================================================");
-    console.log("🔑 ENROLLMENT KEY:", tenant.enrollmentKey);
-    console.log("==================================================\n");
-
-    const userEmail = process.env.USER_EMAIL;
-    const userPassword = process.env.USER_PASSWORD;
-
-    if (!userEmail || !userPassword) {
-      console.log("⚠️ Missing default credentials in .env, skipping seeding.");
-      return;
-    }
-
-    // Check for User
-    const existingUser = await User.findOne({ email: userEmail });
-    if (!existingUser) {
-      const hashedPassword = await bcrypt.hash(userPassword, 10);
+    // 2. Seed ADMIN if not exists
+    const adminEmail = process.env.ADMIN_EMAIL || "admin@example.com";
+    const adminPass = process.env.ADMIN_PASSWORD || "pass123";
+    
+    const adminExists = await User.findOne({ email: adminEmail });
+    if (!adminExists) {
+      const hashedAdminPass = await bcrypt.hash(adminPass, 10);
       await User.create({
-        name: "User",
-        email: userEmail,
-        password: hashedPassword,
-        role: "user",
+        name: "System Administrator",
+        email: adminEmail,
+        password: hashedAdminPass,
+        role: "admin",
+        isApproved: true,
+        tenantId: adminTenant._id
       });
-      console.log(`✅ Default User created: ${userEmail}`);
+      console.log(`✅ Admin Created: ${adminEmail}`);
     } else {
-      console.log("ℹ️ User already exists.");
+      console.log(`ℹ️ Admin already exists: ${adminEmail}`);
     }
+
+    // 3. Ensure Default Client Tenant exists
+    let clientTenant = await Tenant.findOne({ name: "Default Client Company" });
+    if (!clientTenant) {
+      console.log("Creating Default Client Company Tenant...");
+      const key = "noc_" + crypto.randomBytes(16).toString("hex");
+      clientTenant = await Tenant.create({
+        name: "Default Client Company",
+        enrollmentKey: key
+      });
+    }
+
+    // 4. Seed CLIENT if not exists
+    const clientEmail = process.env.USER_EMAIL || "client@example.com";
+    const clientPass = process.env.USER_PASSWORD || "pass123";
+
+    const clientExists = await User.findOne({ email: clientEmail });
+    if (!clientExists) {
+      const hashedClientPass = await bcrypt.hash(clientPass, 10);
+      await User.create({
+        name: "Default Client",
+        email: clientEmail,
+        password: hashedClientPass,
+        role: "client",
+        isApproved: true,
+        companyName: "Default Client Company",
+        tenantId: clientTenant._id
+      });
+      console.log(`✅ Client Created: ${clientEmail}`);
+    } else {
+      console.log(`ℹ️ Client already exists: ${clientEmail}`);
+    }
+    
+    console.log("✅ Seeding process complete. Database preserved.");
+
   } catch (error) {
-    console.error("❌ Error seeding users:", error);
+    console.error("❌ Error seeding database:", error);
   }
 };

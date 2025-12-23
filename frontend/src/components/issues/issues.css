@@ -1,21 +1,13 @@
 /* ---------- Layout ---------- */
-.issues-page {
-  display: flex;
-  min-height: 100vh;
-  background: #0b1e2d;
-  color: #dfe7f1;
-  font-family: "Inter", sans-serif;
-}
-
-/* ---------- Container ---------- */
-.issues-container {
+.issues-content-wrapper {
   flex: 1;
   padding: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #1b263b;
 }
+
+
 
 /* ---------- Header ---------- */
 .issues-title {
@@ -99,7 +91,7 @@
 
 /* ---------- Responsive ---------- */
 @media (max-width: 768px) {
-  .issues-container {
+  .issues-content-wrapper {
     padding: 1rem;
   }
 

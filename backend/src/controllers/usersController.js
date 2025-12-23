@@ -123,14 +123,14 @@ export async function updateUser(req, res) {
     }
 
     // ❌ Prevent self-demotion
-    if (user._id.toString() === loggedInUserId && role === "user") {
+    if (user._id.toString() === loggedInUserId && role === "client") {
       return res.status(400).json({
         message: "You cannot demote yourself",
       });
     }
 
     // ❌ Prevent demoting last active admin
-    if (user.role === "admin" && role === "user" && user.isActive) {
+    if (user.role === "admin" && role === "client" && user.isActive) {
       const adminCount = await getActiveAdminCount(tenantId);
       if (adminCount <= 1) {
         return res.status(400).json({

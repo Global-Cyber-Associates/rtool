@@ -1,15 +1,6 @@
-/* Page wrapper to avoid sidebar overlap */
-.page-wrapper {
+/* Profile content wrapper */
+.profile-content-wrapper {
   padding: 30px;
-  margin-left: 260px; /* sidebar width */
-  background: #0b274b; /* match app background */
-  min-height: 100vh;
-}
-
-@media (max-width: 768px) {
-  .page-wrapper {
-    margin-left: 0;
-  }
 }
 
 /* Profile card */
@@ -77,3 +68,58 @@
   border-radius: 6px;
   margin-bottom: 12px;
 }
+
+/* Form styling */
+.profile-form {
+  margin-top: 20px;
+}
+
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #0077b6;
+  box-shadow: 0 0 0 3px rgba(0, 119, 182, 0.1);
+}
+
+.primary-btn {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #0077b6 0%, #457b9d 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 119, 182, 0.3);
+}
+
+.primary-btn:active {
+  transform: translateY(0);
+}
+

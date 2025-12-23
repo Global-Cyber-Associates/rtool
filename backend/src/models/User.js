@@ -22,16 +22,26 @@ const userSchema = new mongoose.Schema(
 
     role: {
       type: String,
-      enum: ["admin", "user"],
-      default: "user",
+      enum: ["admin", "client"],
+      default: "client",
+    },
+
+    // Registration info for approval
+    isApproved: {
+      type: Boolean,
+      default: false,
+    },
+
+    companyName: {
+      type: String,
+      trim: true,
     },
 
     // ⭐ MULTI-TENANT KEY
     tenantId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Tenant",
-      required: true,
-      default: new mongoose.Types.ObjectId("694114ce93766c317e31ff5a"),
+      required: false, // Optional until approved and tenant created
     },
 
     // User status (soft-disable)

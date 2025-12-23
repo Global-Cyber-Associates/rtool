@@ -27,7 +27,7 @@ function Profile() {
   }, []);
 
   return (
-    <div className="page-wrapper">
+    <div className="profile-content-wrapper">
       <div className="profile-container">
         <h2>My Profile</h2>
 

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import socket from "../../utils/socket"; 
+import socket from "../../utils/socket";
 import "./logs.css";
-import Sidebar from "../navigation/sidenav.jsx";
 
 const Logs = () => {
   const [connected, setConnected] = useState(socket.connected);
@@ -10,7 +9,7 @@ const Logs = () => {
   useEffect(() => {
     // Sync connection state immediately
     if (socket.connected) {
-       setConnected(true);
+      setConnected(true);
     }
 
     const onConnect = () => {
@@ -79,7 +78,7 @@ const Logs = () => {
       // ✅ Keep logs short and fresh (max 100)
       setLiveLogs((prev) => {
         const updated = [...newLogs, ...prev];
-        return updated.slice(0, 100); 
+        return updated.slice(0, 100);
       });
     };
 
@@ -103,70 +102,67 @@ const Logs = () => {
   }, [liveLogs]);
 
   return (
-    <div className="logs-page">
-      <Sidebar />
-      <div className="logs-container">
-        <h1 className="logs-title">System Activity Logs</h1>
+    <div className="logs-content-wrapper">
+      <h1 className="logs-title">System Activity Logs</h1>
 
-        <div
-          style={{
-            color: connected ? "#00ff9d" : "#ff5757",
-            background: "#0f2035",
-            padding: "8px 12px",
-            borderRadius: "8px",
-            marginBottom: "12px",
-            fontWeight: "500",
-          }}
-        >
-          {connected ? "🟢 Connected to Socket" : "🔴 Disconnected"} |{" "}
-          {liveLogs.length ? "Live Logs..." : "Waiting for first update..."}
-        </div>
-
-        <div className="logs-table-container">
-          <table className="logs-table">
-            <thead>
-              <tr>
-                <th>Time</th>
-                <th>Category</th>
-                <th>Actor</th>
-                <th>Message</th>
-                <th>Metadata</th>
-              </tr>
-            </thead>
-            <tbody>
-              {liveLogs.length === 0 ? (
-                <tr>
-                  <td colSpan="5" style={{ textAlign: "center", opacity: 0.6 }}>
-                    No logs yet
-                  </td>
-                </tr>
-              ) : (
-                liveLogs.map((log, i) => (
-                  <tr key={i} className={`log-row log-${log.type.toLowerCase()}`}>
-                    <td>{log.time}</td>
-                    <td>{log.type}</td>
-                    <td>{log.actor}</td>
-                    <td>{log.message}</td>
-                    <td>{log.metadata}</td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Small footer info */}
-        <p
-          style={{
-            fontSize: "12px",
-            opacity: 0.6,
-            textAlign: "right",
-            marginTop: "8px",
-          }}
-        >
-          Showing latest {liveLogs.length}/100 entries
-        </p>
+      <div
+        style={{
+          color: connected ? "#00ff9d" : "#ff5757",
+          background: "#0f2035",
+          padding: "8px 12px",
+          borderRadius: "8px",
+          marginBottom: "12px",
+          fontWeight: "500",
+        }}
+      >
+        {connected ? "🟢 Connected to Socket" : "🔴 Disconnected"} |{" "}
+        {liveLogs.length ? "Live Logs..." : "Waiting for first update..."}
       </div>
+
+      <div className="logs-table-container">
+        <table className="logs-table">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Category</th>
+              <th>Actor</th>
+              <th>Message</th>
+              <th>Metadata</th>
+            </tr>
+          </thead>
+          <tbody>
+            {liveLogs.length === 0 ? (
+              <tr>
+                <td colSpan="5" style={{ textAlign: "center", opacity: 0.6 }}>
+                  No logs yet
+                </td>
+              </tr>
+            ) : (
+              liveLogs.map((log, i) => (
+                <tr key={i} className={`log-row log-${log.type.toLowerCase()}`}>
+                  <td>{log.time}</td>
+                  <td>{log.type}</td>
+                  <td>{log.actor}</td>
+                  <td>{log.message}</td>
+                  <td>{log.metadata}</td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Small footer info */}
+      <p
+        style={{
+          fontSize: "12px",
+          opacity: 0.6,
+          textAlign: "right",
+          marginTop: "8px",
+        }}
+      >
+        Showing latest {liveLogs.length}/100 entries
+      </p>
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Rnd } from "react-rnd";
+import { Monitor, Laptop, Network, Smartphone, Wifi } from "lucide-react";
 import "./FloorGrid.css";
 import socket, { fetchData } from "../../../utils/socket.js";
 
@@ -9,12 +10,12 @@ export default function FloorGrid({ floor, updateDevices }) {
   const [locked, setLocked] = useState(false);
   const [cols, setCols] = useState(5);
 
-  // ✅ Sync devices from parent prop
+  // ✅ Sync devices from parent prop and apply formatting (icons, etc)
   useEffect(() => {
     if (floor && floor.devices) {
-        setDevices(floor.devices); 
+      setDevices(formatDevices(floor.devices, cols));
     }
-  }, [floor]);
+  }, [floor, cols]);
 
   // ✅ Improved router detection logic
   const isRouterDevice = (ip) => {
@@ -39,14 +40,19 @@ export default function FloorGrid({ floor, updateDevices }) {
     return data.map((d, i) => {
       const ip = d.ip || "N/A";
       const router = isRouterDevice(ip);
+
+      let IconComponent = Laptop;
+      if (router) IconComponent = Network;
+      else if (d.noAgent) IconComponent = Monitor;
+
       return {
         id: d._id || d.id,
-        name: router ? "Router" : d.agentId || "Unknown",
+        name: router ? "Router" : d.agentId || d.name || "Unknown",
         ip,
         mac: d.mac || "Unknown",
         noAgent: d.noAgent,
         isRouter: router,
-        icon: router ? "🛜" : d.noAgent ? "🖥️" : "💻",
+        icon: <IconComponent size={34} />,
         x: (i % colCount) * 160 + 40,
         y: Math.floor(i / colCount) * 160 + 40,
       };
@@ -93,12 +99,10 @@ export default function FloorGrid({ floor, updateDevices }) {
             onDragStop={(e, d) => updatePosition(dev.id, d.x, d.y)}
           >
             <div
-              className={`V-device-box ${
-                dev.isRouter ? "V-router" : dev.noAgent ? "V-no-agent" : "V-active"
-              }`}
-              title={`Type: ${
-                dev.isRouter ? "Router" : dev.noAgent ? "Unmanaged Device" : "Active Agent"
-              }\nHostname: ${dev.name}\nIP: ${dev.ip}\nMAC: ${dev.mac}`}
+              className={`V-device-box ${dev.isRouter ? "V-router" : dev.noAgent ? "V-no-agent" : "V-active"
+                }`}
+              title={`Type: ${dev.isRouter ? "Router" : dev.noAgent ? "Unmanaged Device" : "Active Agent"
+                }\nHostname: ${dev.name}\nIP: ${dev.ip}\nMAC: ${dev.mac}`}
             >
               <span className="V-device-icon">{dev.icon}</span>
               <div className="V-device-name">{dev.name}</div>

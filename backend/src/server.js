@@ -30,6 +30,7 @@ import logsStatusRoute from "./api/logs.js";
 import dashboardRoutes from "./api/d-board.js";
 import authRoutes from "./api/auth.js";
 import userRoutes from "./api/users.js";
+import adminRoutes from "./api/admin.js";
 
 import agentRoutes from "./api/agentlist.js";
 import installedAppsRoutes from "./api/installedApps.js";
@@ -66,6 +67,7 @@ app.use("/api/logs-status", logsStatusRoute);
 app.use("/api/usb", usbRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/admin", adminRoutes);
 app.use("/api/agents", agentRoutes);
 app.use("/api/installed-apps", installedAppsRoutes);
 app.use("/api/task-manager", taskManagerRoutes);

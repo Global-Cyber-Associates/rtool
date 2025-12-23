@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./scan.css";
 import Sidebar from "../navigation/sidenav.jsx";
+import TopNav from "../navigation/topnav.jsx";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -167,10 +168,10 @@ const Scan = () => {
                 <td>
                   {d.ips?.length
                     ? d.ips.map((ip, i) => (
-                        <span key={i} className="ip-badge">
-                          {ip}
-                        </span>
-                      ))
+                      <span key={i} className="ip-badge">
+                        {ip}
+                      </span>
+                    ))
                     : "-"}
                 </td>
                 <td>{d.mac || "-"}</td>
@@ -190,7 +191,7 @@ const Scan = () => {
                 </td>
                 <td>
                   {d._meta?.open_ports &&
-                  Object.keys(d._meta.open_ports).length > 0 ? (
+                    Object.keys(d._meta.open_ports).length > 0 ? (
                     <div className="ports-cell">
                       {Object.entries(d._meta.open_ports).map(([p, info]) => (
                         <div key={p} className="port-item">
@@ -232,46 +233,42 @@ const Scan = () => {
   // Render Page
   // ---------------------------------------
   return (
-    <div className="scan-page">
-      <Sidebar />
+    <div className="scan-content-wrapper">
+      <h2>Network Vulnerability Scanner (beta v.0)</h2>
+      <p className="description">
+        Trigger a live scan to identify connected devices and their potential
+        vulnerabilities.
+      </p>
 
-      <div className="scan-content">
-        <h2>Network Vulnerability Scanner (beta v.0)</h2>
-        <p className="description">
-          Trigger a live scan to identify connected devices and their potential
-          vulnerabilities.
-        </p>
+      <button onClick={runScan} disabled={true}>
+        {loading ? "Scanning..." : "Run Network Scan"}
+      </button>
 
-        <button onClick={runScan} disabled={true}>
-          {loading ? "Scanning..." : "Run Network Scan"}
-        </button>
+      {loading && (
+        <ul className="wave-menu">
+          {Array.from({ length: 9 }).map((_, i) => (
+            <li key={i}></li>
+          ))}
+        </ul>
+      )}
 
-        {loading && (
-          <ul className="wave-menu">
-            {Array.from({ length: 9 }).map((_, i) => (
-              <li key={i}></li>
-            ))}
-          </ul>
-        )}
+      {error && <p className="error">{error}</p>}
 
-        {error && <p className="error">{error}</p>}
+      {rawResponse && (
+        <details style={{ marginTop: 8 }}>
+          <summary>Raw response (click to expand)</summary>
+          <pre style={{ maxHeight: 300, overflow: "auto" }}>
+            {JSON.stringify(rawResponse, null, 2)}
+          </pre>
+        </details>
+      )}
 
-        {rawResponse && (
-          <details style={{ marginTop: 8 }}>
-            <summary>Raw response (click to expand)</summary>
-            <pre style={{ maxHeight: 300, overflow: "auto" }}>
-              {JSON.stringify(rawResponse, null, 2)}
-            </pre>
-          </details>
-        )}
-
-        {devices.length > 0 && (
-          <div className="current-scan-container">
-            <h3>Current Scan Results</h3>
-            {renderDeviceTable(devices)}
-          </div>
-        )}
-      </div>
+      {devices.length > 0 && (
+        <div className="current-scan-container">
+          <h3>Current Scan Results</h3>
+          {renderDeviceTable(devices)}
+        </div>
+      )}
     </div>
   );
 };

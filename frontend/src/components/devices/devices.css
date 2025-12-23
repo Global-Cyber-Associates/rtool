@@ -1,19 +1,11 @@
 /* ====== Page Layout ====== */
-.device-page {
-  display: flex;
-  min-height: 100vh;
-  background: #0b1e2d;
-  font-family: "Segoe UI", Roboto, sans-serif;
-  color: #dfe7f1;
-}
-
-/* ====== Container for device cards ====== */
-.devices-container {
-  flex: 1;
+.devices-content-wrapper {
   padding: 24px;
   display: flex;
   flex-direction: column;
 }
+
+
 
 .devices-title {
   font-size: 2rem;

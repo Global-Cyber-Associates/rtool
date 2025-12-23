@@ -1,10 +1,8 @@
 /* ======= TASK MANAGER UI ======= */
 .pc-container {
-  background: #1e1e1e;
   color: #e0e0e0;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  min-height: 100vh;
-  padding: 20px 40px;
+  padding: 24px;
   box-sizing: border-box;
 }
 

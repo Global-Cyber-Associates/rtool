@@ -19,6 +19,7 @@ import Profile from "./components/profile/Profile.jsx";
 
 // AUTH & ADMIN
 import Login from "./components/navigation/Login.jsx";
+import Register from "./components/navigation/Register.jsx";
 import CreateUser from "./components/admin/CreateUser.jsx";
 import AdminDashboard from "./components/admin/AdminDashboard.jsx";
 import ManageUsers from "./components/admin/ManageUsers.jsx";
@@ -30,6 +31,9 @@ import Download from "./components/download/Download.jsx";
 // TOKEN HELPERS
 import { getToken, getRole } from "./utils/authService.js";
 
+// LAYOUT WRAPPER
+import Layout from "./components/navigation/Layout.jsx";
+
 // ------------------------------------------------------
 // 🔐 PROTECTED ROUTES
 // ------------------------------------------------------
@@ -37,6 +41,21 @@ import { getToken, getRole } from "./utils/authService.js";
 // Block access if no token
 function ProtectedRoute({ children }) {
   return getToken() ? children : <Navigate to="/login" replace />;
+}
+
+// Full Layout with Sidebar and TopNav
+function ProtectedLayout({ children, adminOnly = false }) {
+  const content = adminOnly ? (
+    <AdminRoute>{children}</AdminRoute>
+  ) : (
+    children
+  );
+
+  return (
+    <ProtectedRoute>
+      <Layout>{content}</Layout>
+    </ProtectedRoute>
+  );
 }
 
 // Block access if not admin
@@ -57,147 +76,142 @@ function App() {
       <Routes>
         {/* LOGIN */}
         <Route path="/login" element={<Login />} />
-        {/* PUBLIC DOWNLOAD PAGE */}
-        <Route path="/download" element={<Download />} />
+        <Route path="/register" element={<Register />} />
+        {/* PROTECTED DOWNLOAD PAGE */}
+        <Route
+          path="/download"
+          element={
+            <ProtectedLayout>
+              <Download />
+            </ProtectedLayout>
+          }
+        />
         {/* USER DASHBOARD */}
         <Route
           path="/dashboard"
           element={
-            <ProtectedRoute>
+            <ProtectedLayout>
               <Dashboard />
-            </ProtectedRoute>
+            </ProtectedLayout>
           }
         />
         {/* ADMIN DASHBOARD */}
         <Route
           path="/admin/dashboard"
           element={
-            <ProtectedRoute>
-              <AdminRoute>
-                <AdminDashboard />
-              </AdminRoute>
-            </ProtectedRoute>
+            <ProtectedLayout adminOnly={true}>
+              <AdminDashboard />
+            </ProtectedLayout>
           }
         />
         {/* ADMIN: MANAGE USERS */}
         <Route
           path="/admin/users"
           element={
-            <ProtectedRoute>
-              <AdminRoute>
-                <ManageUsers />
-              </AdminRoute>
-            </ProtectedRoute>
+            <ProtectedLayout adminOnly={true}>
+              <ManageUsers />
+            </ProtectedLayout>
           }
         />
         {/* ADMIN: CREATE USER */}
         <Route
           path="/admin/create-user"
           element={
-            <ProtectedRoute>
-              <AdminRoute>
-                <CreateUser />
-              </AdminRoute>
-            </ProtectedRoute>
+            <ProtectedLayout adminOnly={true}>
+              <CreateUser />
+            </ProtectedLayout>
           }
         />
         {/* USER ROUTES */}
         <Route
           path="/visualizer"
           element={
-            <ProtectedRoute>
+            <ProtectedLayout>
               <Visualizer />
-            </ProtectedRoute>
+            </ProtectedLayout>
           }
         />
 
         <Route
           path="/profile/change-password"
           element={
-            <ProtectedRoute>
+            <ProtectedLayout>
               <ChangePassword />
-            </ProtectedRoute>
+            </ProtectedLayout>
           }
         />
 
         <Route
           path="/devices"
           element={
-            <ProtectedRoute>
+            <ProtectedLayout>
               <Devices />
-            </ProtectedRoute>
+            </ProtectedLayout>
           }
         />
         <Route
           path="/devices/:id"
           element={
-            <ProtectedRoute>
+            <ProtectedLayout>
               <DeviceDetail />
-            </ProtectedRoute>
+            </ProtectedLayout>
           }
         />
         <Route
           path="/tasks/:id"
           element={
-            <ProtectedRoute>
+            <ProtectedLayout>
               <TaskManager />
-            </ProtectedRoute>
+            </ProtectedLayout>
           }
         />
         <Route
           path="/apps/:id"
           element={
-            <ProtectedRoute>
+            <ProtectedLayout>
               <InstalledApps />
-            </ProtectedRoute>
+            </ProtectedLayout>
           }
         />
         <Route
           path="/logs"
           element={
-            <ProtectedRoute>
+            <ProtectedLayout>
               <Logs />
-            </ProtectedRoute>
+            </ProtectedLayout>
           }
         />
-        <Route
-          path="/issues"
-          element={
-            <ProtectedRoute>
-              <Issues />
-            </ProtectedRoute>
-          }
-        />
+
         <Route
           path="/features"
           element={
-            <ProtectedRoute>
+            <ProtectedLayout>
               <Features />
-            </ProtectedRoute>
+            </ProtectedLayout>
           }
         />
         <Route
           path="/scan"
           element={
-            <ProtectedRoute>
+            <ProtectedLayout>
               <Scan />
-            </ProtectedRoute>
+            </ProtectedLayout>
           }
         />
         <Route
           path="/usb"
           element={
-            <ProtectedRoute>
+            <ProtectedLayout>
               <UsbControl />
-            </ProtectedRoute>
+            </ProtectedLayout>
           }
         />
         <Route
           path="/profile"
           element={
-            <ProtectedRoute>
+            <ProtectedLayout>
               <Profile />
-            </ProtectedRoute>
+            </ProtectedLayout>
           }
         />
 

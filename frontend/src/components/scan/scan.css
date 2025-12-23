@@ -5,41 +5,44 @@ body {
   color: white;
 }
 
-/* Overall page layout */
-.scan-page {
-  display: flex;
-  min-height: 100vh;
-  background-color: #0f172a;
-}
-
 /* Main scan content */
-.scan-content {
+.scan-content-wrapper {
   flex: 1;
   padding: 40px 60px;
-  background-color: #f4f6f8;
   color: #111827;
-  border-radius: 16px;
-  margin: 40px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
-  max-width: 1000px;
-  height: fit-content;
   transition: all 0.3s ease;
 }
 
+.scan-content-wrapper > h2 {
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+.scan-content-wrapper > p.description {
+  color: #a8dadc;
+  margin-bottom: 30px;
+}
+
+@media (max-width: 768px) {
+  .scan-content-wrapper {
+    padding: 24px;
+  }
+}
+
 /* Headings + Buttons */
-.scan-content h2 {
+.scan-content-wrapper h2 {
   margin-bottom: 10px;
-  color: #111827;
+  color: #fff;
 }
 
 .description {
   margin-bottom: 20px;
-  color: #555;
+  color: #a8dadc;
 }
 
-.scan-content button {
+.scan-content-wrapper button {
   padding: 10px 20px;
-  background-color: #9e9db6;
+  background-color: #4338ca;
   color: white;
   border: none;
   border-radius: 6px;
@@ -48,11 +51,11 @@ body {
   transition: background 0.2s ease;
 }
 
-.scan-content button:hover:not(:disabled) {
-  background-color: #4338ca;
+.scan-content-wrapper button:hover:not(:disabled) {
+  background-color: #3730a3;
 }
 
-.scan-content button:disabled {
+.scan-content-wrapper button:disabled {
   background-color: #9ca3af;
   cursor: not-allowed;
 }
