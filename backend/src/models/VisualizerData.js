@@ -38,6 +38,10 @@ const visualizerDataSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isRouter: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

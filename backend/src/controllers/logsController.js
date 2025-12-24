@@ -25,7 +25,11 @@ export async function getLogsSnapshot(tenantId) {
   try {
     const now = Date.now();
 
-    // ✅ 1. Agents (systeminfo)
+    // ✅ 2. Get Authorized Devices from Visualizer (Pre-filtered by aggregator)
+    const visualizers = await VisualizerData.find({ tenantId }).lean();
+    const authorizedIPs = new Set(visualizers.map((v) => v.ip));
+
+    // ✅ 3. Agents (systeminfo) - Filter by Authorized IPs
     const agents = await SystemInfo.find(
       { tenantId },
       {
@@ -37,31 +41,31 @@ export async function getLogsSnapshot(tenantId) {
         "data.memory.ram_percent": 1,
         "data.cpu.logical_cores": 1,
         timestamp: 1,
-        lastSeen: 1, // ⭐ MUST BE INCLUDED
+        lastSeen: 1,
       }
     ).lean();
 
-    const agentSnapshots = agents.map((a) => {
-      // ⭐ FINAL FIX — use lastSeen instead of timestamp
-      const lastSeenValue = a.lastSeen || a.timestamp;
-      const lastSeen = new Date(lastSeenValue).getTime();
-      const isOnline = now - lastSeen < 15000; // 15s threshold
+    const agentSnapshots = agents
+      .filter((a) => a.data?.ip && authorizedIPs.has(a.data.ip))
+      .map((a) => {
+        const lastSeenValue = a.lastSeen || a.timestamp;
+        const lastSeen = new Date(lastSeenValue).getTime();
+        const isOnline = now - lastSeen < 15000;
 
-      return {
-        agentId: a.agentId,
-        hostname: a.data?.hostname || "Unknown",
-        ip: a.data?.ip || "Unknown",
-        os_type: a.data?.os_type || "Unknown",
-        os_version: a.data?.os_version || "Unknown",
-        ram_percent: a.data?.memory?.ram_percent || 0,
-        cpu_cores: a.data?.cpu?.logical_cores || 0,
-        status: isOnline ? "online" : "offline",
-        lastSeen: lastSeenValue,
-      };
-    });
+        return {
+          agentId: a.agentId,
+          hostname: a.data?.hostname || "Unknown",
+          ip: a.data?.ip || "Unknown",
+          os_type: a.data?.os_type || "Unknown",
+          os_version: a.data?.os_version || "Unknown",
+          ram_percent: a.data?.memory?.ram_percent || 0,
+          cpu_cores: a.data?.cpu?.logical_cores || 0,
+          status: isOnline ? "online" : "offline",
+          lastSeen: lastSeenValue,
+        };
+      });
 
-    // ✅ 2. Unknown Devices (filter out routers)
-    const visualizers = await VisualizerData.find({ tenantId }).lean();
+    // ✅ 4. Unknown Devices
     const unknownDevices = visualizers.filter(
       (v) => v.noAgent && !isRouter(v.ip)
     );

@@ -157,7 +157,7 @@ io.on("connection", (socket) => {
   console.log(`🔌 Connected: ${socket.id} (${ip}) - ${type} [Tenant: ${socket.tenantId}]`);
 
   if (socket.tenantId) {
-    socket.join(socket.tenantId); // ⭐ Join tenant room for broadcasts
+    socket.join(socket.tenantId.toString()); // ⭐ Join tenant room for broadcasts
     global.ACTIVE_TENANTS.add(socket.tenantId.toString());
   }
 

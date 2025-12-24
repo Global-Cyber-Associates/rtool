@@ -30,14 +30,34 @@ router.post("/system", async (req, res) => {
 });
 
 
-// ✅ GET /api/system — returns all system records
-router.get("/system", async (req, res) => {
+import os from "os";
+
+// ... (previous routes)
+
+// ✅ GET /api/system/server-ip — returns server's primary LAN IP
+router.get("/server-ip", (req, res) => {
   try {
-    const systems = await SystemInfo.find();
-    res.status(200).json(systems);
+    const interfaces = os.networkInterfaces();
+    let bestIp = "127.0.0.1";
+
+    for (const name of Object.keys(interfaces)) {
+      for (const iface of interfaces[name]) {
+        if (iface.family === "IPv4" && !iface.internal) {
+          // Prefer 192, 10, or 172 ranges
+          if (
+            iface.address.startsWith("192.") ||
+            iface.address.startsWith("10.") ||
+            iface.address.startsWith("172.")
+          ) {
+            return res.json({ ip: iface.address });
+          }
+          bestIp = iface.address;
+        }
+      }
+    }
+    res.json({ ip: bestIp });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Failed to fetch system info", error: err.message });
+    res.status(500).json({ error: err.message });
   }
 });
 
