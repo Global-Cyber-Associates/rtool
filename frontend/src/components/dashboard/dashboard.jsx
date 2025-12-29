@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./dashboard.css";
-
+import socket from "../../utils/socket.js";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -39,44 +39,56 @@ const Dashboard = () => {
   });
 
   const [lastUpdated, setLastUpdated] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    let interval = null;
-    let aborter = null;
+    let currentDataHash = "";
 
+    // 1️⃣ Initial Load
     const fetchSnap = async () => {
       try {
-        if (aborter) aborter.abort();
-        aborter = new AbortController();
-
+        setLoading(true);
         const token = sessionStorage.getItem("token");
         const res = await fetch(`${BACKEND_URL}/api/dashboard`, {
           headers: { "Authorization": `Bearer ${token}` },
-          signal: aborter.signal,
         });
 
         if (!res.ok) throw new Error("Dashboard fetch failed");
         const snap = await res.json();
 
+        // Stable hash of relevant data
+        const newHash = JSON.stringify(snap.allDevices);
+        currentDataHash = newHash;
+
         setSnapshot(snap);
         setLastUpdated(new Date());
       } catch (err) {
-        if (err.name !== "AbortError") console.error(err);
+        console.error("Dashboard init load error:", err);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchSnap();
-    interval = setInterval(fetchSnap, 1500);
+
+    // 2️⃣ Real-time Listeners (Sync with Agreggator)
+    socket.on("dashboard_update", (snap) => {
+      const newHash = JSON.stringify(snap.allDevices);
+      if (newHash === currentDataHash) return;
+
+      currentDataHash = newHash;
+      console.log("📊 Dashboard socket update received (CHANGED):", snap.summary);
+      setSnapshot(snap);
+      setLastUpdated(new Date());
+    });
 
     return () => {
-      if (aborter) aborter.abort();
-      clearInterval(interval);
+      socket.off("dashboard_update");
     };
   }, []);
 
   const {
     summary,
-    allDevices,
     activeAgents,
     inactiveAgents,
     unknownDevices,
@@ -87,42 +99,44 @@ const Dashboard = () => {
     <div className="dashboard-content-wrapper">
 
       {/* Header */}
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <h1 className="dashboard-title">Network & Device Overview</h1>
-        <div style={{ fontSize: "0.9rem", color: "#666" }}>
-          Last update: {lastUpdated?.toLocaleString()}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          <h1 className="dashboard-title" style={{ margin: 0 }}>Network & Device Overview</h1>
+          <div className="live-indicator">
+            <span className="dot"></span>
+            <span className="text">LIVE</span>
+          </div>
+        </div>
+        <div style={{ fontSize: "0.85rem", color: "#94a3b8", backgroundColor: "rgba(30, 41, 59, 0.5)", padding: "4px 12px", borderRadius: "20px", border: "1px solid rgba(255,255,255,0.05)" }}>
+          {loading ? "Syncing..." : `Sync: ${lastUpdated?.toLocaleTimeString()}`}
         </div>
       </div>
 
       {/* KPI SUMMARY */}
       <div className="stats-grid">
         <div className="stat-card gray">
-          <h2>All Devices</h2>
-          <p>{summary.all}</p>
+          <div className="stat-label">All Devices</div>
+          <div className="stat-value">{summary.all}</div>
         </div>
         <div className="stat-card green">
-          <h2>Active Agents</h2>
-          <p>{summary.active}</p>
+          <div className="stat-label">Active Agents</div>
+          <div className="stat-value">{summary.active}</div>
         </div>
         <div className="stat-card red">
-          <h2>Inactive Agents</h2>
-          <p>{summary.inactive}</p>
+          <div className="stat-label">Inactive Agents</div>
+          <div className="stat-value">{summary.inactive}</div>
         </div>
         <div className="stat-card orange">
-          <h2>Unknown Devices</h2>
-          <p>{summary.unknown}</p>
+          <div className="stat-label">Unknown Devices</div>
+          <div className="stat-value">{summary.unknown}</div>
         </div>
         <div className="stat-card blue">
-          <h2>Routers</h2>
-          <p>{summary.routers}</p>
+          <div className="stat-label">Routers</div>
+          <div className="stat-value">{summary.routers}</div>
         </div>
       </div>
 
-
-
-      {/* ================================
-            ACTIVE DEVICES TABLE
-        ================================= */}
+      {/* OFFICE VIEW (Agents + Routers) */}
       <div className="table-container">
         <h2>Active Devices</h2>
         <table className="activity-table">
@@ -138,7 +152,7 @@ const Dashboard = () => {
             </tr>
           </thead>
           <tbody>
-            {activeAgents.map((a) => (
+            {activeAgents.length > 0 ? activeAgents.map((a) => (
               <tr key={a.ip}>
                 <td>{a.agentId || "-"}</td>
                 <td>{a.hostname || a.system?.hostname || "-"}</td>
@@ -148,14 +162,13 @@ const Dashboard = () => {
                 <td>{formatOS(a.os)}</td>
                 <td>{formatTime(a.lastSeen)}</td>
               </tr>
-            ))}
+            )) : (
+              <tr><td colSpan="7" style={{ textAlign: 'center', padding: '30px', color: '#64748b' }}>No active agents detected</td></tr>
+            )}
           </tbody>
         </table>
       </div>
 
-      {/* ================================
-            INACTIVE DEVICES TABLE
-        ================================= */}
       <div className="table-container">
         <h2>Inactive Devices</h2>
         <table className="activity-table">
@@ -171,65 +184,71 @@ const Dashboard = () => {
             </tr>
           </thead>
           <tbody>
-            {inactiveAgents.map((a) => {
-              return (
-                <tr key={a.ip}>
-                  <td>{a.agentId || "-"}</td>
-                  <td>{a.hostname || "-"}</td>
-                  <td>{a.ip}</td>
-                  <td>{formatCPU(a.cpu)}</td>
-                  <td>{formatRAM(a.memory)}</td>
-                  <td>{formatOS(a.os)}</td>
-                  <td>{formatTime(a.timestamp)}</td>
-                </tr>
-              );
-            })}
+            {inactiveAgents.length > 0 ? inactiveAgents.map((a) => (
+              <tr key={a.ip}>
+                <td>{a.agentId || "-"}</td>
+                <td>{a.hostname || "-"}</td>
+                <td>{a.ip}</td>
+                <td>{formatCPU(a.cpu)}</td>
+                <td>{formatRAM(a.memory)}</td>
+                <td>{formatOS(a.os)}</td>
+                <td>{formatTime(a.timestamp)}</td>
+              </tr>
+            )) : (
+              <tr><td colSpan="7" style={{ textAlign: 'center', padding: '30px', color: '#64748b' }}>No inactive agents recorded</td></tr>
+            )}
           </tbody>
         </table>
       </div>
 
-      {/* ================================
-            UNKNOWN DEVICES
-        ================================= */}
       <div className="table-container">
-        <h2>Unknown Devices</h2>
+        <h2>Unknown Network Devices</h2>
         <table className="activity-table">
           <thead>
             <tr>
               <th>IP</th>
+              <th>Hostname / Discovery</th>
+              <th>Vendor Hint</th>
               <th>Detected At</th>
             </tr>
           </thead>
           <tbody>
-            {unknownDevices.map((d) => (
+            {unknownDevices.length > 0 ? unknownDevices.map((d) => (
               <tr key={d.ip}>
                 <td>{d.ip}</td>
+                <td>{d.hostname || "Unscanned Device"}</td>
+                <td>{d.vendor || "-"}</td>
                 <td>{formatTime(d.timestamp)}</td>
               </tr>
-            ))}
+            )) : (
+              <tr><td colSpan="4" style={{ textAlign: 'center', padding: '40px', color: '#64748b' }}>No unknown devices on this subnet</td></tr>
+            )}
           </tbody>
         </table>
       </div>
 
-      {/* ================================
-            ROUTERS
-        ================================= */}
       <div className="table-container">
         <h2>Routers</h2>
         <table className="activity-table">
           <thead>
             <tr>
               <th>IP</th>
+              <th>Hostname</th>
+              <th>Vendor</th>
               <th>Detected At</th>
             </tr>
           </thead>
           <tbody>
-            {routers.map((r) => (
+            {routers.length > 0 ? routers.map((r) => (
               <tr key={r.ip}>
                 <td>{r.ip}</td>
+                <td>{r.hostname || "Gateway"}</td>
+                <td>{r.vendor || "Unknown"}</td>
                 <td>{formatTime(r.timestamp || r.createdAt)}</td>
               </tr>
-            ))}
+            )) : (
+              <tr><td colSpan="4" style={{ textAlign: 'center', padding: '30px', color: '#64748b' }}>No routers identified</td></tr>
+            )}
           </tbody>
         </table>
       </div>
