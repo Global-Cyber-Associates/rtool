@@ -10,8 +10,22 @@ function DownloadPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [agentId, setAgentId] = useState("");
+    const [serverIP, setServerIP] = useState(null);
 
     useEffect(() => {
+        const fetchServerIP = async () => {
+            try {
+                const res = await apiGet("/api/system/server-ip");
+                if (res.ok) {
+                    const data = await res.json();
+                    setServerIP(data.ip);
+                }
+            } catch (err) {
+                console.error("Failed to fetch server IP:", err);
+            }
+        };
+        fetchServerIP();
+
         const fetchData = async () => {
             try {
                 const res = await apiGet("/api/auth/me");
@@ -57,7 +71,16 @@ function DownloadPage() {
     };
 
     const handleDownloadEnv = () => {
-        const serverUrl = window.location.origin.replace(":5173", ":5000").replace(":3000", ":5000");
+        let hostname = window.location.hostname;
+
+        // If we are on localhost, try to use the server's LAN IP for the agent
+        if ((hostname === "localhost" || hostname === "127.0.0.1") && serverIP && serverIP !== "127.0.0.1") {
+            hostname = serverIP;
+        }
+
+        const port = "5000";
+        const serverUrl = `${window.location.protocol}//${hostname}:${port}`;
+
         const envContent = `SERVER_URL=${serverUrl}\nAGENT_ID=${agentId}\nTENANT_KEY=${enrollmentKey}\n`;
         const blob = new Blob([envContent], { type: "application/octet-stream" });
         const url = window.URL.createObjectURL(blob);

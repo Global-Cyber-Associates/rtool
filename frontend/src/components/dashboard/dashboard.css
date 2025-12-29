@@ -16,8 +16,40 @@
   font-size: 1.8rem;
   font-weight: 600;
   color: #a8dadc;
-  margin-bottom: 32px;
+  margin: 0;
   letter-spacing: 0.5px;
+}
+
+.live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(16, 185, 129, 0.1);
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.live-indicator .dot {
+  width: 8px;
+  height: 8px;
+  background-color: #10b981;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #10b981;
+  animation: pulse 1.5s infinite;
+}
+
+.live-indicator .text {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #10b981;
+  letter-spacing: 1px;
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.9); opacity: 0.7; }
+  50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 12px #10b981; }
+  100% { transform: scale(0.9); opacity: 0.7; }
 }
 
 /* ====== Stats Grid ====== */
@@ -34,9 +66,28 @@
   padding: 22px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
   border: 1px solid #1e3b52;
-  text-align: center;
   transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
 }
+
+.stat-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+}
+
+.stat-card.gray::after { background: #64748b; }
+.stat-card.green::after { background: #10b981; }
+.stat-card.red::after { background: #ef4444; }
+.stat-card.orange::after { background: #f59e0b; }
+.stat-card.blue::after { background: #3b82f6; }
 
 .stat-card:hover {
   transform: translateY(-4px);
@@ -44,17 +95,18 @@
   border-color: #457b9d;
 }
 
-.stat-card h2 {
-  color: #a8dadc;
-  font-size: 1rem;
-  margin-bottom: 8px;
+.stat-label {
+  color: #94a3b8;
+  font-size: 0.85rem;
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
 }
 
-.stat-card p {
-  font-size: 1.9rem;
+.stat-value {
+  font-size: 2.2rem;
   font-weight: 700;
-  margin: 0;
   color: #f1faee;
 }
 
@@ -129,6 +181,37 @@
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #0077b6;
+}
+
+/* ====== Segment Control ====== */
+.segment-control {
+  display: flex;
+  background: rgba(30, 41, 59, 0.5);
+  padding: 4px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.segment-btn {
+  background: transparent;
+  color: #94a3b8;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 7px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.segment-btn:hover {
+  color: #f1faee;
+}
+
+.segment-btn.active {
+  background: #1e3b52;
+  color: #a8dadc;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* ====== Responsive Tables ====== */

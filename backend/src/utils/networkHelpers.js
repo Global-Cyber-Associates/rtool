@@ -13,7 +13,7 @@ export function isRouterIP(ip, hostname = "", vendor = "") {
 
   // 🧠 Hotspot / gateway patterns (common in mobile + shared networks)
   const routerPatterns = [
-    ".0.1", ".1.1", ".254", ".1.254", ".0.254",
+    ".0.1", ".1.1", ".254", ".1.254", ".0.254", ".1",
     ".43.1",  // Android tether
     ".137.1", // Windows hotspot
     ".2.1",   // macOS Internet Sharing

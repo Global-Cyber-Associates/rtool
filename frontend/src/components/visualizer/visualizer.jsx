@@ -1,73 +1,84 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../navigation/sidenav.jsx";
-import TopNav from "../navigation/topnav.jsx";
 import FloorManager from "./view/FloorManager.jsx";
 import FloorGrid from "./view/FloorGrid.jsx";
-import socket, { fetchData } from "../../utils/socket.js";
+import socket from "../../utils/socket.js";
+import { apiGet } from "../../utils/api.js";
 import "./visualizer.css";
 
 export default function Visualizer() {
+  const [allFetchedDevices, setAllFetchedDevices] = useState([]);
+  const [viewMode, setViewMode] = useState("my_office"); // "my_office" or "unknown"
   const [floors, setFloors] = useState([{ id: 1, name: "Floor 1", devices: [] }]);
   const [activeFloor, setActiveFloor] = useState(1);
   const [loading, setLoading] = useState(false);
 
-  // ✅ Fetch devices via socket
   // ✅ Fetch devices via API (HTTP) for reliable load
   useEffect(() => {
-    setLoading(true);
-    const token = sessionStorage.getItem("token");
+    let currentHash = "";
 
-    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/visualizer-data`, {
-      headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    })
+    const processDevices = (list) => {
+      const dataHash = JSON.stringify(list);
+      if (dataHash === currentHash) return null;
+      currentHash = dataHash;
+
+      return list.map(d => {
+        const rawName = d.hostname || d.agentId || "";
+        // Client-side fallback for router detection
+        const isRouterDetected = d.isRouter ||
+          (d.ip && d.ip.endsWith(".1")) ||
+          (d.ip && d.ip.endsWith(".254")) ||
+          /router|gateway|modem|dlink|tplink/i.test(rawName);
+        return { ...d, isRouter: isRouterDetected };
+      });
+    };
+
+    setLoading(true);
+    apiGet("/api/visualizer-data")
       .then((res) => res.json())
       .then((data) => {
         if (!Array.isArray(data)) return;
-
-        const fetchedDevices = data.map((d, i) => ({
-          ...d,
-          id: i + 1,
-          name: d.agentId || d.hostname || "Unknown",
-          ip: d.ip || "N/A",
-          mac: d.mac || "Unknown",
-          noAgent: d.noAgent,
-          x: (i % 6) * 120,
-          y: Math.floor(i / 6) * 120,
-        }));
-
-        setFloors([{ id: 1, name: "Floor 1", devices: fetchedDevices }]);
+        const devices = processDevices(data);
+        if (devices) setAllFetchedDevices(devices);
       })
       .catch((err) => console.error("❌ Failed to fetch devices:", err))
       .finally(() => setLoading(false));
 
-    // ✅ Fix for socket update overwriting agentId
-    socket.on("visualizer_update", (deviceUpdate) => {
-      setFloors((prev) =>
-        prev.map((f) =>
-          f.id === 1
-            ? {
-              ...f,
-              devices: f.devices.map((d) =>
-                d.ip === deviceUpdate.ip
-                  ? {
-                    ...d,
-                    ...deviceUpdate,
-                    name: deviceUpdate.agentId || deviceUpdate.hostname || d.agentId || d.hostname || d.name || "Unknown", // 🔥 force agentId display
-                  }
-                  : d
-              ),
-            }
-            : f
-        )
-      );
+    // ✅ Listen for bulk refresh from aggregator
+    socket.on("visualizer_refresh", (newList) => {
+      console.log("🎨 Visualizer Socket Refresh:", newList.length, "devices");
+      const devices = processDevices(newList);
+      if (devices) setAllFetchedDevices(devices);
     });
 
     return () => {
-      socket.off("visualizer_update");
+      socket.off("visualizer_refresh");
     };
   }, []);
+
+  // Filter and Map devices whenever allFetchedDevices or viewMode changes
+  useEffect(() => {
+    const filtered = allFetchedDevices.filter(d => {
+      // "My Office" includes agents and routers
+      if (viewMode === "my_office") return !d.noAgent || d.isRouter;
+      // "Unknown" includes everything else
+      return d.noAgent && !d.isRouter;
+    });
+
+    const mapped = filtered.map((d, i) => ({
+      ...d,
+      id: d.ip || `device-${i}`,
+      name: d.agentId && d.agentId !== "unknown" ? d.agentId : (d.hostname && d.hostname !== "Unknown" ? d.hostname : d.ip),
+      ip: d.ip || "N/A",
+      mac: d.mac || "Unknown",
+      noAgent: d.noAgent,
+      isRouter: d.isRouter,
+      x: (i % 6) * 120,
+      y: Math.floor(i / 6) * 120,
+    }));
+
+    setFloors([{ id: 1, name: "Floor 1", devices: mapped }]);
+  }, [allFetchedDevices, viewMode]);
 
   const addFloor = () => {
     const newId = floors.length + 1;
@@ -84,7 +95,25 @@ export default function Visualizer() {
   return (
     <div className="visualizer-content-wrapper">
       <div className="visualizer-header">
-        <h1>Network Visualizer</h1>
+        <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+          <h1>Network Visualizer</h1>
+
+          <div className="segment-control">
+            <button
+              className={`segment-btn ${viewMode === 'my_office' ? 'active' : ''}`}
+              onClick={() => setViewMode('my_office')}
+            >
+              My Office
+            </button>
+            <button
+              className={`segment-btn ${viewMode === 'unknown' ? 'active' : ''}`}
+              onClick={() => setViewMode('unknown')}
+            >
+              Unknown Devices
+            </button>
+          </div>
+        </div>
+
         <FloorManager
           floors={floors}
           activeFloor={activeFloor}

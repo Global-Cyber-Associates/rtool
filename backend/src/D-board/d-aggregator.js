@@ -1,24 +1,12 @@
-// backend/src/D-board/d-aggregator.js
-
 import VisualizerData from "../models/VisualizerData.js";
 import SystemInfo from "../models/SystemInfo.js";
 import Dashboard from "../models/Dashboard.js";
 import Agent from "../models/Agent.js";
+import VisualizerScanner from "../models/VisualizerScanner.js";
+import { isRouterIP } from "../utils/networkHelpers.js";
 
 // -----------------------------------------
-// Helper: Parse timestamps safely
-// -----------------------------------------
-function parseDate(v) {
-  if (!v) return null;
-  if (typeof v === "object") {
-    if (v.$date) return new Date(v.$date);
-    if (v.$numberLong) return new Date(Number(v.$numberLong));
-  }
-  return new Date(v);
-}
-
-// -----------------------------------------
-// Extract all possible IPs from a SystemInfo doc
+// Helper: Extract all possible IPs from a SystemInfo doc
 // -----------------------------------------
 function extractIPs(sys) {
   if (!sys) return [];
@@ -35,32 +23,39 @@ function extractIPs(sys) {
     d.wlan_ip.forEach((w) => w?.address && ips.push(w.address));
   }
 
-  return ips.filter(Boolean);
+  // ⭐ Filter out loopback and APIPA
+  return ips.filter(ip => 
+    ip && 
+    !ip.startsWith("127.") && 
+    !ip.startsWith("169.254.")
+  );
+}
+
+// -----------------------------------------
+// Helper: Normalize MAC for comparison
+// -----------------------------------------
+function normalizeMAC(mac) {
+  if (!mac) return null;
+  return mac.toLowerCase().replace(/[^a-z0-9]/g, "");
 }
 
 // -----------------------------------------
 // MAIN WORKER
 // -----------------------------------------
 async function runDashboardWorker(interval = 4500) {
-  console.log(`📊 Dashboard Worker running every ${interval}ms`);
-
-  const routerEndings = [1, 250, 253, 254];
+  console.log(`📊 Dashboard Worker (Hyper-Stable) running every ${interval}ms`);
 
   const loop = async () => {
     // 0. Iterate Active Tenants
-    const tenants = global.ACTIVE_TENANTS ? [...global.ACTIVE_TENANTS] : []; // defensive copy
-
-    // If no active tenants, we might still want to process if we want background updates, 
-    // but typically we only care about active ones.
-    // However, for correct "Dashboard" loading on login, we might need data even if socket just connected.
-    // Let's assume ACTIVE_TENANTS includes anyone with socket open (User or Agent).
+    const tenants = global.ACTIVE_TENANTS ? [...global.ACTIVE_TENANTS] : [];
 
     for (const tenantId of tenants) {
       try {
+        const tStr = tenantId.toString();
         // 1. Fetch Scoped Data
         const agents = await Agent.find({ tenantId }).lean();
         const sysRaw = await SystemInfo.find({ tenantId }).lean();
-        const vizRaw = await VisualizerData.find({ tenantId }).lean();
+        const scanRaw = await VisualizerScanner.find({ tenantId }).lean();
 
         // 2. Map System Info by AgentId
         const sysByAgentId = {};
@@ -68,142 +63,228 @@ async function runDashboardWorker(interval = 4500) {
           if (sys.agentId) sysByAgentId[sys.agentId] = sys;
         });
 
-        // 3. Classify Agents
-        const activeAgents = [];
-        const inactiveAgents = [];
-
-        agents.forEach((agent) => {
+        // 3. Process Agents with Intelligent IP Resolution
+        const rawAgentsFormatted = agents.map((agent) => {
           const sys = sysByAgentId[agent.agentId] || {};
           const sysData = sys.data || {};
 
-          // Merge
-          const richAgent = {
+          // Resolve the "Actual" LAN IP
+          let finalIP = agent.ip || "unknown";
+          
+          const possibleIPs = extractIPs(sysData);
+          const routableIP = possibleIPs.find(ip => 
+            !ip.startsWith("127.") && 
+            !ip.startsWith("169.254.") &&
+            (ip.startsWith("192.") || ip.startsWith("10.") || ip.startsWith("172."))
+          );
+
+          if (finalIP.startsWith("127.") || finalIP === "::1" || finalIP === "unknown") {
+            if (routableIP) finalIP = routableIP;
+          }
+
+          return {
             agentId: agent.agentId,
-            ip: agent.ip || sysData.ip || "unknown",
-            hostname: sysData.hostname || "Unknown",
+            ip: finalIP,
+            hostname: sysData.hostname || agent.agentId || "Unknown",
             status: agent.status || "offline",
             lastSeen: agent.lastSeen,
-            cpu: sysData.cpu,
-            memory: sysData.memory,
-            os: sysData.os_type,
+            cpu: sysData.cpu || {},
+            memory: sysData.memory || {},
+            os: sysData.os_type || "Unknown",
             system: sysData,
-            mac: agent.mac || sysData.mac || null,
+            mac: normalizeMAC(agent.mac || sysData.mac),
             timestamp: agent.lastSeen,
-            tenantId // Keep context
-          };
-
-          if (agent.status === 'online') {
-            activeAgents.push(richAgent);
-          } else {
-            inactiveAgents.push(richAgent);
-          }
-        });
-
-        // 4. Build "All Devices" Map
-        const allDevicesMap = new Map();
-
-        // Helper to add device
-        const addOrUpdateDevice = (device, isAgent) => {
-          // Try to find existing by MAC
-          if (device.mac && allDevicesMap.has(device.mac)) {
-            const existing = allDevicesMap.get(device.mac);
-            if (isAgent) {
-              allDevicesMap.set(device.mac, { ...existing, ...device, source: 'agent', noAgent: false });
-            } else {
-              if (existing.source !== 'agent') {
-                allDevicesMap.set(device.mac, { ...existing, ...device });
-              }
-            }
-            return;
-          }
-
-          // Try to find existing by IP
-          if (device.ip && device.ip !== 'unknown' && allDevicesMap.has(device.ip)) {
-            const existing = allDevicesMap.get(device.ip);
-            if (isAgent) {
-              allDevicesMap.set(device.ip, { ...existing, ...device, source: 'agent', noAgent: false });
-            } else {
-              if (existing.source !== 'agent') {
-                allDevicesMap.set(device.ip, { ...existing, ...device });
-              }
-            }
-            return;
-          }
-
-          // New
-          let key = device.mac || device.ip;
-          if ((!key || key === 'unknown') && isAgent) {
-            key = device.agentId;
-          }
-          if (key && key !== 'unknown') {
-            allDevicesMap.set(key, { ...device, source: isAgent ? 'agent' : 'scanner', noAgent: !isAgent });
-          }
-        };
-
-        // A. ADD AGENTS
-        [...activeAgents, ...inactiveAgents].forEach(a => addOrUpdateDevice(a, true));
-
-        // B. ADD SCANNER DATA
-        const routers = [];
-        const unknownDevices = [];
-
-        vizRaw.forEach(scan => {
-          if (!scan.ip) return;
-          const device = {
-            ip: scan.ip,
-            hostname: scan.hostname || "Unknown",
-            mac: scan.mac || null,
-            vendor: scan.vendor || "Unknown",
-            createdAt: scan.createdAt || scan.timestamp,
-            timestamp: scan.createdAt || scan.timestamp,
             tenantId
           };
-          addOrUpdateDevice(device, false);
         });
 
-        // Re-process map
-        const finalDevices = Array.from(allDevicesMap.values());
+        // 4. Build Deduplicated Device Map
+        const allDevicesMap = new Map();
 
-        finalDevices.forEach(d => {
-          if (d.source === 'agent') return;
-          const lastOctet = Number(d.ip.split('.').pop());
-          if (routerEndings.includes(lastOctet)) {
-            routers.push(d);
+        const addOrUpdateDevice = (device, isAgent) => {
+          const normMac = normalizeMAC(device.mac);
+          let existingKey = null;
+          let existingData = null;
+
+          for (const [k, v] of allDevicesMap.entries()) {
+            const macMatch = normMac && v.mac === normMac;
+            const ipMatch = device.ip && device.ip !== 'unknown' && v.ip === device.ip;
+            
+            if (macMatch || ipMatch) {
+              existingKey = k;
+              existingData = v;
+              break;
+            }
+          }
+
+          if (existingData) {
+            if (isAgent) {
+              allDevicesMap.set(existingKey, { 
+                ...existingData, 
+                ...device, 
+                source: 'agent', 
+                noAgent: false,
+                mac: normMac || existingData.mac,
+                vendor: device.vendor || existingData.vendor || "Unknown"
+              });
+            } else {
+              if (existingData.source !== 'agent') {
+                allDevicesMap.set(existingKey, { ...existingData, ...device, mac: normMac });
+              } else {
+                allDevicesMap.set(existingKey, { 
+                  ...existingData, 
+                  mac: existingData.mac || normMac,
+                  vendor: existingData.vendor || device.vendor || "Unknown",
+                  isRouter: existingData.isRouter || isRouterIP(device.ip, device.hostname, device.vendor)
+                });
+              }
+            }
+            return;
+          }
+
+          let key = normMac || device.ip;
+          if ((!key || key === 'unknown') && isAgent) key = device.agentId;
+          
+          if (key && key !== 'unknown') {
+            const isRouter = isRouterIP(device.ip, device.hostname, device.vendor);
+            allDevicesMap.set(key, { 
+              ...device, 
+              mac: normMac, 
+              source: isAgent ? 'agent' : 'scanner', 
+              noAgent: !isAgent,
+              isRouter
+            });
+          }
+        };
+
+        // Populate Map
+        rawAgentsFormatted.forEach(a => addOrUpdateDevice(a, true));
+        
+        scanRaw.forEach(scan => {
+          if (!scan.ip || scan.ip.startsWith("127.") || scan.ip.startsWith("169.254.")) return;
+          
+          // Relaxed Filter: Only skip if it looks like absolute noise AND is not in target range 
+          // (We will filter by targetSubnet later anyway)
+          addOrUpdateDevice({
+            ip: scan.ip,
+            hostname: scan.hostname || "Unknown",
+            mac: normalizeMAC(scan.mac),
+            vendor: scan.vendor || "Unknown",
+            createdAt: scan.createdAt || scan.lastSeen,
+            timestamp: scan.createdAt || scan.lastSeen,
+            tenantId
+          }, false);
+        });
+
+        // ⭐ 5. DYNAMIC SUBNET DETECTION
+        let targetSubnet = null;
+        const allEntries = Array.from(allDevicesMap.values());
+
+        const primaryGateway = allEntries.find(d => isRouterIP(d.ip, d.hostname, d.vendor));
+        if (primaryGateway) {
+          const pts = primaryGateway.ip.split('.');
+          if (pts.length === 4) targetSubnet = pts.slice(0, 3).join('.') + '.';
+        }
+
+        if (!targetSubnet) {
+          const firstOnline = rawAgentsFormatted.find(a => a.status === 'online' && a.ip !== 'unknown');
+          if (firstOnline) {
+             const pts = firstOnline.ip.split('.');
+             if (pts.length === 4) targetSubnet = pts.slice(0, 3).join('.') + '.';
+          }
+        }
+
+        // ⭐ 6. FILTER: LAN-Only stable view
+        const filteredDevices = (targetSubnet 
+          ? allEntries.filter(d => d.ip && d.ip.startsWith(targetSubnet))
+          : allEntries)
+          .sort((a, b) => {
+            // Stable sort by IP
+            const ipToNum = (ip) => ip.split('.').reduce((acc, octet) => (acc << 8) + parseInt(octet, 10), 0) >>> 0;
+            return ipToNum(a.ip) - ipToNum(b.ip);
+          });
+
+        // 7. Classify (Now pre-sorted)
+        const routers = [];
+        const unknownDevices = [];
+        const activeAgents = [];
+        const inactiveAgents = [];
+
+        filteredDevices.forEach(d => {
+          if (d.source === 'agent') {
+            if (d.status === 'online') activeAgents.push(d);
+            else inactiveAgents.push(d);
           } else {
-            unknownDevices.push(d);
+            if (isRouterIP(d.ip, d.hostname, d.vendor)) {
+              routers.push(d);
+            } else {
+              unknownDevices.push(d);
+            }
           }
         });
 
-        const allDevices = finalDevices;
+        // ⭐ 8. SYNC VISUALIZER FIRST to ensure 1:1 match
+        const vizItems = filteredDevices.map(d => ({
+          tenantId,
+          agentId: d.agentId || "unknown",
+          ip: d.ip,
+          mac: d.mac || "Unknown",
+          vendor: d.vendor || "Unknown",
+          hostname: d.hostname || d.agentId || "Unknown",
+          noAgent: d.noAgent ?? true,
+          isRouter: d.isRouter || false
+        }));
 
-        // 5. Final Snapshot
-        const snapshot = {
-          tenantId, // ⭐ Scoped
-          timestamp: new Date(),
-          summary: {
-            all: allDevices.length,
-            active: activeAgents.length,
-            inactive: inactiveAgents.length,
-            unknown: unknownDevices.length,
-            routers: routers.length,
-          },
-          allDevices,
-          activeAgents,
-          inactiveAgents,
-          routers,
-          unknownDevices,
-        };
+        // 9. Check if data actually changed to prevent flickering
+        const currentDataHash = JSON.stringify(vizItems);
+        const lastDataHash = global[`LAST_HASH_${tStr}`];
 
-        await Dashboard.findOneAndUpdate(
-          { tenantId },
-          { $set: snapshot },
-          { upsert: true }
-        );
+        if (currentDataHash === lastDataHash) {
+          // No change in devices, only update agent heartbeats in background if needed
+          // But don't broadcast/save massive snapshot unless data changed
+          // Heartbeats are handled in Step 3/4 and Step 7-10 logic.
+          // We can skip database update for visualizer and dashboard if nothing changed.
+        } else {
+          global[`LAST_HASH_${tStr}`] = currentDataHash;
 
-        // console.log(`✅ Dashboard updated for tenant ${tenantId}`);
+          await VisualizerData.deleteMany({ tenantId });
+          if (vizItems.length > 0) {
+            await VisualizerData.insertMany(vizItems);
+          }
+
+          // 9. Save Snapshot (Uses the exact same vizItems count)
+          const snapshot = {
+            tenantId,
+            track: Date.now(),
+            timestamp: new Date(),
+            summary: {
+              all: vizItems.length,
+              active: activeAgents.length,
+              inactive: inactiveAgents.length,
+              unknown: unknownDevices.length,
+              routers: routers.length,
+            },
+            allDevices: filteredDevices,
+            activeAgents,
+            inactiveAgents,
+            routers,
+            unknownDevices,
+          };
+
+          await Dashboard.findOneAndUpdate({ tenantId }, { $set: snapshot }, { upsert: true });
+          console.log(`📡 [${tStr}] Change detected: ${vizItems.length} devices. Broadcasting...`);
+
+          // ⭐ 10. BROADCAST
+          try {
+            const { getIO } = await import("../socket-nvs.js");
+            const io = getIO();
+            io.to(tStr).emit("dashboard_update", snapshot);
+            io.to(tStr).emit("visualizer_refresh", vizItems);
+          } catch (e) {}
+        }
 
       } catch (err) {
-        console.error(`❌ Dashboard loop error for tenant ${tenantId}:`, err);
+        console.error(`❌ Dashboard loop error:`, err);
       }
     }
   };
