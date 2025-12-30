@@ -25,11 +25,10 @@ def get_cpu_id():
     except Exception as e:
         logging.error(f"Error getting CPU ID: {e}")
         return "UnknownCPU"
-    except Exception:
-        return "UnknownCPU"
 
 def get_system_drive_serial():
     try:
+        # Get SerialNumber of the physical disk that contains the OS partition (usually C:)
         output = subprocess.check_output("wmic diskdrive get serialnumber", shell=True).decode().strip()
         lines = [line.strip() for line in output.split('\n') if line.strip()]
         if len(lines) > 1:
@@ -38,15 +37,16 @@ def get_system_drive_serial():
     except Exception as e:
         logging.error(f"Error getting Drive Serial: {e}")
         return "UnknownDrive"
-    except Exception:
-        return "UnknownDrive"
 
 def generate_fingerprint():
     machine_guid = get_machine_guid()
     cpu_id = get_cpu_id()
     drive_serial = get_system_drive_serial()
+    
+    # Salted hash
     salt = "GCA_VISUS_NT_2025"
     raw_id = f"{machine_guid}|{cpu_id}|{drive_serial}|{salt}"
+    
     return hashlib.sha256(raw_id.encode()).hexdigest()
 
 TOKEN_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "license.token")
@@ -61,23 +61,31 @@ def load_license_token():
             return f.read().strip()
     return None
 
-def verify_license_locally(token, fingerprint):
+def verify_license_locally(token, fingerprint, public_key=None):
     if not token:
         return False, "No token found"
+    
     try:
+        # Splitting JWT parts (header.payload.signature)
         parts = token.split('.')
         if len(parts) != 3:
             return False, "Invalid token format"
+            
         import base64
         payload_b64 = parts[1]
+        # Fix padding
         payload_b64 += '=' * (-len(payload_b64) % 4)
         payload_json = base64.b64decode(payload_b64).decode()
         payload = json.loads(payload_json)
+        
         if payload.get("fingerprint") != fingerprint:
             return False, "Hardware ID mismatch"
+            
+        # check expiration
         import time
         if payload.get("exp") and payload.get("exp") < time.time():
             return False, "License expired"
+            
         return True, "Valid"
     except Exception as e:
         return False, f"Verification failed: {str(e)}"

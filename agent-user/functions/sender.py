@@ -59,6 +59,11 @@ def disconnect():
     logging.warning("[⚠️] Disconnected from backend server.")
 
 
+@sio.event
+def connect_error(data):
+    logging.error(f"[❌] Socket connection error: {data}")
+
+
 @sio.on("license_approved")
 def on_license_approved(data):
     logging.info(f"[🔓] {data.get('message')}")
@@ -70,6 +75,7 @@ def on_license_approved(data):
 # -----------------------------------------------------------
 @sio.on("registration_status")
 def handle_registration_status(data):
+    logging.info(f"[ℹ️] Registration status received: {data}")
     global IS_LICENSED
     IS_LICENSED = data.get("isLicensed", False)
     
@@ -105,8 +111,11 @@ def activate_license():
 # ⭐ BOOTSTRAP: AUTO-RESOLVE TENANT KEY
 # -----------------------------------------------------------
 def bootstrap_license():
+    """
+    Attempts to find the TENANT_KEY via hardware fingerprint or license.key file.
+    """
     try:
-        # 1. Hardware Lookup
+        # 1. Try Hardware Lookup first (Success if machine was already registered)
         logging.info("[🔍] Attempting zero-touch hardware identification...")
         res = requests.post(f"{SERVER_URL}/api/license/verify-hardware", json={"fingerprint": FINGERPRINT}, timeout=10)
         if res.status_code == 200:
@@ -116,7 +125,7 @@ def bootstrap_license():
                 logging.info(f"[✔️] Hardware recognized! Associated with {data['companyName']}")
                 return data["tenantKey"]
 
-        # 2. License file
+        # 2. Try license.key file from root
         license_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "license.key")
         if os.path.exists(license_file):
             with open(license_file, "r") as f:
@@ -134,6 +143,8 @@ def bootstrap_license():
                             save_to_env("TENANT_KEY", data["tenantKey"])
                             logging.info(f"[✔️] Bootstrap successful! Associated with {data['companyName']}")
                             return data["tenantKey"]
+        
+        logging.warning("[⚠️] No TENANT_KEY found and bootstrap failed. Waiting for manual entry or license.key file.")
         return None
     except Exception as e:
         logging.error(f"[❌] Bootstrap error: {e}")
@@ -143,8 +154,10 @@ def save_to_env(key, value):
     env_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".env")
     lines = []
     if os.path.exists(env_path):
-        with open(env_path, "r") as f: lines = f.readlines()
+        with open(env_path, "r") as f:
+            lines = f.readlines()
     
+    # Update or add
     found = False
     new_lines = []
     for line in lines:
@@ -153,17 +166,25 @@ def save_to_env(key, value):
             found = True
         else:
             new_lines.append(line)
-    if not found: new_lines.append(f"{key}={value}\n")
-    with open(env_path, "w") as f: f.writelines(new_lines)
+    
+    if not found:
+        new_lines.append(f"{key}={value}\n")
+    
+    with open(env_path, "w") as f:
+        f.writelines(new_lines)
+    
+    # Also update current process env
     os.environ[key] = value
 
 # -----------------------------------------------------------
-# CONNECT FUNCTION (UPDATED)
+# CONNECT FUNCTION (UPDATED FOR BOOTSTRAP)
 # -----------------------------------------------------------
 def connect_socket():
     try:
         if not sio.connected:
             token = os.getenv("TENANT_KEY")
+            
+            # ⭐ If no token, try to bootstrap automatically
             if not token:
                 logging.info("[ℹ️] TENANT_KEY missing. Starting bootstrap...")
                 token = bootstrap_license()
@@ -220,20 +241,6 @@ def send_data(data_type, payload):
 
 
 # -----------------------------------------------------------
-# SEND RAW LAN SCAN
-# -----------------------------------------------------------
-def send_raw_network_scan(devices_list):
-    if not IS_LICENSED:
-        return
-
-    try:
-        sio.emit("network_scan_raw", devices_list)
-        logging.info("[📡] Sent raw network scan result.")
-    except Exception as e:
-        logging.error(f"[❌] Failed to send raw network scan: {e}")
-
-
-# -----------------------------------------------------------
 # BACKGROUND QUEUE WORKER
 # -----------------------------------------------------------
 def start_queue_worker():
@@ -248,42 +255,3 @@ def start_queue_worker():
 
 start_queue_worker()
 connect_socket()
-
-
-# -----------------------------------------------------------
-# ⭐ VULNERABILITY SCAN HANDLER
-# -----------------------------------------------------------
-@sio.on("run_vuln_scan")
-def handle_vulnerability_scan(data=None):
-    """
-    Triggered when backend emits: io.to(socketId).emit("run_vuln_scan")
-    """
-
-    try:
-        # Correct location: /agent/functions/network_vulnscan.py
-        script_path = os.path.join(
-            os.path.dirname(os.path.abspath(__file__)),
-            "network_vulnscan.py"
-        )
-
-        logging.info("[⚡] Running vulnerability scan...")
-        logging.info(f"[📌] Scanner path: {script_path}")
-
-        # Run the script
-        output = subprocess.check_output(
-            [sys.executable, script_path],
-            stderr=subprocess.STDOUT,
-            text=True
-        )
-
-        result = json.loads(output)
-
-        # NEW: backend processor for vuln scan
-        sio.emit("network_vulnscan_raw", result)
-
-        logging.info("[✔️] Vulnerability scan completed and sent.")
-
-    except subprocess.CalledProcessError as err:
-        logging.error(f"[❌] Vulnerability scan script error: {err.output}")
-    except Exception as e:
-        logging.error(f"[❌] Vulnerability scan failed: {e}")

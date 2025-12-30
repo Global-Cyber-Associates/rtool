@@ -59,6 +59,11 @@ def disconnect():
     logging.warning("[⚠️] Disconnected from backend server.")
 
 
+@sio.event
+def connect_error(data):
+    logging.error(f"[❌] Socket connection error: {data}")
+
+
 @sio.on("license_approved")
 def on_license_approved(data):
     logging.info(f"[🔓] {data.get('message')}")
