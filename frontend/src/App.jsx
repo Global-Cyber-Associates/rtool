@@ -34,6 +34,7 @@ import { getToken, getRole } from "./utils/authService.js";
 
 // LAYOUT WRAPPER
 import Layout from "./components/navigation/Layout.jsx";
+import { apiGet } from "./utils/api.js";
 
 // ------------------------------------------------------
 // 🔐 PROTECTED ROUTES
@@ -66,6 +67,46 @@ function AdminRoute({ children }) {
   ) : (
     <Navigate to="/dashboard" replace />
   );
+}
+
+// Block access if feature is lead-locked
+function FeatureGate({ children, featureId }) {
+  const [unlockedFeatures, setUnlockedFeatures] = React.useState({});
+  const [checking, setChecking] = React.useState(true);
+
+  // Re-check on every mount to ensure fresh state from DB
+  React.useEffect(() => {
+    let isMounted = true;
+    const verifyAccess = async () => {
+      try {
+        const response = await apiGet("/api/features");
+        if (response.ok && isMounted) {
+          const data = await response.json();
+          const unlockedMap = {};
+          if (data && data.unlockedFeatures) {
+            data.unlockedFeatures.forEach(id => unlockedMap[id] = true);
+          }
+          setUnlockedFeatures(unlockedMap);
+        }
+      } catch (err) {
+        console.error("Access verification failed:", err);
+      } finally {
+        if (isMounted) setChecking(false);
+      }
+    };
+    verifyAccess();
+    return () => { isMounted = false; };
+  }, []);
+
+  if (getRole() === "admin") return children; // Admins see everything
+
+  if (checking) return null; // or a loading spinner
+
+  if (!unlockedFeatures[featureId]) {
+    return <Navigate to="/features" replace />;
+  }
+
+  return children;
 }
 
 // ------------------------------------------------------
@@ -137,7 +178,9 @@ function App() {
           path="/visualizer"
           element={
             <ProtectedLayout>
-              <Visualizer />
+              <FeatureGate featureId="visualizer">
+                <Visualizer />
+              </FeatureGate>
             </ProtectedLayout>
           }
         />
@@ -155,7 +198,9 @@ function App() {
           path="/devices"
           element={
             <ProtectedLayout>
-              <Devices />
+              <FeatureGate featureId="devices">
+                <Devices />
+              </FeatureGate>
             </ProtectedLayout>
           }
         />
@@ -163,7 +208,9 @@ function App() {
           path="/devices/:id"
           element={
             <ProtectedLayout>
-              <DeviceDetail />
+              <FeatureGate featureId="devices">
+                <DeviceDetail />
+              </FeatureGate>
             </ProtectedLayout>
           }
         />
@@ -171,7 +218,9 @@ function App() {
           path="/tasks/:id"
           element={
             <ProtectedLayout>
-              <TaskManager />
+              <FeatureGate featureId="devices">
+                <TaskManager />
+              </FeatureGate>
             </ProtectedLayout>
           }
         />
@@ -179,7 +228,9 @@ function App() {
           path="/apps/:id"
           element={
             <ProtectedLayout>
-              <InstalledApps />
+              <FeatureGate featureId="devices">
+                <InstalledApps />
+              </FeatureGate>
             </ProtectedLayout>
           }
         />
@@ -187,7 +238,9 @@ function App() {
           path="/logs"
           element={
             <ProtectedLayout>
-              <Logs />
+              <FeatureGate featureId="logs">
+                <Logs />
+              </FeatureGate>
             </ProtectedLayout>
           }
         />
@@ -204,7 +257,9 @@ function App() {
           path="/scan"
           element={
             <ProtectedLayout>
-              <Scan />
+              <FeatureGate featureId="scan">
+                <Scan />
+              </FeatureGate>
             </ProtectedLayout>
           }
         />
@@ -212,7 +267,9 @@ function App() {
           path="/usb"
           element={
             <ProtectedLayout>
-              <UsbControl />
+              <FeatureGate featureId="usb">
+                <UsbControl />
+              </FeatureGate>
             </ProtectedLayout>
           }
         />

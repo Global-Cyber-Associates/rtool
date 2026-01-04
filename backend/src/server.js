@@ -37,6 +37,7 @@ import agentRoutes from "./api/agentlist.js";
 import installedAppsRoutes from "./api/installedApps.js";
 import taskManagerRoutes from "./api/taskManager.js";
 import licenseRoutes from "./api/license.js";
+import featuresRoutes from "./api/features.js";
 
 import { getLogsSnapshot } from "./controllers/logsController.js";
 import { isRouterIP } from "./utils/networkHelpers.js";
@@ -76,6 +77,7 @@ app.use("/api/installed-apps", installedAppsRoutes);
 app.use("/api/task-manager", taskManagerRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/license", licenseRoutes);
+app.use("/api/features", featuresRoutes);
 
 app.get("/api/auth/debug", (_req, res) =>
   res.json({ msg: "AUTH ROUTES ACTIVE" })

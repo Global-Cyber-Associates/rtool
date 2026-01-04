@@ -27,6 +27,10 @@ const tenantSchema = new mongoose.Schema(
       unique: true,
       sparse: true,
     },
+    unlockedFeatures: {
+      type: [String],
+      default: [],
+    },
   },
   { timestamps: true }
 );

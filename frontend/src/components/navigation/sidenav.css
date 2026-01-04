@@ -200,6 +200,21 @@
   color: #fff;
 }
 
+.nav-link.nav-locked {
+  opacity: 0.7;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.nav-link.nav-locked:hover {
+  background: rgba(239, 68, 68, 0.05);
+  color: #ef4444;
+}
+
+.sidebar-lock-icon {
+  color: #ef4444;
+}
+
 /* Small screens adjustments */
 @media (max-width: 1024px) {
   .sidebar.closed {

@@ -32,17 +32,50 @@
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
   border: 1px solid #1e3b52;
   transition: all 0.25s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
-.feature-card:hover {
+.feature-card.locked {
+  background: #0d1b2a;
+  border-color: #1b263b;
+}
+
+.feature-card.locked:hover {
+  transform: translateY(-2px);
+  border-color: #334155;
+}
+
+.feature-card.unlocked:hover {
   transform: translateY(-4px);
   box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35);
-  border-color: #457b9d;
+  border-color: #00b4d8;
+}
+
+.feature-icon-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 12px;
+  width: fit-content;
 }
 
 .feature-icon {
   color: #00b4d8;
-  margin-bottom: 12px;
+}
+
+.lock-badge {
+  position: absolute;
+  top: -4px;
+  right: -8px;
+  background: #ef4444;
+  color: white;
+  padding: 4px;
+  border-radius: 50%;
+  border: 2px solid #0d1b2a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .feature-card h2 {
@@ -56,20 +89,63 @@
   color: #b0bec5;
   font-size: 14px;
   line-height: 1.5;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  flex-grow: 1;
 }
 
-.buy-btn {
-  background: #0077b6;
-  color: #fff;
+.feature-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.feature-price {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #a8dadc;
+}
+
+.unlock-btn, .open-btn {
   border: none;
   border-radius: 8px;
-  padding: 8px 16px;
+  padding: 8px 20px;
   font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: all 0.2s ease;
 }
 
-.buy-btn:hover {
-  background: #0096c7;
+.unlock-btn {
+  background: transparent;
+  border: 1px solid #1e8ef1;
+  color: #1e8ef1;
+}
+
+.unlock-btn:hover {
+  background: #1e8ef1;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(30, 142, 241, 0.3);
+}
+
+.open-btn {
+  background: #00b4d8;
+  color: #fff;
+}
+
+.open-btn:hover {
+  background: #0077b6;
+  box-shadow: 0 4px 12px rgba(0, 180, 216, 0.3);
+}
+
+.loading-spinner {
+  color: #a8dadc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
 }
