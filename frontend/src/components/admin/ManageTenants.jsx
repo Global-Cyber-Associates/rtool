@@ -91,18 +91,18 @@ function ManageTenants() {
                         <tbody>
                             {tenants.map((t) => (
                                 <tr key={t.id} className={!t.isActive ? "disabled-row" : ""}>
-                                    <td><strong>{t.name}</strong></td>
-                                    <td>{t.ownerEmail}</td>
-                                    <td style={{ fontFamily: 'monospace', fontSize: '0.8rem' }}>{t.enrollmentKey}</td>
-                                    <td>{t.deviceCount}</td>
-                                    <td>
+                                    <td data-label="Company Name"><strong>{t.name}</strong></td>
+                                    <td data-label="Owner Email">{t.ownerEmail}</td>
+                                    <td data-label="Enrollment Key" style={{ fontFamily: 'monospace', fontSize: '0.8rem' }}>{t.enrollmentKey}</td>
+                                    <td data-label="Devices">{t.deviceCount}</td>
+                                    <td data-label="Status">
                                         <div className={`status-badge ${t.isActive ? "active" : "disabled"}`}>
                                             <div className="status-dot"></div>
                                             {t.isActive ? "Active" : "Disabled"}
                                         </div>
                                     </td>
 
-                                    <td>
+                                    <td data-label="Action">
                                         <button
                                             className={`toggle-action-btn ${t.isActive ? "deactivate" : "activate"}`}
                                             onClick={() => toggleTenantActivation(t)}

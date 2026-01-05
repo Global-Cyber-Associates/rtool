@@ -51,6 +51,12 @@ This file is a living document that tracks every logical change made by Antigrav
 | 029 | 2026-01-05 | `ManageTenants.jsx`, `ManageUsers.css` | Implemented premium status badges & icons. | Revamped the 'Active/Disabled' UI with modern pills, status dots, and check/power icons. |
 | 030 | 2026-01-05 | `Profile.jsx`, `profile.css` | Unified Profile & Security. | Redesigned the profile page to match the dark navy theme and integrated secure password change logic. |
 | 031 | 2026-01-05 | `Profile.jsx`, `profile.css` | Modal-based Password Change. | Refactored the security form into a sleek modal with backdrop blurring and animations. |
+| 032 | 2026-01-05 | `features.css`, `features.jsx` | Non-scrolling Layout. | Redesigned the features landing page to fit all modules within a single screen view. |
+| 033 | 2026-01-05 | `layout.css`, `dashboard.css`, `devices.css`, `ManageUsers.css`, `profile.css` | Full-App Responsiveness. | Comprehensive CSS update for mobile/tablet optimization across all pages, including responsive tables and overlays. |
+| 034 | 2026-01-05 | `devices.css`, `devices.jsx`, `taskmanager.css`, `taskmanager.jsx`, `deviceControl.css`, `deviceControl.jsx`, `installedapps.css`, `installedapps.jsx` | Infrastructure UI Overhaul. | Revamped the entire Devices, Task Manager, System Info, and Software components to match the premium dark navy theme. |
+| 035 | 2026-01-05 | `Agent.js`, `save.js`, `networkHelpers.js`, `devices.jsx` | Accurate IP & Hostname Resolution. | Implemented intelligent LAN IP extraction from agent reports and added hostname persistence to ensure accurate device identification in the UI. |
+| 036 | 2026-01-05 | `agentlist.js`, `devices.jsx`, `devices.css` | Data Stability & UI De-cluttering. | Switched to hyper-stable dashboard snapshot backend and redesigned the card UI for enterprise-grade data density and accuracy. |
+| 037 | 2026-01-05 | `dashboard.jsx`, `d-aggregator.js` | Restricted Device View. | Removed "Unknown Devices" from the dashboard UI and backend aggregation stream to focus exclusively on managed assets. |
 
 ---
 

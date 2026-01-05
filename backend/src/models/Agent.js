@@ -29,6 +29,8 @@ const AgentSchema = new mongoose.Schema(
 
     lastSeen: { type: Date, default: Date.now },
     mac: { type: String },
+    hostname: { type: String },
+    os: { type: String },
     
     // ⭐ LICENSING FIELDS
     fingerprint: { type: String, index: true },

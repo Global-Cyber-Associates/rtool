@@ -321,8 +321,41 @@
   box-shadow: 0 0 8px #2ecc71;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+  .profile-content-wrapper {
+    padding: 20px 10px;
+  }
+  
+  .profile-header {
+    padding: 25px 15px;
+  }
+  
+  .profile-body {
+    padding: 20px 15px;
+  }
+  
   .profile-grid {
     grid-template-columns: 1fr;
+    gap: 15px;
   }
+
+  .security-btn {
+      width: 100%;
+  }
+
+  .modal-content {
+      max-width: 95%;
+  }
+}
+
+@media (max-width: 480px) {
+    .modal-body {
+        padding: 15px;
+    }
+    .modal-footer {
+        flex-direction: column;
+    }
+    .modal-footer button {
+        width: 100%;
+    }
 }

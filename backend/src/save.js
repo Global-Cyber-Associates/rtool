@@ -7,6 +7,7 @@ import PortScanData from "./models/PortScan.js";
 import TaskInfo from "./models/TaskInfo.js";
 import VisualizerScanner from "./models/VisualizerScanner.js";
 import ScanResult from "./models/ScanResult.js";
+import { extractIPs, resolveBestIP } from "./utils/networkHelpers.js";
 
 // (DEFAULT TENANT REMOVED)
 
@@ -66,18 +67,31 @@ export async function saveAgentData(payload, tenantId) {
     // Use the reliable tenantId from the DB (or the one just created)
     const finalTenantId = agent.tenantId;
 
+    // ⭐ INTELLIGENT IP RESOLUTION
+    // If it's system_info, try to find the "real" LAN IP from wlan_info etc.
+    let resolvedIP = payload.ip || "unknown";
+    if (type === "system_info") {
+        const candidates = extractIPs(data);
+        resolvedIP = resolveBestIP(candidates, resolvedIP);
+    }
+
     // 2️⃣ Update agent heartbeat (tenant-safe)
+    const updateObj = {
+      socketId: payload.socket_id || null,
+      ip: resolvedIP,
+      lastSeen: new Date(),
+      status: "online",
+      mac: payload.mac || payload.data?.mac || null,
+    };
+
+    if (type === "system_info") {
+      if (data.hostname) updateObj.hostname = data.hostname;
+      if (data.os_type) updateObj.os = data.os_type;
+    }
+
     await Agent.findOneAndUpdate(
       { agentId, tenantId: finalTenantId },
-      {
-        $set: {
-          socketId: payload.socket_id || null,
-          ip: payload.ip || "unknown",
-          lastSeen: new Date(),
-          status: "online",
-          mac: payload.mac || payload.data?.mac || null,
-        },
-      }
+      { $set: updateObj }
     );
 
     // 3️⃣ USB handled elsewhere

@@ -1,6 +1,5 @@
 import React from "react";
 import "./features.css";
-import TopNav from "../navigation/topnav.jsx";
 import { Monitor, Usb, Cpu, Network, Activity, Lock, Unlock, Scan, Smartphone } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { apiGet, apiPost } from "../../utils/api";

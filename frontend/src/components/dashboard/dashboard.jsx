@@ -126,10 +126,6 @@ const Dashboard = () => {
           <div className="stat-label">Inactive Agents</div>
           <div className="stat-value">{summary.inactive}</div>
         </div>
-        <div className="stat-card orange">
-          <div className="stat-label">Unknown Devices</div>
-          <div className="stat-value">{summary.unknown}</div>
-        </div>
         <div className="stat-card blue">
           <div className="stat-label">Routers</div>
           <div className="stat-value">{summary.routers}</div>
@@ -154,13 +150,13 @@ const Dashboard = () => {
           <tbody>
             {activeAgents.length > 0 ? activeAgents.map((a) => (
               <tr key={a.ip}>
-                <td>{a.agentId || "-"}</td>
-                <td>{a.hostname || a.system?.hostname || "-"}</td>
-                <td>{a.ip}</td>
-                <td>{formatCPU(a.cpu)}</td>
-                <td>{formatRAM(a.memory)}</td>
-                <td>{formatOS(a.os)}</td>
-                <td>{formatTime(a.lastSeen)}</td>
+                <td data-label="Agent ID">{a.agentId || "-"}</td>
+                <td data-label="Hostname">{a.hostname || a.system?.hostname || "-"}</td>
+                <td data-label="IP">{a.ip}</td>
+                <td data-label="CPU">{formatCPU(a.cpu)}</td>
+                <td data-label="RAM">{formatRAM(a.memory)}</td>
+                <td data-label="OS">{formatOS(a.os)}</td>
+                <td data-label="Last Seen">{formatTime(a.lastSeen)}</td>
               </tr>
             )) : (
               <tr><td colSpan="7" style={{ textAlign: 'center', padding: '30px', color: '#64748b' }}>No active agents detected</td></tr>
@@ -186,13 +182,13 @@ const Dashboard = () => {
           <tbody>
             {inactiveAgents.length > 0 ? inactiveAgents.map((a) => (
               <tr key={a.ip}>
-                <td>{a.agentId || "-"}</td>
-                <td>{a.hostname || "-"}</td>
-                <td>{a.ip}</td>
-                <td>{formatCPU(a.cpu)}</td>
-                <td>{formatRAM(a.memory)}</td>
-                <td>{formatOS(a.os)}</td>
-                <td>{formatTime(a.timestamp)}</td>
+                <td data-label="Agent ID">{a.agentId || "-"}</td>
+                <td data-label="Hostname">{a.hostname || "-"}</td>
+                <td data-label="IP">{a.ip}</td>
+                <td data-label="CPU">{formatCPU(a.cpu)}</td>
+                <td data-label="RAM">{formatRAM(a.memory)}</td>
+                <td data-label="OS">{formatOS(a.os)}</td>
+                <td data-label="Last Seen">{formatTime(a.timestamp)}</td>
               </tr>
             )) : (
               <tr><td colSpan="7" style={{ textAlign: 'center', padding: '30px', color: '#64748b' }}>No inactive agents recorded</td></tr>
@@ -201,31 +197,6 @@ const Dashboard = () => {
         </table>
       </div>
 
-      <div className="table-container">
-        <h2>Unknown Network Devices</h2>
-        <table className="activity-table">
-          <thead>
-            <tr>
-              <th>IP</th>
-              <th>Hostname / Discovery</th>
-              <th>Vendor Hint</th>
-              <th>Detected At</th>
-            </tr>
-          </thead>
-          <tbody>
-            {unknownDevices.length > 0 ? unknownDevices.map((d) => (
-              <tr key={d.ip}>
-                <td>{d.ip}</td>
-                <td>{d.hostname || "Unscanned Device"}</td>
-                <td>{d.vendor || "-"}</td>
-                <td>{formatTime(d.timestamp)}</td>
-              </tr>
-            )) : (
-              <tr><td colSpan="4" style={{ textAlign: 'center', padding: '40px', color: '#64748b' }}>No unknown devices on this subnet</td></tr>
-            )}
-          </tbody>
-        </table>
-      </div>
 
       <div className="table-container">
         <h2>Routers</h2>
@@ -241,10 +212,10 @@ const Dashboard = () => {
           <tbody>
             {routers.length > 0 ? routers.map((r) => (
               <tr key={r.ip}>
-                <td>{r.ip}</td>
-                <td>{r.hostname || "Gateway"}</td>
-                <td>{r.vendor || "Unknown"}</td>
-                <td>{formatTime(r.timestamp || r.createdAt)}</td>
+                <td data-label="IP">{r.ip}</td>
+                <td data-label="Hostname">{r.hostname || "Gateway"}</td>
+                <td data-label="Vendor">{r.vendor || "Unknown"}</td>
+                <td data-label="Detected At">{formatTime(r.timestamp || r.createdAt)}</td>
               </tr>
             )) : (
               <tr><td colSpan="4" style={{ textAlign: 'center', padding: '30px', color: '#64748b' }}>No routers identified</td></tr>

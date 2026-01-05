@@ -199,10 +199,11 @@ async function runDashboardWorker(interval = 4500) {
           }
         }
 
-        // ⭐ 6. FILTER: LAN-Only stable view
+        // ⭐ 6. FILTER: LAN-Only stable view + (NEW) Managed Only
         const filteredDevices = (targetSubnet
           ? allEntries.filter(d => d.ip && d.ip.startsWith(targetSubnet))
           : allEntries)
+          .filter(d => d.source === 'agent' || isRouterIP(d.ip, d.hostname, d.vendor)) // Hide unmanaged/unknown noise
           .sort((a, b) => {
             // Stable sort by IP
             const ipToNum = (ip) => ip.split('.').reduce((acc, octet) => (acc << 8) + parseInt(octet, 10), 0) >>> 0;
@@ -267,14 +268,12 @@ async function runDashboardWorker(interval = 4500) {
               all: vizItems.length,
               active: activeAgents.length,
               inactive: inactiveAgents.length,
-              unknown: unknownDevices.length,
               routers: routers.length,
             },
             allDevices: filteredDevices,
             activeAgents,
             inactiveAgents,
             routers,
-            unknownDevices,
           };
 
           await Dashboard.findOneAndUpdate({ tenantId }, { $set: snapshot }, { upsert: true });

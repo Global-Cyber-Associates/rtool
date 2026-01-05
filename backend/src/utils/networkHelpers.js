@@ -35,3 +35,49 @@ export function isRouterIP(ip, hostname = "", vendor = "") {
 
   return false;
 }
+
+/**
+ * Extract all potential IPv4 addresses from system data payload.
+ */
+export function extractIPs(data) {
+    if (!data) return [];
+    const ips = [];
+  
+    if (data.ip) ips.push(data.ip);
+    if (data.address) ips.push(data.address);
+  
+    if (Array.isArray(data.wlan_info)) {
+      data.wlan_info.forEach((w) => w?.address && ips.push(w.address));
+    }
+    if (Array.isArray(data.wlan_ip)) {
+      data.wlan_ip.forEach((w) => w?.address && ips.push(w.address));
+    }
+  
+    // Filter out obvious noise
+    return [...new Set(ips)].filter(ip =>
+      ip &&
+      typeof ip === 'string' &&
+      !ip.startsWith("127.") &&
+      !ip.startsWith("169.254.") &&
+      !ip.includes(":") // Skip IPv6 for now if only IPv4 is requested
+    );
+}
+
+/**
+ * Pick the "best" routable LAN IP from a list of candidates.
+ */
+export function resolveBestIP(candidates, fallback) {
+    if (!Array.isArray(candidates) || candidates.length === 0) return fallback;
+
+    // Prioritize RFC1918 Private ranges
+    const routableMatch = candidates.find(ip =>
+        ip.startsWith("192.168.") || 
+        ip.startsWith("10.") || 
+        ip.startsWith("172.")
+    );
+
+    if (routableMatch) return routableMatch;
+    
+    // If no classic LAN match, but we have ANY valid candidate that isn't loopback/apipa
+    return candidates[0] || fallback;
+}

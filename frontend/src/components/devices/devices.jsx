@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Sidebar from "../navigation/sidenav.jsx";
-import TopNav from "../navigation/topnav.jsx";
 import socket from "../../utils/socket.js";
 import { apiGet } from "../../utils/api.js";
 import { getRole } from "../../utils/authService.js";
-import { Lock } from "lucide-react";
+import {
+  Monitor, Cpu, Smartphone, Shield, LogOut, Lock, Search,
+  RefreshCw, Clock, Globe, WifiOff, Radar, CheckCircle2, AlertCircle
+} from "lucide-react";
 import "./devices.css";
 
 const Devices = () => {
   const [agents, setAgents] = useState([]);
-  const [statusMap, setStatusMap] = useState({});
-  const [visualizerMap, setVisualizerMap] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [unlockedFeatures, setUnlockedFeatures] = useState({});
@@ -19,76 +18,38 @@ const Devices = () => {
   const role = getRole();
 
   useEffect(() => {
-    // --- Fetch agents ---
-    // --- Fetch agents via API ---
     const token = sessionStorage.getItem("token");
+
+    // ⭐ FETCH CLEAN AGGREGATED DATA
     fetch(`${import.meta.env.VITE_BACKEND_URL}/api/agents`, {
       headers: { "Authorization": `Bearer ${token}` }
     })
       .then(res => res.json())
       .then(data => {
-        if (Array.isArray(data)) {
-          setAgents(data);
-        } else {
-          setError("Invalid response from server");
-        }
+        if (Array.isArray(data)) setAgents(data);
+        else setError("Infrastructure synchronization failed.");
         setLoading(false);
       })
       .catch(err => {
         console.error("Failed to fetch agents:", err);
-        setError("Failed to load agents");
+        setError("Network communication error.");
         setLoading(false);
       });
 
-    // --- Fetch logsstatuses ---
-    socket.emit("get_data", { type: "logsstatuses" }, (response) => {
-      if (response?.success && Array.isArray(response.data)) {
-        const latestDoc = response.data[0];
-        if (latestDoc?.agents?.length) {
-          const statuses = {};
-          latestDoc.agents.forEach((agent) => {
-            statuses[agent.agentId] = agent.status || "unknown";
-          });
-          setStatusMap(statuses);
-        }
-      }
-    });
-
-    // --- Fetch visualizer_data ---
-    socket.emit("get_data", { type: "visualizer_data" }, (response) => {
-      if (response?.success && Array.isArray(response.data)) {
-        const map = {};
-        response.data.forEach((item) => {
-          if (item.agentId && item.ip) {
-            map[item.agentId] = item.ip;
-          }
-        });
-        setVisualizerMap(map);
-      }
-    });
-
-    // --- Live agent updates ---
+    // ⭐ LISTEN FOR STABLE UPDATES
     socket.on("agent_update", (updatedAgent) => {
       setAgents((prev) => {
         const idx = prev.findIndex((a) => a.agentId === updatedAgent.agentId);
         if (idx >= 0) {
           const updated = [...prev];
-          updated[idx] = updatedAgent;
+          updated[idx] = { ...updated[idx], ...updatedAgent };
           return updated;
         } else {
           return [...prev, updatedAgent];
         }
       });
-
-      if (updatedAgent.status) {
-        setStatusMap((prev) => ({
-          ...prev,
-          [updatedAgent.agentId]: updatedAgent.status,
-        }));
-      }
     });
 
-    // --- Fetch unlocked features ---
     apiGet("/api/features")
       .then(res => res.json())
       .then(data => {
@@ -98,156 +59,143 @@ const Devices = () => {
         }
         setUnlockedFeatures(map);
       })
-      .catch(err => console.error("Failed to fetch features in devices:", err));
+      .catch(err => console.error("Failed to fetch features:", err));
 
     return () => socket.off("agent_update");
   }, []);
 
+
+  const formatLastSeen = (date) => {
+    if (!date) return "N/A";
+    const d = new Date(date);
+    const now = new Date();
+    const diff = Math.floor((now - d) / 1000);
+
+    if (diff < 60) return "Just now";
+    if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+    if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+    return d.toLocaleDateString();
+  };
+
   return (
     <div className="devices-content-wrapper">
-      <h1 className="devices-title">Devices with agents</h1>
+      <div className="devices-header">
+        <div className="header-left-group">
+          <h1 className="devices-title">Managed Infrastructure</h1>
+          <p className="devices-subtitle-main">Real-time status of all deployed agents and nodes.</p>
+        </div>
+      </div>
 
-      {loading && <div style={{ padding: "20px", color: "#ccc" }}>Loading agents...</div>}
-      {error && <div style={{ padding: "20px", color: "#ff5757" }}>{error}</div>}
+      {loading && (
+        <div className="state-container">
+          <RefreshCw size={44} className="animate-spin text-primary" />
+          <p>Analyzing network topology...</p>
+        </div>
+      )}
+
+      {error && (
+        <div className="state-container error">
+          <AlertCircle size={44} />
+          <p>{error}</p>
+        </div>
+      )}
 
       {!loading && !error && agents.length === 0 && (
-        <div style={{ padding: "20px", color: "#ccc" }}>No agents found.</div>
+        <div className="state-container">
+          <Monitor size={48} style={{ opacity: 0.2 }} />
+          <p>No nodes registered in this network.</p>
+        </div>
       )}
 
       <div className="device-list">
         {agents.map((agent) => {
-          // ⭐ NEW: TRUST BACKEND STATUS
           const isOnline = agent.status === "online";
-          const statusLabel = isOnline ? "Online" : "Offline";
+          const canAccessTasks = role === 'admin' || unlockedFeatures.tasks;
+          const canAccessApps = role === 'admin' || unlockedFeatures.apps;
 
           return (
             <div
-              key={agent._id}
-              className="device-card"
+              key={agent.agentId}
+              className={`device-card-premium ${!isOnline ? 'offline-node' : ''}`}
               onClick={() => navigate(`/devices/${agent.agentId}`)}
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 120px 1fr",
-                alignItems: "center",
-                padding: "10px",
-                gap: "10px",
-              }}
             >
-              {/* LEFT: Device info */}
-              <div className="device-left" style={{ display: "flex" }}>
-                <div className="device-icon">🖥️</div>
-                <div className="device-info-wrapper">
-                  <div className="device-name">{agent.agentId}</div>
-                  <div className="device-info">
-                    <p>
-                      <strong>IP:</strong> {agent.ip || "unknown"}
-                    </p>
-                    <p>
-                      <strong>Last Seen:</strong>{" "}
-                      {agent.lastSeen
-                        ? new Date(agent.lastSeen).toLocaleString()
-                        : "N/A"}
-                    </p>
+              <div className="node-main">
+                <div className={`node-icon ${isOnline ? 'online' : 'offline'}`}>
+                  {isOnline ? <CheckCircle2 size={24} /> : <Monitor size={24} />}
+                </div>
+
+                <div className="node-identity">
+                  <div className="node-meta">
+                    <span className="node-os-tag">{agent.os || "OS"}</span>
+                    <span className="node-ip-tag">{agent.ip || "0.0.0.0"}</span>
                   </div>
+                  <div className="node-name-label">{agent.hostname || agent.agentId}</div>
+                  <div className="node-id-sub">SID: {agent.agentId}</div>
                 </div>
               </div>
 
-              {/* CENTER: Status badge */}
-              <div
-                className="device-status-center"
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <span
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    backgroundColor: isOnline ? "#dcfce7" : "#fee2e2",
-                    padding: "4px 10px",
-                    borderRadius: "9999px",
-                    fontSize: "12px",
-                    fontWeight: "600",
-                    color: isOnline ? "#16a34a" : "#dc2626",
-                    minWidth: "80px",
-                  }}
-                >
-                  <span
-                    style={{
-                      width: "8px",
-                      height: "8px",
-                      borderRadius: "50%",
-                      backgroundColor: isOnline ? "#16a34a" : "#dc2626",
-                      marginRight: "6px",
-                    }}
-                  ></span>
-                  {statusLabel}
-                </span>
+              <div className="node-health">
+                <div className="health-stat">
+                  <span className="health-label">Uptime Status</span>
+                  <span className={`health-value ${isOnline ? 'text-success' : 'text-danger'}`}>
+                    {isOnline ? "ONLINE" : "OFFLINE"}
+                  </span>
+                </div>
+                <div className="health-stat">
+                  <span className="health-label">Last Synchronization</span>
+                  <span className="health-value text-muted">{formatLastSeen(agent.lastSeen)}</span>
+                </div>
               </div>
 
-              {/* RIGHT: Action buttons */}
-              <div
-                className="device-actions"
-                style={{
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  gap: "10px",
-                }}
-              >
+              <div className="node-actions">
+                <div className="action-button-group">
+                  <button
+                    className={`node-action-btn ${!canAccessTasks ? 'locked' : ''}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (!canAccessTasks) navigate("/features");
+                      else navigate(`/tasks/${agent.agentId}`);
+                    }}
+                    title="Task Manager"
+                  >
+                    {!canAccessTasks ? <Lock size={16} /> : <Cpu size={16} />}
+                    <span>Manager</span>
+                  </button>
 
+                  <button
+                    className={`node-action-btn ${!canAccessApps ? 'locked' : ''}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (!canAccessApps) navigate("/features");
+                      else navigate(`/apps/${agent.agentId}`);
+                    }}
+                    title="Software Inventory"
+                  >
+                    {!canAccessApps ? <Lock size={16} /> : <Smartphone size={16} />}
+                    <span>Software</span>
+                  </button>
+                </div>
 
-                <button
-                  className={`action-btn ${role !== 'admin' && !unlockedFeatures.tasks ? 'btn-locked' : ''}`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    if (role !== 'admin' && !unlockedFeatures.tasks) {
-                      navigate("/features");
-                    } else {
-                      navigate(`/tasks/${agent.agentId}`);
-                    }
-                  }}
-                >
-                  {role !== 'admin' && !unlockedFeatures.tasks && <Lock size={12} style={{ marginRight: '4px' }} />}
-                  Task Manager
-                </button>
-
-                <button
-                  className={`action-btn ${role !== 'admin' && !unlockedFeatures.apps ? 'btn-locked' : ''}`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    if (role !== 'admin' && !unlockedFeatures.apps) {
-                      navigate("/features");
-                    } else {
-                      navigate(`/apps/${agent.agentId}`);
-                    }
-                  }}
-                >
-                  {role !== 'admin' && !unlockedFeatures.apps && <Lock size={12} style={{ marginRight: '4px' }} />}
-                  Installed Apps
-                </button>
-                <button disabled
-                  className="action-btn"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    alert(`Disconnect ${agent.agentId}`);
-                  }}
-                >
-                  Disconnect
-                </button>
-
-
-                <button disabled
-                  className="action-btn"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    alert(`Scan ${agent.agentId}`);
-                  }}
-                >
-                  Scan
-                </button>
+                <div className="action-button-group utility">
+                  <button
+                    className="node-action-btn util"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      alert("Remote decommission Capability: Coming Soon");
+                    }}
+                  >
+                    <WifiOff size={16} />
+                  </button>
+                  <button
+                    className="node-action-btn util"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      alert("Node Vulnerability Scan: Coming Soon");
+                    }}
+                  >
+                    <Radar size={16} />
+                  </button>
+                </div>
               </div>
             </div>
           );

@@ -4,7 +4,7 @@
   min-height: 100vh;
   width: 100%;
   background: #0b1e2e; /* Darker navy */
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 /* Sidebar width variables */
@@ -19,44 +19,63 @@
   display: flex;
   flex-direction: column;
   min-width: 0; 
-  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Adjust margin based on sidebar state */
-.sidebar-open .main-wrapper {
-  margin-left: var(--sidebar-width);
-}
-
-.sidebar-closed .main-wrapper {
-  margin-left: var(--sidebar-mini-width);
+/* Desktop Sidebar Offset */
+@media (min-width: 1025px) {
+  .sidebar-open .main-wrapper {
+    margin-left: var(--sidebar-width);
+  }
+  .sidebar-closed .main-wrapper {
+    margin-left: var(--sidebar-mini-width);
+  }
 }
 
 /* Content container ensures proper padding and scroll */
 .content-container {
   flex: 1;
   padding: 0; 
-  height: 100vh;
+  min-height: 100vh;
   overflow-y: auto;
   overflow-x: hidden;
   position: relative;
   box-sizing: border-box;
 }
 
-/* Responsive: Keep mini-bar but prevent content overlap on very small screens */
+/* Mobile Adjustments */
 @media (max-width: 1024px) {
-  .sidebar-open .main-wrapper {
-    margin-left: 0;
+  .main-wrapper {
+    margin-left: 0 !important;
   }
-  
-  .sidebar-closed .main-wrapper {
-    margin-left: 0;
-  }
-
   .content-container {
-      padding-top: 60px; /* Space for the toggle button on mobile */
+      padding-top: 65px; /* Space for the toggle button on mobile */
+      padding-left: 12px;
+      padding-right: 12px;
   }
 }
 
-.main-wrapper, .sidebar, .content-container {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(2px);
+    z-index: 850;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@media (max-width: 480px) {
+    .content-container {
+        padding-top: 60px;
+        padding-left: 8px;
+        padding-right: 8px;
+    }
 }
