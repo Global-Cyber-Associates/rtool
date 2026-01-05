@@ -102,7 +102,6 @@ const Sidebar = ({ onToggle, isOpen: controlledIsOpen }) => {
     { label: "Admin Dashboard", path: "/admin/dashboard", icon: <ShieldCheck size={20} /> },
     { label: "Manage Users", path: "/admin/users", icon: <Users size={20} /> },
     { label: "License Manager", path: "/admin/licenses", icon: <Key size={20} /> },
-    { label: "Download", path: "/download", icon: <Download size={20} /> },
   ];
 
   const handleLogout = () => {

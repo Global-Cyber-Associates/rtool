@@ -44,6 +44,7 @@ This file is a living document that tracks every logical change made by Antigrav
 | 022 | 2026-01-05 | `backend/src/api/features.js` | Added null-check for `unlockedFeatures` array. | Prevents backend crashes when attempting to push to a non-existent array for new tenants. |
 | 023 | 2026-01-05 | `frontend/src/components/devices/devices.jsx` | Integrated feature locking for Task/App buttons. | Visual feedback (Lock icon) and logic redirection for sub-features within the agent list. |
 | 024 | 2026-01-05 | `frontend/src/components/devices/devices.css` | Added styles for `.btn-locked`. | Visual representation of restricted actions (desaturated, help cursor). |
+| 025 | 2026-01-05 | `frontend/src/components/navigation/sidenav.jsx` | Removed 'Download' from admin menu. | Administrative cleanup to remove unnecessary navigation items for admins. |
 
 ---
 
