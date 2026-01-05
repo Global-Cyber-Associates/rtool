@@ -39,5 +39,20 @@ This file is a living document that tracks every logical change made by Antigrav
 | 017 | 2026-01-04 | `App.jsx`, `features.jsx`, `sidenav.jsx` | Added `isMounted` checks & API response safety. | Resolved console errors caused by racing async state updates and undefined API data. |
 | 018 | 2026-01-05 | `App.jsx`, `devices.jsx`, `devices.css` | Gated Task Manager & Apps within Devices page. | Ensures sub-features require their own unlocks, even if the parent page is accessible. |
 | 019 | 2026-01-05 | `features.jsx` | Added 'Application Manager' feature. | Allows granular control over viewing installed software on devices. |
-| 020 | 2026-01-05 | `App.jsx` | Fixed correct feature IDs for protected routes. | Routes `/tasks/:id` and `/apps/:id` now check for `tasks` and `apps` IDs respectively. |
-| 021 | 2026-01-05 | `features.jsx` | Added missing `Smartphone` import. | Resolves ReferenceError that was crashing the Features landing page. |
+| 020 | 2026-01-05 | `frontend/src/App.jsx` | Fixed correct feature IDs for protected routes. | Routes `/tasks/:id` and `/apps/:id` now check for `tasks` and `apps` IDs respectively. |
+| 021 | 2026-01-05 | `frontend/src/components/Features/features.jsx` | Added missing `Smartphone` import. | Resolves ReferenceError that was crashing the Features landing page. |
+| 022 | 2026-01-05 | `backend/src/api/features.js` | Added null-check for `unlockedFeatures` array. | Prevents backend crashes when attempting to push to a non-existent array for new tenants. |
+| 023 | 2026-01-05 | `frontend/src/components/devices/devices.jsx` | Integrated feature locking for Task/App buttons. | Visual feedback (Lock icon) and logic redirection for sub-features within the agent list. |
+| 024 | 2026-01-05 | `frontend/src/components/devices/devices.css` | Added styles for `.btn-locked`. | Visual representation of restricted actions (desaturated, help cursor). |
+
+---
+
+### Summary for Teammate:
+I have successfully transitioned the application from a **Local Storage** based feature locking system to a robust **Database-Backed Multi-Tenant** system.
+
+**Key areas to watch during merge:**
+1. **Frontend API integration**: Components now fetch `unlockedFeatures` from the backend. Ensure `apiGet` and `apiPost` from `utils/api.js` are correctly configured.
+2. **Feature IDs**: The gate IDs are consistently mapped:
+   - `visualizer`, `devices`, `usb`, `scan`, `logs`, `tasks` (TaskManager), `apps` (Installed Apps).
+3. **Route Protection**: `App.jsx` now uses `FeatureGate` for granular protection. If you add new routes, wrap them in this component with the appropriate ID.
+4. **Backend Persistence**: Access is stored in the `Tenant` model. Ensure the `unlockedFeatures` field is present in yours.
