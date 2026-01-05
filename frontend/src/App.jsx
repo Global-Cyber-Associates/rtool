@@ -1,6 +1,6 @@
 // frontend/src/App.jsx
 import React from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 
 // USER PAGES
 import Dashboard from "./components/dashboard/dashboard.jsx";
@@ -218,7 +218,7 @@ function App() {
           path="/tasks/:id"
           element={
             <ProtectedLayout>
-              <FeatureGate featureId="devices">
+              <FeatureGate featureId="tasks">
                 <TaskManager />
               </FeatureGate>
             </ProtectedLayout>
@@ -228,7 +228,7 @@ function App() {
           path="/apps/:id"
           element={
             <ProtectedLayout>
-              <FeatureGate featureId="devices">
+              <FeatureGate featureId="apps">
                 <InstalledApps />
               </FeatureGate>
             </ProtectedLayout>

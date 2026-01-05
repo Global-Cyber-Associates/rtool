@@ -1,7 +1,7 @@
 import React from "react";
 import "./features.css";
 import TopNav from "../navigation/topnav.jsx";
-import { Monitor, Usb, Cpu, Network, Activity, Lock, Unlock, Scan } from "lucide-react";
+import { Monitor, Usb, Cpu, Network, Activity, Lock, Unlock, Scan, Smartphone } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { apiGet, apiPost } from "../../utils/api";
 
@@ -55,6 +55,14 @@ const Features = () => {
       title: "Task Manager",
       description: "Track and control active processes and system operations from a central interface.",
       icon: <Cpu size={26} />,
+      route: "/devices",
+      price: 0
+    },
+    {
+      id: "apps",
+      title: "Application Manager",
+      description: "Inventory and monitor all installed software across your managed endpoints.",
+      icon: <Smartphone size={26} />,
       route: "/devices",
       price: 0
     },

@@ -37,3 +37,7 @@ This file is a living document that tracks every logical change made by Antigrav
 | 015 | 2026-01-04 | `frontend/src/components/navigation/sidenav.jsx` | Fetches features from DB on mount. | Navigation state is now synchronized with server-side tenant records. |
 | 016 | 2026-01-04 | `frontend/src/App.jsx` | Secures routes via server-side verification. | `FeatureGate` now performs a fresh DB check on mount to prevent unauthorized access. |
 | 017 | 2026-01-04 | `App.jsx`, `features.jsx`, `sidenav.jsx` | Added `isMounted` checks & API response safety. | Resolved console errors caused by racing async state updates and undefined API data. |
+| 018 | 2026-01-05 | `App.jsx`, `devices.jsx`, `devices.css` | Gated Task Manager & Apps within Devices page. | Ensures sub-features require their own unlocks, even if the parent page is accessible. |
+| 019 | 2026-01-05 | `features.jsx` | Added 'Application Manager' feature. | Allows granular control over viewing installed software on devices. |
+| 020 | 2026-01-05 | `App.jsx` | Fixed correct feature IDs for protected routes. | Routes `/tasks/:id` and `/apps/:id` now check for `tasks` and `apps` IDs respectively. |
+| 021 | 2026-01-05 | `features.jsx` | Added missing `Smartphone` import. | Resolves ReferenceError that was crashing the Features landing page. |

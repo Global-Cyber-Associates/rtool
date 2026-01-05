@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import Sidebar from "../navigation/sidenav.jsx";
 import TopNav from "../navigation/topnav.jsx";
 import socket from "../../utils/socket.js";
+import { apiGet } from "../../utils/api.js";
+import { getRole } from "../../utils/authService.js";
+import { Lock } from "lucide-react";
 import "./devices.css";
 
 const Devices = () => {
@@ -11,7 +14,9 @@ const Devices = () => {
   const [visualizerMap, setVisualizerMap] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [unlockedFeatures, setUnlockedFeatures] = useState({});
   const navigate = useNavigate();
+  const role = getRole();
 
   useEffect(() => {
     // --- Fetch agents ---
@@ -82,6 +87,18 @@ const Devices = () => {
         }));
       }
     });
+
+    // --- Fetch unlocked features ---
+    apiGet("/api/features")
+      .then(res => res.json())
+      .then(data => {
+        const map = {};
+        if (data?.unlockedFeatures) {
+          data.unlockedFeatures.forEach(id => map[id] = true);
+        }
+        setUnlockedFeatures(map);
+      })
+      .catch(err => console.error("Failed to fetch features in devices:", err));
 
     return () => socket.off("agent_update");
   }, []);
@@ -183,23 +200,32 @@ const Devices = () => {
 
 
                 <button
-                  className="action-btn"
+                  className={`action-btn ${role !== 'admin' && !unlockedFeatures.tasks ? 'btn-locked' : ''}`}
                   onClick={(e) => {
                     e.stopPropagation();
-                    navigate(`/tasks/${agent.agentId}`);
+                    if (role !== 'admin' && !unlockedFeatures.tasks) {
+                      navigate("/features");
+                    } else {
+                      navigate(`/tasks/${agent.agentId}`);
+                    }
                   }}
                 >
+                  {role !== 'admin' && !unlockedFeatures.tasks && <Lock size={12} style={{ marginRight: '4px' }} />}
                   Task Manager
                 </button>
 
-
                 <button
-                  className="action-btn"
+                  className={`action-btn ${role !== 'admin' && !unlockedFeatures.apps ? 'btn-locked' : ''}`}
                   onClick={(e) => {
                     e.stopPropagation();
-                    navigate(`/apps/${agent.agentId}`);
+                    if (role !== 'admin' && !unlockedFeatures.apps) {
+                      navigate("/features");
+                    } else {
+                      navigate(`/apps/${agent.agentId}`);
+                    }
                   }}
                 >
+                  {role !== 'admin' && !unlockedFeatures.apps && <Lock size={12} style={{ marginRight: '4px' }} />}
                   Installed Apps
                 </button>
                 <button disabled

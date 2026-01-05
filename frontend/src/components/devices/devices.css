@@ -110,6 +110,20 @@
   transform: none;
 }
 
+.action-btn.btn-locked {
+  background: #2b3a55;
+  color: #7a8ba8;
+  opacity: 0.7;
+  cursor: help;
+  display: inline-flex;
+  align-items: center;
+}
+
+.action-btn.btn-locked:hover {
+  background: #34446a;
+  transform: none;
+}
+
 /* ====== Loading/Error ====== */
 .devices-container > div {
   font-size: 1.2rem;
