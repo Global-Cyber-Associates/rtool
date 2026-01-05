@@ -14,7 +14,6 @@ import Scan from "./components/scan/scan.jsx";
 import TaskManager from "./components/devices/Taskmanager/taskmanager.jsx";
 import UsbControl from "./components/usb/usb.jsx";
 import InstalledApps from "./components/devices/installedApps/installedapps.jsx";
-import ChangePassword from "./components/profile/ChangePassword.jsx";
 import Profile from "./components/profile/Profile.jsx";
 
 // AUTH & ADMIN
@@ -181,15 +180,6 @@ function App() {
               <FeatureGate featureId="visualizer">
                 <Visualizer />
               </FeatureGate>
-            </ProtectedLayout>
-          }
-        />
-
-        <Route
-          path="/profile/change-password"
-          element={
-            <ProtectedLayout>
-              <ChangePassword />
             </ProtectedLayout>
           }
         />

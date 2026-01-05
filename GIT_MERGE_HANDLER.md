@@ -49,6 +49,8 @@ This file is a living document that tracks every logical change made by Antigrav
 | 027 | 2026-01-05 | `adminController.js`, `admin.js` | Added `toggleTenantStatus` API. | Backend support for temporary activation/deactivation of client organizations. |
 | 028 | 2026-01-05 | `authMiddleware.js`, `authController.js`, `server.js` | Enforced `tenant.isActive` checks. | Globally block system access (API and Agents) for deactivated or expired tenants. |
 | 029 | 2026-01-05 | `ManageTenants.jsx`, `ManageUsers.css` | Implemented premium status badges & icons. | Revamped the 'Active/Disabled' UI with modern pills, status dots, and check/power icons. |
+| 030 | 2026-01-05 | `Profile.jsx`, `profile.css` | Unified Profile & Security. | Redesigned the profile page to match the dark navy theme and integrated secure password change logic. |
+| 031 | 2026-01-05 | `Profile.jsx`, `profile.css` | Modal-based Password Change. | Refactored the security form into a sleek modal with backdrop blurring and animations. |
 
 ---
 
