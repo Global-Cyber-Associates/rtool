@@ -116,11 +116,11 @@
   text-transform: uppercase;
 }
 
-.status-badge.active { background: rgba(46, 204, 113, 0.1); color: #2ecc71; border: 1px solid rgba(46, 204, 113, 0.2); }
+.status-badge.active { background: rgba(30, 41, 59, 0.5); color: #fff; border: 1px solid rgba(255, 255, 255, 0.1); }
 .status-badge.disabled { background: rgba(231, 76, 60, 0.1); color: #e74c3c; border: 1px solid rgba(231, 76, 60, 0.2); }
 
 .status-dot { width: 6px; height: 6px; border-radius: 50%; }
-.status-badge.active .status-dot { background: #2ecc71; box-shadow: 0 0 8px #2ecc71; }
+.status-badge.active .status-dot { background: #3b82f6; box-shadow: 0 0 8px #3b82f6; }
 .status-badge.disabled .status-dot { background: #e74c3c; }
 
 /* ====== Action Buttons ====== */
@@ -139,7 +139,7 @@
 }
 
 .toggle-action-btn.deactivate { background: transparent; border: 1px solid #e67e22; color: #e67e22; }
-.toggle-action-btn.activate { background: #2ecc71; color: #fff; }
+.toggle-action-btn.activate { background: #1f8ef1; color: #fff; }
 
 .toggle-action-btn:hover { transform: translateY(-1px); }
 

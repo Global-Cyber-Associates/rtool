@@ -34,6 +34,8 @@ import { getToken, getRole } from "./utils/authService.js";
 // LAYOUT WRAPPER
 import Layout from "./components/navigation/Layout.jsx";
 import { apiGet } from "./utils/api.js";
+import { Toaster } from "./utils/toast.jsx";
+import "./utils/toast.css";
 
 // ------------------------------------------------------
 // 🔐 PROTECTED ROUTES
@@ -114,6 +116,7 @@ function FeatureGate({ children, featureId }) {
 function App() {
   return (
     <BrowserRouter>
+      <Toaster />
       <Routes>
         {/* LOGIN */}
         <Route path="/login" element={<Login />} />

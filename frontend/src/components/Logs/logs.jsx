@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import socket from "../../utils/socket";
+import { toast } from "../../utils/toast";
 import "./logs.css";
 
 const Logs = () => {
@@ -14,10 +15,12 @@ const Logs = () => {
 
     const onConnect = () => {
       setConnected(true);
+      toast.success("Laboratory Link Established: Receiving system telemetry.");
     };
 
     const onDisconnect = (reason) => {
       setConnected(false);
+      toast.error("Laboratory Link Interrupted: Synchronization paused.");
     };
 
     const onLogsUpdate = (data) => {

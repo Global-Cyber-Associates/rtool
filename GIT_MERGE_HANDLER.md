@@ -65,7 +65,7 @@ I have successfully transitioned the application from a **Local Storage** based 
 
 **Key areas to watch during merge:**
 1. **Frontend API integration**: Components now fetch `unlockedFeatures` from the backend. Ensure `apiGet` and `apiPost` from `utils/api.js` are correctly configured.
-2. **Feature IDs**: The gate IDs are consistently mapped:
+2. **Feature IDs**: The gate IDs are consistently mapped
    - `visualizer`, `devices`, `usb`, `scan`, `logs`, `tasks` (TaskManager), `apps` (Installed Apps).
 3. **Route Protection**: `App.jsx` now uses `FeatureGate` for granular protection. If you add new routes, wrap them in this component with the appropriate ID.
 4. **Backend Persistence**: Access is stored in the `Tenant` model. Ensure the `unlockedFeatures` field is present in yours.

@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiGet, apiPost } from "../../utils/api";
 import { Check, Power } from "lucide-react";
+import { toast } from "../../utils/toast";
 import "./ManageUsers.css";
 
 function ManageTenants() {
     const [tenants, setTenants] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [message, setMessage] = useState("");
     const navigate = useNavigate();
 
     // Load tenants summary
@@ -20,6 +20,7 @@ function ManageTenants() {
             }
         } catch (err) {
             console.error("Failed to load tenants:", err);
+            toast.error("Network error: Could not load client tenants.");
         } finally {
             setLoading(false);
         }
@@ -44,14 +45,13 @@ function ManageTenants() {
 
             const data = await res.json();
             if (res.ok) {
-                setMessage(data.message);
+                toast.success(data.message);
                 loadTenants();
-                setTimeout(() => setMessage(""), 3000);
             } else {
-                alert(data.message || "Toggle failed");
+                toast.error(data.message || "Toggle failed");
             }
         } catch (err) {
-            alert("Error toggling tenant status");
+            toast.error("System error while toggling tenant status.");
         }
     };
 
@@ -67,11 +67,6 @@ function ManageTenants() {
                     </div>
                 </div>
 
-                {message && (
-                    <div className="success-msg" style={{ background: '#2ecc71', color: '#fff', padding: '10px 15px', borderRadius: '8px', marginBottom: '15px' }}>
-                        {message}
-                    </div>
-                )}
 
                 {loading ? (
                     <div className="empty-state">Loading tenants...</div>

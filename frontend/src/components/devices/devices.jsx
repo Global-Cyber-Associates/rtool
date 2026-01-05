@@ -7,6 +7,7 @@ import {
   Monitor, Cpu, Smartphone, Shield, LogOut, Lock, Search,
   RefreshCw, Clock, Globe, WifiOff, Radar, CheckCircle2, AlertCircle
 } from "lucide-react";
+import { toast } from "../../utils/toast";
 import "./devices.css";
 
 const Devices = () => {
@@ -181,7 +182,7 @@ const Devices = () => {
                     className="node-action-btn util"
                     onClick={(e) => {
                       e.stopPropagation();
-                      alert("Remote decommission Capability: Coming Soon");
+                      toast.info("Remote decommission Capability: Coming Soon");
                     }}
                   >
                     <WifiOff size={16} />
@@ -190,7 +191,7 @@ const Devices = () => {
                     className="node-action-btn util"
                     onClick={(e) => {
                       e.stopPropagation();
-                      alert("Node Vulnerability Scan: Coming Soon");
+                      toast.info("Node Vulnerability Scan: Coming Soon");
                     }}
                   >
                     <Radar size={16} />

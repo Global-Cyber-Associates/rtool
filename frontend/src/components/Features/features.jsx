@@ -3,6 +3,7 @@ import "./features.css";
 import { Monitor, Usb, Cpu, Network, Activity, Lock, Unlock, Scan, Smartphone } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { apiGet, apiPost } from "../../utils/api";
+import { toast } from "../../utils/toast";
 
 const Features = () => {
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ const Features = () => {
         }
       } catch (err) {
         console.error("Failed to fetch features landing page:", err);
+        toast.error("Connectivity error: Could not sync with licensing server.");
       } finally {
         if (isMounted) setLoading(false);
       }
@@ -93,8 +95,7 @@ const Features = () => {
 
   const handleUnlock = async (feature) => {
     if (feature.price > 0) {
-      console.log(`Loading Razorpay for ${feature.title} at $${feature.price}`);
-      alert("Redirecting to Razorpay payment gateway...");
+      toast.info("Redirecting to Razorpay payment gateway...");
     } else {
       try {
         const response = await apiPost("/api/features/unlock", { featureId: feature.id });
@@ -109,10 +110,10 @@ const Features = () => {
           // without needing full re-fetches between navigation
           localStorage.setItem("unlockedFeatures", JSON.stringify(unlockedMap));
 
-          alert(`${feature.title} has been successfully unlocked!`);
+          toast.success(`${feature.title} has been successfully unlocked!`);
         }
       } catch (err) {
-        alert("Failed to unlock feature. Please try again.");
+        toast.error("Failed to unlock feature. Please try again.");
       }
     }
   };

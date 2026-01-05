@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiGet, apiPut, apiDelete } from "../../utils/api";
-import Sidebar from "../navigation/sidenav.jsx";
-import TopNav from "../navigation/topnav.jsx";
+import { toast } from "../../utils/toast";
 import "./ManageUsers.css";
 
 function ManageUsers() {
   const [users, setUsers] = useState([]);
-  const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
   const loggedInEmail = sessionStorage.getItem("email");
 
   // Load users
   const loadUsers = async () => {
-    const res = await apiGet("/api/users");
-    const data = await res.json();
-    setUsers(data);
+    try {
+      const res = await apiGet("/api/users");
+      const data = await res.json();
+      setUsers(data);
+    } catch (err) {
+      toast.error("Network error: Could not load identity database.");
+    }
   };
 
   useEffect(() => {
@@ -31,28 +33,44 @@ function ManageUsers() {
 
     if (!window.confirm(confirmMsg)) return;
 
-    const res = await apiPut(`/api/users/${user._id}`, {
-      isActive: !user.isActive,
-    });
+    try {
+      const res = await apiPut(`/api/users/${user._id}`, {
+        isActive: !user.isActive,
+      });
 
-    const data = await res.json();
-    setMessage(data.message || "User updated");
-    loadUsers();
+      const data = await res.json();
+      if (res.ok) {
+        toast.success(`Identity status updated: ${user.email} is now ${!user.isActive ? 'Inactive' : 'Active'}.`);
+        loadUsers();
+      } else {
+        toast.error(data.message || "Credential status update failed.");
+      }
+    } catch (err) {
+      toast.error("Internal process error during status toggle.");
+    }
   };
 
   // Delete user
   const deleteUser = async (user) => {
     if (user.email === loggedInEmail) {
-      alert("You cannot delete your own account.");
+      toast.error("Authorization Error: Domain admins cannot self-delete.");
       return;
     }
 
     if (!window.confirm(`Delete user ${user.email}?`)) return;
 
-    const res = await apiDelete(`/api/users/${user._id}`);
-    const data = await res.json();
-    setMessage(data.message || "User deleted");
-    loadUsers();
+    try {
+      const res = await apiDelete(`/api/users/${user._id}`);
+      const data = await res.json();
+      if (res.ok) {
+        toast.success(`Identity Purged: ${user.email} removed from infrastructure.`);
+        loadUsers();
+      } else {
+        toast.error(data.message || "Purge operation failed.");
+      }
+    } catch (err) {
+      toast.error("Backend Error: Identity could not be removed.");
+    }
   };
 
   return (
@@ -68,7 +86,6 @@ function ManageUsers() {
           </button>
         </div>
 
-        {message && <div className="success-msg">{message}</div>}
 
         <table className="users-table">
           <thead>

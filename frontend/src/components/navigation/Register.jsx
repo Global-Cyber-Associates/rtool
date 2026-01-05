@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { toast } from "../../utils/toast";
 import logo from "../../assets/gca.png";
-import "./login.css"; // Reuse login styles
+import "./login.css";
 
 function Register() {
     const navigate = useNavigate();
@@ -11,9 +12,8 @@ function Register() {
         password: "",
         companyName: "",
     });
-    const [error, setError] = useState("");
-    const [success, setSuccess] = useState("");
     const [loading, setLoading] = useState(false);
+    const [success, setSuccess] = useState(false);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -22,8 +22,6 @@ function Register() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        setError("");
-        setSuccess("");
 
         try {
             const resp = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/register`, {
@@ -35,13 +33,14 @@ function Register() {
             const data = await resp.json();
 
             if (resp.ok) {
-                setSuccess(data.message);
+                toast.success(data.message || "Registration request submitted successfully!");
                 setFormData({ name: "", email: "", password: "", companyName: "" });
+                setSuccess(true);
             } else {
-                setError(data.message || "Registration failed");
+                toast.error(data.message || "Registration failed");
             }
         } catch (err) {
-            setError("Network error. Please try again.");
+            toast.error("Network error. Please check your connection and try again.");
         } finally {
             setLoading(false);
         }
@@ -54,10 +53,7 @@ function Register() {
                 <h2 className="login-title">VisuN</h2>
                 <p className="login-subtitle">Client Registration Request</p>
 
-                {error && <div className="login-error">{error}</div>}
-                {success && <div className="login-success" style={{ color: "#2ecc71", marginBottom: "15px", textAlign: "center", fontSize: "0.9rem" }}>{success}</div>}
-
-                {!success && (
+                {!success ? (
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
                             <label>Full Name</label>
@@ -107,6 +103,12 @@ function Register() {
                             {loading ? "Submitting..." : "Submit Request"}
                         </button>
                     </form>
+                ) : (
+                    <div className="registration-success-message" style={{ textAlign: "center", padding: "20px" }}>
+                        <div style={{ background: "rgba(30, 41, 59, 0.5)", color: "#1f8ef1", padding: "15px", borderRadius: "10px", marginBottom: "20px", border: "1px solid rgba(31, 142, 241, 0.3)" }}>
+                            Request Submitted! Our technical team will review and provision your tenant shortly.
+                        </div>
+                    </div>
                 )}
 
                 <div style={{ marginTop: "20px", textAlign: "center" }}>

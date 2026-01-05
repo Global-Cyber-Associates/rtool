@@ -1,0 +1,111 @@
+.toast-container {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: none;
+  perspective: 1000px;
+}
+
+.toast-item {
+  pointer-events: auto;
+  width: 380px;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.1), 
+    0 20px 25px -5px rgba(0, 0, 0, 0.2),
+    inset 0 1px 1px rgba(255, 255, 255, 0.05);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.toast-content {
+  padding: 16px 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.toast-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+  padding: 8px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.toast-item.success .toast-icon-wrapper { color: #06b6d4; background: rgba(6, 182, 212, 0.1); }
+.toast-item.error .toast-icon-wrapper { color: #ef4444; background: rgba(239, 68, 68, 0.1); }
+.toast-item.info .toast-icon-wrapper { color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
+
+.toast-message-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.toast-title {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #f8fafc;
+}
+
+.toast-text {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.toast-close-btn {
+  background: transparent;
+  border: none;
+  color: #475569;
+  cursor: pointer;
+  padding: 6px;
+  margin-top: -6px;
+  margin-right: -10px;
+  border-radius: 6px;
+  transition: all 0.2s;
+  display: flex;
+}
+
+.toast-close-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #cbd5e1;
+}
+
+/* Progress Bar */
+.toast-progress-bar {
+  height: 3px;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transform-origin: left;
+}
+
+.toast-item.success .toast-progress-bar { background: linear-gradient(to right, #0891b2, #3b82f6); }
+.toast-item.error .toast-progress-bar { background: linear-gradient(to right, #ef4444, #f87171); }
+.toast-item.info .toast-progress-bar { background: linear-gradient(to right, #3b82f6, #60a5fa); }
+
+/* Animation tweaks */
+.toast-item {
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+}

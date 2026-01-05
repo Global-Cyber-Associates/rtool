@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { apiGet, apiPost } from "../../utils/api";
 import { Users, Building2, CheckCircle, Clock, Smartphone } from "lucide-react";
+import { toast } from "../../utils/toast";
 import "./AdminDashboard.css";
 
 function AdminDashboard() {
   const [requests, setRequests] = useState([]);
   const [tenants, setTenants] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [message, setMessage] = useState("");
 
   useEffect(() => {
     fetchData();
@@ -25,6 +25,7 @@ function AdminDashboard() {
       if (tenRes.ok) setTenants(await tenRes.json());
     } catch (err) {
       console.error("Failed to fetch admin data", err);
+      toast.error("Network error: Failed to fetch administration data.");
     } finally {
       setLoading(false);
     }
@@ -37,14 +38,13 @@ function AdminDashboard() {
       const res = await apiPost(`/api/admin/approve/${id}`);
       const data = await res.json();
       if (res.ok) {
-        setMessage("Client approved successfully!");
+        toast.success("Client approved successfully! New tenant initialized.");
         fetchData();
-        setTimeout(() => setMessage(""), 3000);
       } else {
-        alert(data.message || "Approval failed");
+        toast.error(data.message || "Approval failed");
       }
     } catch (err) {
-      alert("Error approving client");
+      toast.error("Critical error during client approval.");
     }
   };
 
@@ -57,7 +57,6 @@ function AdminDashboard() {
         <p>Global multi-tenant management and approval center.</p>
       </div>
 
-      {message && <div className="success-banner" style={{ background: '#2ecc71', color: '#fff', padding: '10px', borderRadius: '8px', marginBottom: '20px', textAlign: 'center' }}>{message}</div>}
 
       {/* 1. PENDING REQUESTS */}
       <section className="admin-section">
@@ -124,7 +123,7 @@ function AdminDashboard() {
                     </div>
                   </td>
                   <td>
-                    <span className="badge-pending" style={{ background: ten.isActive ? '#2ecc71' : '#e74c3c' }}>
+                    <span className={`status-badge ${ten.isActive ? "active" : "disabled"}`}>
                       {ten.isActive ? "Active" : "Disabled"}
                     </span>
                   </td>

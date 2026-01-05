@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { apiGet, apiPut } from "../../utils/api";
 import { User, Shield, Lock, Key, AlertCircle, CheckCircle, X } from "lucide-react";
+import { toast } from "../../utils/toast";
 import "./profile.css";
 
 function Profile() {
@@ -16,7 +18,6 @@ function Profile() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passError, setPassError] = useState("");
-  const [passSuccess, setPassSuccess] = useState("");
   const [updating, setUpdating] = useState(false);
 
   useEffect(() => {
@@ -38,7 +39,6 @@ function Profile() {
   const handlePasswordChange = async (e) => {
     e.preventDefault();
     setPassError("");
-    setPassSuccess("");
 
     if (newPassword !== confirmPassword) {
       return setPassError("New passwords do not match");
@@ -57,20 +57,18 @@ function Profile() {
       const data = await res.json();
 
       if (res.ok) {
-        setPassSuccess("Password updated successfully!");
+        toast.success("Security status updated: Password changed successfully.");
         setOldPassword("");
         setNewPassword("");
         setConfirmPassword("");
-        // Keep success message visible for a bit then close?
-        setTimeout(() => {
-          setIsModalOpen(false);
-          setPassSuccess("");
-        }, 2000);
+        setIsModalOpen(false);
       } else {
         setPassError(data.message || "Failed to update password");
+        toast.error(data.message || "Security update failed.");
       }
     } catch (err) {
       setPassError("Server error. Please try again later.");
+      toast.error("Critical: Security sync failed with server.");
     } finally {
       setUpdating(false);
     }
@@ -82,7 +80,6 @@ function Profile() {
     setNewPassword("");
     setConfirmPassword("");
     setPassError("");
-    setPassSuccess("");
   };
 
   if (loading) return (
@@ -171,7 +168,6 @@ function Profile() {
 
             <div className="modal-body">
               {passError && <div className="error-msg"><AlertCircle size={18} /> {passError}</div>}
-              {passSuccess && <div className="success-msg"><CheckCircle size={18} /> {passSuccess}</div>}
 
               <form className="profile-form" onSubmit={handlePasswordChange}>
                 <div className="form-group">
