@@ -100,7 +100,7 @@ const Sidebar = ({ onToggle, isOpen: controlledIsOpen }) => {
 
   const adminNavItems = [
     { label: "Admin Dashboard", path: "/admin/dashboard", icon: <ShieldCheck size={20} /> },
-    { label: "Manage Users", path: "/admin/users", icon: <Users size={20} /> },
+    { label: "Manage Tenants", path: "/admin/tenants", icon: <Users size={20} /> },
     { label: "License Manager", path: "/admin/licenses", icon: <Key size={20} /> },
   ];
 

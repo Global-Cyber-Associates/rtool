@@ -133,39 +133,88 @@
   transform: translateY(-1px);
 }
 
-.status-active {
-  color: #2ecc71;
-  font-weight: 600;
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 99px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-.status-disabled {
-  color: #e74c3c;
-  font-weight: 600;
+.status-badge.active {
+    background: rgba(46, 204, 113, 0.1);
+    color: #2ecc71;
+    border: 1px solid rgba(46, 204, 113, 0.2);
 }
 
-.disable-btn {
-  background: #e67e22;
-  border: none;
-  padding: 6px 10px;
-  color: #fff;
-  border-radius: 4px;
-  cursor: pointer;
+.status-badge.disabled {
+    background: rgba(231, 76, 60, 0.1);
+    color: #e74c3c;
+    border: 1px solid rgba(231, 76, 60, 0.2);
 }
 
-.enable-btn {
-  background: #2ecc71;
-  border: none;
-  padding: 6px 10px;
-  color: #fff;
-  border-radius: 4px;
-  cursor: pointer;
+.status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
 }
 
-.disable-btn:hover,
-.enable-btn:hover {
-  opacity: 0.85;
+.status-badge.active .status-dot { background: #2ecc71; box-shadow: 0 0 8px #2ecc71; }
+.status-badge.disabled .status-dot { background: #e74c3c; }
+
+.toggle-action-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: none;
+}
+
+.toggle-action-btn.deactivate {
+    background: transparent;
+    border: 1px solid #e67e22;
+    color: #e67e22;
+}
+
+.toggle-action-btn.activate {
+    background: #2ecc71;
+    border: none;
+    color: #fff;
+}
+
+.toggle-action-btn:hover {
+    transform: translateY(-1px);
+}
+
+.toggle-action-btn.deactivate:hover {
+    background: #e67e22;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
+}
+
+.toggle-action-btn.activate:hover {
+    background: #27ae60;
+    box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
 }
 
 .disabled-row {
-  opacity: 0.6;
+  background: rgba(13, 27, 42, 0.5);
+}
+
+.disabled-row td {
+    color: #7a8ba8;
+}
+
+.manage-users p {
+    margin-top: 4px;
+    margin-bottom: 20px;
 }

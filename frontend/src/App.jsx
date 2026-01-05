@@ -22,7 +22,7 @@ import Login from "./components/navigation/Login.jsx";
 import Register from "./components/navigation/Register.jsx";
 import CreateUser from "./components/admin/CreateUser.jsx";
 import AdminDashboard from "./components/admin/AdminDashboard.jsx";
-import ManageUsers from "./components/admin/ManageUsers.jsx";
+import ManageTenants from "./components/admin/ManageTenants.jsx";
 import LicenseManager from "./components/admin/LicenseManager.jsx";
 // import ManageUsers from "./components/admin/ManageUsers.jsx"; // create later
 
@@ -148,10 +148,10 @@ function App() {
         />
         {/* ADMIN: MANAGE USERS */}
         <Route
-          path="/admin/users"
+          path="/admin/tenants"
           element={
             <ProtectedLayout adminOnly={true}>
-              <ManageUsers />
+              <ManageTenants />
             </ProtectedLayout>
           }
         />

@@ -130,6 +130,11 @@ io.use(async (socket, next) => {
     try {
       const decoded = jwt.verify(cleanToken, process.env.JWT_SECRET);
       if (decoded && decoded.tenantId) {
+        // Enforce active tenant for Users too
+        const tenant = await Tenant.findById(decoded.tenantId);
+        if (!tenant || !tenant.isActive) {
+          return next(new Error("Authentication error: Company account is deactivated."));
+        }
         socket.user = decoded;
         socket.tenantId = decoded.tenantId;
         socket.isAgent = false;
@@ -142,6 +147,9 @@ io.use(async (socket, next) => {
     // 2️⃣ Try as AGENT (Enrollment Key)
     const tenant = await Tenant.findOne({ enrollmentKey: cleanToken });
     if (tenant) {
+      if (!tenant.isActive) {
+        return next(new Error("Authentication error: Tenant account deactivated or expired."));
+      }
       socket.tenantId = tenant._id.toString();
       socket.isAgent = true;
       return next();
@@ -304,7 +312,16 @@ io.on("connection", (socket) => {
         return;
       }
 
-      // 🔐 LICENSE ENFORCEMENT
+      // 🔐 TENANT & LICENSE ENFORCEMENT
+      const tenant = await Tenant.findById(socket.tenantId);
+      if (!tenant || !tenant.isActive) {
+        console.warn(`[DENIED] Blocked data from inactive tenant: ${socket.tenantId}`);
+        return socket.emit("agent_response", {
+          success: false,
+          message: "Tenant membership deactivated. Operation canceled.",
+        });
+      }
+
       const agent = await Agent.findOne({ agentId: payload.agentId, tenantId: socket.tenantId });
       if (!agent || !agent.isLicensed) {
         console.warn(`[DENIED] Data from unlicensed/revoked agent: ${payload.agentId} (Tenant: ${socket.tenantId})`);

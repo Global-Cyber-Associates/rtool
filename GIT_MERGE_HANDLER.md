@@ -44,7 +44,11 @@ This file is a living document that tracks every logical change made by Antigrav
 | 022 | 2026-01-05 | `backend/src/api/features.js` | Added null-check for `unlockedFeatures` array. | Prevents backend crashes when attempting to push to a non-existent array for new tenants. |
 | 023 | 2026-01-05 | `frontend/src/components/devices/devices.jsx` | Integrated feature locking for Task/App buttons. | Visual feedback (Lock icon) and logic redirection for sub-features within the agent list. |
 | 024 | 2026-01-05 | `frontend/src/components/devices/devices.css` | Added styles for `.btn-locked`. | Visual representation of restricted actions (desaturated, help cursor). |
-| 025 | 2026-01-05 | `frontend/src/components/navigation/sidenav.jsx` | Removed 'Download' from admin menu. | Administrative cleanup to remove unnecessary navigation items for admins. |
+| 025 | 2026-01-05 | `frontend/src/components/navigation/sidenav.jsx` | Renamed 'Manage Users' to 'Manage Tenants'. | Align UI with organization-centric administration. |
+| 026 | 2026-01-05 | `App.jsx`, `ManageTenants.jsx` | Replaced User mgmt with Tenant mgmt. | Admins now manage organization-wide access instead of just user accounts. |
+| 027 | 2026-01-05 | `adminController.js`, `admin.js` | Added `toggleTenantStatus` API. | Backend support for temporary activation/deactivation of client organizations. |
+| 028 | 2026-01-05 | `authMiddleware.js`, `authController.js`, `server.js` | Enforced `tenant.isActive` checks. | Globally block system access (API and Agents) for deactivated or expired tenants. |
+| 029 | 2026-01-05 | `ManageTenants.jsx`, `ManageUsers.css` | Implemented premium status badges & icons. | Revamped the 'Active/Disabled' UI with modern pills, status dots, and check/power icons. |
 
 ---
 
