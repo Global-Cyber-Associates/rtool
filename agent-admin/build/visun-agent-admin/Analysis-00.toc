@@ -1,0 +1,2922 @@
+(['e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\main.py'],
+ ['e:\\GCA\\tools\\cloud\\ntool\\agent-admin'],
+ [],
+ [('C:\\Users\\RAHUL '
+   'VENKAT\\AppData\\Local\\Programs\\Python\\Python39\\Lib\\site-packages\\numpy\\_pyinstaller',
+   0),
+  ('c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks',
+   -1000),
+  ('c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\_pyinstaller_hooks_contrib',
+   -1000)],
+ {},
+ ['cryptography', '__main__'],
+ [],
+ False,
+ {},
+ 0,
+ [],
+ [('python-embed\\LICENSE.txt',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\LICENSE.txt',
+   'DATA'),
+  ('python-embed\\_asyncio.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\_asyncio.pyd',
+   'DATA'),
+  ('python-embed\\_bz2.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\_bz2.pyd',
+   'DATA'),
+  ('python-embed\\_ctypes.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\_ctypes.pyd',
+   'DATA'),
+  ('python-embed\\_decimal.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\_decimal.pyd',
+   'DATA'),
+  ('python-embed\\_elementtree.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\_elementtree.pyd',
+   'DATA'),
+  ('python-embed\\_hashlib.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\_hashlib.pyd',
+   'DATA'),
+  ('python-embed\\_lzma.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\_lzma.pyd',
+   'DATA'),
+  ('python-embed\\_msi.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\_msi.pyd',
+   'DATA'),
+  ('python-embed\\_multiprocessing.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\_multiprocessing.pyd',
+   'DATA'),
+  ('python-embed\\_overlapped.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\_overlapped.pyd',
+   'DATA'),
+  ('python-embed\\_queue.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\_queue.pyd',
+   'DATA'),
+  ('python-embed\\_socket.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\_socket.pyd',
+   'DATA'),
+  ('python-embed\\_sqlite3.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\_sqlite3.pyd',
+   'DATA'),
+  ('python-embed\\_ssl.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\_ssl.pyd',
+   'DATA'),
+  ('python-embed\\_uuid.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\_uuid.pyd',
+   'DATA'),
+  ('python-embed\\_zoneinfo.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\_zoneinfo.pyd',
+   'DATA'),
+  ('python-embed\\libcrypto-1_1.dll',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\libcrypto-1_1.dll',
+   'DATA'),
+  ('python-embed\\libffi-8.dll',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\libffi-8.dll',
+   'DATA'),
+  ('python-embed\\libssl-1_1.dll',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\libssl-1_1.dll',
+   'DATA'),
+  ('python-embed\\netifaces.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\netifaces.pyd',
+   'DATA'),
+  ('python-embed\\pyexpat.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\pyexpat.pyd',
+   'DATA'),
+  ('python-embed\\python.cat',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\python.cat',
+   'DATA'),
+  ('python-embed\\python.exe',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\python.exe',
+   'DATA'),
+  ('python-embed\\python3.dll',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\python3.dll',
+   'DATA'),
+  ('python-embed\\python311._pth',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\python311._pth',
+   'DATA'),
+  ('python-embed\\python311.dll',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\python311.dll',
+   'DATA'),
+  ('python-embed\\python311.zip',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\python311.zip',
+   'DATA'),
+  ('python-embed\\pythonw.exe',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\pythonw.exe',
+   'DATA'),
+  ('python-embed\\select.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\select.pyd',
+   'DATA'),
+  ('python-embed\\sqlite3.dll',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\sqlite3.dll',
+   'DATA'),
+  ('python-embed\\unicodedata.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\unicodedata.pyd',
+   'DATA'),
+  ('python-embed\\vcruntime140.dll',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\vcruntime140.dll',
+   'DATA'),
+  ('python-embed\\vcruntime140_1.dll',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\vcruntime140_1.dll',
+   'DATA'),
+  ('python-embed\\winsound.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\winsound.pyd',
+   'DATA'),
+  ('visualizer-scanner\\scanner_service.py',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\visualizer-scanner\\scanner_service.py',
+   'DATA')],
+ '3.9.0 (tags/v3.9.0:9cf6752, Oct  5 2020, 15:34:40) [MSC v.1927 64 bit '
+ '(AMD64)]',
+ [('pyi_rth_inspect',
+   'C:\\Users\\RAHUL '
+   'VENKAT\\AppData\\Local\\Programs\\Python\\Python39\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_inspect.py',
+   'PYSOURCE'),
+  ('pyi_rth_pywintypes',
+   'C:\\Users\\RAHUL '
+   'VENKAT\\AppData\\Local\\Programs\\Python\\Python39\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\rthooks\\pyi_rth_pywintypes.py',
+   'PYSOURCE'),
+  ('pyi_rth_multiprocessing',
+   'C:\\Users\\RAHUL '
+   'VENKAT\\AppData\\Local\\Programs\\Python\\Python39\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_multiprocessing.py',
+   'PYSOURCE'),
+  ('pyi_rth_pkgutil',
+   'C:\\Users\\RAHUL '
+   'VENKAT\\AppData\\Local\\Programs\\Python\\Python39\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_pkgutil.py',
+   'PYSOURCE'),
+  ('pyi_rth_pythoncom',
+   'C:\\Users\\RAHUL '
+   'VENKAT\\AppData\\Local\\Programs\\Python\\Python39\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\rthooks\\pyi_rth_pythoncom.py',
+   'PYSOURCE'),
+  ('main', 'E:\\GCA\\tools\\cloud\\ntool\\agent-admin\\main.py', 'PYSOURCE')],
+ [('pkgutil',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\pkgutil.py',
+   'PYMODULE'),
+  ('zipimport',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\zipimport.py',
+   'PYMODULE'),
+  ('pathlib',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\pathlib.py',
+   'PYMODULE'),
+  ('urllib.parse',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\urllib\\parse.py',
+   'PYMODULE'),
+  ('urllib',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\urllib\\__init__.py',
+   'PYMODULE'),
+  ('fnmatch',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\fnmatch.py',
+   'PYMODULE'),
+  ('importlib.abc',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\importlib\\abc.py',
+   'PYMODULE'),
+  ('typing',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\typing.py',
+   'PYMODULE'),
+  ('contextlib',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\contextlib.py',
+   'PYMODULE'),
+  ('importlib._bootstrap_external',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\importlib\\_bootstrap_external.py',
+   'PYMODULE'),
+  ('importlib.metadata',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\importlib\\metadata.py',
+   'PYMODULE'),
+  ('configparser',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\configparser.py',
+   'PYMODULE'),
+  ('zipfile',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\zipfile.py',
+   'PYMODULE'),
+  ('argparse',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\argparse.py',
+   'PYMODULE'),
+  ('textwrap',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\textwrap.py',
+   'PYMODULE'),
+  ('copy',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\copy.py',
+   'PYMODULE'),
+  ('gettext',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\gettext.py',
+   'PYMODULE'),
+  ('py_compile',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\py_compile.py',
+   'PYMODULE'),
+  ('lzma',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\lzma.py',
+   'PYMODULE'),
+  ('_compression',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\_compression.py',
+   'PYMODULE'),
+  ('bz2',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\bz2.py',
+   'PYMODULE'),
+  ('struct',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\struct.py',
+   'PYMODULE'),
+  ('email',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\email\\__init__.py',
+   'PYMODULE'),
+  ('email.parser',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\email\\parser.py',
+   'PYMODULE'),
+  ('email._policybase',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\email\\_policybase.py',
+   'PYMODULE'),
+  ('email.utils',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\email\\utils.py',
+   'PYMODULE'),
+  ('email._parseaddr',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\email\\_parseaddr.py',
+   'PYMODULE'),
+  ('calendar',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\calendar.py',
+   'PYMODULE'),
+  ('datetime',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\datetime.py',
+   'PYMODULE'),
+  ('_strptime',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\_strptime.py',
+   'PYMODULE'),
+  ('socket',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\socket.py',
+   'PYMODULE'),
+  ('selectors',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\selectors.py',
+   'PYMODULE'),
+  ('random',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\random.py',
+   'PYMODULE'),
+  ('statistics',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\statistics.py',
+   'PYMODULE'),
+  ('decimal',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\decimal.py',
+   'PYMODULE'),
+  ('_pydecimal',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\_pydecimal.py',
+   'PYMODULE'),
+  ('contextvars',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\contextvars.py',
+   'PYMODULE'),
+  ('fractions',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\fractions.py',
+   'PYMODULE'),
+  ('numbers',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\numbers.py',
+   'PYMODULE'),
+  ('bisect',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\bisect.py',
+   'PYMODULE'),
+  ('email.feedparser',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\email\\feedparser.py',
+   'PYMODULE'),
+  ('email.message',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\email\\message.py',
+   'PYMODULE'),
+  ('email.policy',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\email\\policy.py',
+   'PYMODULE'),
+  ('email.contentmanager',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\email\\contentmanager.py',
+   'PYMODULE'),
+  ('email.quoprimime',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\email\\quoprimime.py',
+   'PYMODULE'),
+  ('string',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\string.py',
+   'PYMODULE'),
+  ('email.headerregistry',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\email\\headerregistry.py',
+   'PYMODULE'),
+  ('email.iterators',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\email\\iterators.py',
+   'PYMODULE'),
+  ('email.generator',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\email\\generator.py',
+   'PYMODULE'),
+  ('email._encoded_words',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\email\\_encoded_words.py',
+   'PYMODULE'),
+  ('base64',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\base64.py',
+   'PYMODULE'),
+  ('getopt',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\getopt.py',
+   'PYMODULE'),
+  ('quopri',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\quopri.py',
+   'PYMODULE'),
+  ('uu',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\uu.py',
+   'PYMODULE'),
+  ('optparse',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\optparse.py',
+   'PYMODULE'),
+  ('email._header_value_parser',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\email\\_header_value_parser.py',
+   'PYMODULE'),
+  ('email.header',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\email\\header.py',
+   'PYMODULE'),
+  ('email.base64mime',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\email\\base64mime.py',
+   'PYMODULE'),
+  ('email.charset',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\email\\charset.py',
+   'PYMODULE'),
+  ('email.encoders',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\email\\encoders.py',
+   'PYMODULE'),
+  ('email.errors',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\email\\errors.py',
+   'PYMODULE'),
+  ('csv',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\csv.py',
+   'PYMODULE'),
+  ('tokenize',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\tokenize.py',
+   'PYMODULE'),
+  ('token',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\token.py',
+   'PYMODULE'),
+  ('importlib._bootstrap',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\importlib\\_bootstrap.py',
+   'PYMODULE'),
+  ('inspect',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\inspect.py',
+   'PYMODULE'),
+  ('dis',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\dis.py',
+   'PYMODULE'),
+  ('opcode',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\opcode.py',
+   'PYMODULE'),
+  ('ast',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\ast.py',
+   'PYMODULE'),
+  ('importlib.machinery',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\importlib\\machinery.py',
+   'PYMODULE'),
+  ('importlib.util',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\importlib\\util.py',
+   'PYMODULE'),
+  ('importlib',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\importlib\\__init__.py',
+   'PYMODULE'),
+  ('importlib._common',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\importlib\\_common.py',
+   'PYMODULE'),
+  ('tempfile',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\tempfile.py',
+   'PYMODULE'),
+  ('multiprocessing.spawn',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\multiprocessing\\spawn.py',
+   'PYMODULE'),
+  ('multiprocessing.resource_tracker',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\multiprocessing\\resource_tracker.py',
+   'PYMODULE'),
+  ('signal',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\signal.py',
+   'PYMODULE'),
+  ('multiprocessing.util',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\multiprocessing\\util.py',
+   'PYMODULE'),
+  ('multiprocessing.forkserver',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\multiprocessing\\forkserver.py',
+   'PYMODULE'),
+  ('multiprocessing.connection',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\multiprocessing\\connection.py',
+   'PYMODULE'),
+  ('multiprocessing.resource_sharer',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\multiprocessing\\resource_sharer.py',
+   'PYMODULE'),
+  ('xmlrpc.client',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\xmlrpc\\client.py',
+   'PYMODULE'),
+  ('xmlrpc',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\xmlrpc\\__init__.py',
+   'PYMODULE'),
+  ('gzip',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\gzip.py',
+   'PYMODULE'),
+  ('xml.parsers.expat',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\xml\\parsers\\expat.py',
+   'PYMODULE'),
+  ('xml.parsers',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\xml\\parsers\\__init__.py',
+   'PYMODULE'),
+  ('xml',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\xml\\__init__.py',
+   'PYMODULE'),
+  ('xml.sax.expatreader',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\xml\\sax\\expatreader.py',
+   'PYMODULE'),
+  ('xml.sax.saxutils',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\xml\\sax\\saxutils.py',
+   'PYMODULE'),
+  ('urllib.request',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\urllib\\request.py',
+   'PYMODULE'),
+  ('getpass',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\getpass.py',
+   'PYMODULE'),
+  ('nturl2path',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\nturl2path.py',
+   'PYMODULE'),
+  ('ftplib',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\ftplib.py',
+   'PYMODULE'),
+  ('netrc',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\netrc.py',
+   'PYMODULE'),
+  ('shlex',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\shlex.py',
+   'PYMODULE'),
+  ('mimetypes',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\mimetypes.py',
+   'PYMODULE'),
+  ('http.cookiejar',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\http\\cookiejar.py',
+   'PYMODULE'),
+  ('http',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\http\\__init__.py',
+   'PYMODULE'),
+  ('ssl',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\ssl.py',
+   'PYMODULE'),
+  ('urllib.response',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\urllib\\response.py',
+   'PYMODULE'),
+  ('urllib.error',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\urllib\\error.py',
+   'PYMODULE'),
+  ('xml.sax',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\xml\\sax\\__init__.py',
+   'PYMODULE'),
+  ('xml.sax.handler',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\xml\\sax\\handler.py',
+   'PYMODULE'),
+  ('xml.sax._exceptions',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\xml\\sax\\_exceptions.py',
+   'PYMODULE'),
+  ('xml.sax.xmlreader',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\xml\\sax\\xmlreader.py',
+   'PYMODULE'),
+  ('http.client',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\http\\client.py',
+   'PYMODULE'),
+  ('hmac',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\hmac.py',
+   'PYMODULE'),
+  ('logging',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\logging\\__init__.py',
+   'PYMODULE'),
+  ('pickle',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\pickle.py',
+   'PYMODULE'),
+  ('pprint',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\pprint.py',
+   'PYMODULE'),
+  ('_compat_pickle',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\_compat_pickle.py',
+   'PYMODULE'),
+  ('multiprocessing.context',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\multiprocessing\\context.py',
+   'PYMODULE'),
+  ('multiprocessing.popen_spawn_win32',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\multiprocessing\\popen_spawn_win32.py',
+   'PYMODULE'),
+  ('multiprocessing.popen_forkserver',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\multiprocessing\\popen_forkserver.py',
+   'PYMODULE'),
+  ('multiprocessing.popen_spawn_posix',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\multiprocessing\\popen_spawn_posix.py',
+   'PYMODULE'),
+  ('multiprocessing.popen_fork',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\multiprocessing\\popen_fork.py',
+   'PYMODULE'),
+  ('multiprocessing.sharedctypes',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\multiprocessing\\sharedctypes.py',
+   'PYMODULE'),
+  ('multiprocessing.heap',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\multiprocessing\\heap.py',
+   'PYMODULE'),
+  ('multiprocessing.pool',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\multiprocessing\\pool.py',
+   'PYMODULE'),
+  ('multiprocessing.dummy',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\multiprocessing\\dummy\\__init__.py',
+   'PYMODULE'),
+  ('multiprocessing.dummy.connection',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\multiprocessing\\dummy\\connection.py',
+   'PYMODULE'),
+  ('queue',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\queue.py',
+   'PYMODULE'),
+  ('multiprocessing.queues',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\multiprocessing\\queues.py',
+   'PYMODULE'),
+  ('multiprocessing.synchronize',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\multiprocessing\\synchronize.py',
+   'PYMODULE'),
+  ('multiprocessing.managers',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\multiprocessing\\managers.py',
+   'PYMODULE'),
+  ('multiprocessing.shared_memory',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\multiprocessing\\shared_memory.py',
+   'PYMODULE'),
+  ('secrets',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\secrets.py',
+   'PYMODULE'),
+  ('multiprocessing.reduction',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\multiprocessing\\reduction.py',
+   'PYMODULE'),
+  ('multiprocessing.process',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\multiprocessing\\process.py',
+   'PYMODULE'),
+  ('multiprocessing',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\multiprocessing\\__init__.py',
+   'PYMODULE'),
+  ('stringprep',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\stringprep.py',
+   'PYMODULE'),
+  ('tracemalloc',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\tracemalloc.py',
+   'PYMODULE'),
+  ('_py_abc',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\_py_abc.py',
+   'PYMODULE'),
+  ('ctypes',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\ctypes\\__init__.py',
+   'PYMODULE'),
+  ('ctypes.wintypes',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\ctypes\\wintypes.py',
+   'PYMODULE'),
+  ('ctypes._endian',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\ctypes\\_endian.py',
+   'PYMODULE'),
+  ('requests',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\requests\\__init__.py',
+   'PYMODULE'),
+  ('requests.status_codes',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\requests\\status_codes.py',
+   'PYMODULE'),
+  ('requests.structures',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\requests\\structures.py',
+   'PYMODULE'),
+  ('requests.compat',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\requests\\compat.py',
+   'PYMODULE'),
+  ('http.cookies',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\http\\cookies.py',
+   'PYMODULE'),
+  ('requests.models',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\requests\\models.py',
+   'PYMODULE'),
+  ('idna',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\idna\\__init__.py',
+   'PYMODULE'),
+  ('idna.package_data',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\idna\\package_data.py',
+   'PYMODULE'),
+  ('idna.intranges',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\idna\\intranges.py',
+   'PYMODULE'),
+  ('idna.core',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\idna\\core.py',
+   'PYMODULE'),
+  ('idna.uts46data',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\idna\\uts46data.py',
+   'PYMODULE'),
+  ('idna.idnadata',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\idna\\idnadata.py',
+   'PYMODULE'),
+  ('requests.hooks',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\requests\\hooks.py',
+   'PYMODULE'),
+  ('requests.cookies',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\requests\\cookies.py',
+   'PYMODULE'),
+  ('requests.auth',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\requests\\auth.py',
+   'PYMODULE'),
+  ('requests._internal_utils',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\requests\\_internal_utils.py',
+   'PYMODULE'),
+  ('urllib3.util',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\urllib3\\util\\__init__.py',
+   'PYMODULE'),
+  ('urllib3.util.wait',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\urllib3\\util\\wait.py',
+   'PYMODULE'),
+  ('urllib3.util.url',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\urllib3\\util\\url.py',
+   'PYMODULE'),
+  ('urllib3.util.util',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\urllib3\\util\\util.py',
+   'PYMODULE'),
+  ('urllib3.util.timeout',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\urllib3\\util\\timeout.py',
+   'PYMODULE'),
+  ('urllib3.util.ssl_',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\urllib3\\util\\ssl_.py',
+   'PYMODULE'),
+  ('urllib3.util.ssltransport',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\urllib3\\util\\ssltransport.py',
+   'PYMODULE'),
+  ('typing_extensions',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\typing_extensions.py',
+   'PYMODULE'),
+  ('urllib3.util.retry',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\urllib3\\util\\retry.py',
+   'PYMODULE'),
+  ('urllib3.response',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\urllib3\\response.py',
+   'PYMODULE'),
+  ('urllib3.connection',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\urllib3\\connection.py',
+   'PYMODULE'),
+  ('urllib3.util.ssl_match_hostname',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\urllib3\\util\\ssl_match_hostname.py',
+   'PYMODULE'),
+  ('ipaddress',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\ipaddress.py',
+   'PYMODULE'),
+  ('urllib3._version',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\urllib3\\_version.py',
+   'PYMODULE'),
+  ('urllib3.http2.probe',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\urllib3\\http2\\probe.py',
+   'PYMODULE'),
+  ('urllib3.http2',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\urllib3\\http2\\__init__.py',
+   'PYMODULE'),
+  ('urllib3.http2.connection',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\urllib3\\http2\\connection.py',
+   'PYMODULE'),
+  ('urllib3._collections',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\urllib3\\_collections.py',
+   'PYMODULE'),
+  ('urllib3._base_connection',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\urllib3\\_base_connection.py',
+   'PYMODULE'),
+  ('urllib3.connectionpool',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\urllib3\\connectionpool.py',
+   'PYMODULE'),
+  ('urllib3.util.proxy',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\urllib3\\util\\proxy.py',
+   'PYMODULE'),
+  ('urllib3._request_methods',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\urllib3\\_request_methods.py',
+   'PYMODULE'),
+  ('urllib3.util.response',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\urllib3\\util\\response.py',
+   'PYMODULE'),
+  ('urllib3.util.request',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\urllib3\\util\\request.py',
+   'PYMODULE'),
+  ('urllib3.util.connection',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\urllib3\\util\\connection.py',
+   'PYMODULE'),
+  ('__future__',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\__future__.py',
+   'PYMODULE'),
+  ('urllib3.filepost',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\urllib3\\filepost.py',
+   'PYMODULE'),
+  ('urllib3.fields',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\urllib3\\fields.py',
+   'PYMODULE'),
+  ('requests.api',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\requests\\api.py',
+   'PYMODULE'),
+  ('requests.sessions',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\requests\\sessions.py',
+   'PYMODULE'),
+  ('requests.adapters',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\requests\\adapters.py',
+   'PYMODULE'),
+  ('urllib3.contrib.socks',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\urllib3\\contrib\\socks.py',
+   'PYMODULE'),
+  ('urllib3.poolmanager',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\urllib3\\poolmanager.py',
+   'PYMODULE'),
+  ('requests.__version__',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\requests\\__version__.py',
+   'PYMODULE'),
+  ('requests.utils',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\requests\\utils.py',
+   'PYMODULE'),
+  ('requests.certs',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\requests\\certs.py',
+   'PYMODULE'),
+  ('certifi',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\certifi\\__init__.py',
+   'PYMODULE'),
+  ('certifi.core',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\certifi\\core.py',
+   'PYMODULE'),
+  ('importlib.resources',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\importlib\\resources.py',
+   'PYMODULE'),
+  ('requests.packages',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\requests\\packages.py',
+   'PYMODULE'),
+  ('urllib3.exceptions',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\urllib3\\exceptions.py',
+   'PYMODULE'),
+  ('urllib3.contrib.pyopenssl',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\urllib3\\contrib\\pyopenssl.py',
+   'PYMODULE'),
+  ('urllib3.contrib',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\urllib3\\contrib\\__init__.py',
+   'PYMODULE'),
+  ('charset_normalizer',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\charset_normalizer\\__init__.py',
+   'PYMODULE'),
+  ('charset_normalizer.version',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\charset_normalizer\\version.py',
+   'PYMODULE'),
+  ('charset_normalizer.utils',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\charset_normalizer\\utils.py',
+   'PYMODULE'),
+  ('charset_normalizer.constant',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\charset_normalizer\\constant.py',
+   'PYMODULE'),
+  ('charset_normalizer.models',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\charset_normalizer\\models.py',
+   'PYMODULE'),
+  ('charset_normalizer.cd',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\charset_normalizer\\cd.py',
+   'PYMODULE'),
+  ('charset_normalizer.legacy',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\charset_normalizer\\legacy.py',
+   'PYMODULE'),
+  ('charset_normalizer.api',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\charset_normalizer\\api.py',
+   'PYMODULE'),
+  ('requests.exceptions',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\requests\\exceptions.py',
+   'PYMODULE'),
+  ('urllib3',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\urllib3\\__init__.py',
+   'PYMODULE'),
+  ('urllib3.contrib.emscripten',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\urllib3\\contrib\\emscripten\\__init__.py',
+   'PYMODULE'),
+  ('urllib3.contrib.emscripten.connection',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\urllib3\\contrib\\emscripten\\connection.py',
+   'PYMODULE'),
+  ('urllib3.contrib.emscripten.response',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\urllib3\\contrib\\emscripten\\response.py',
+   'PYMODULE'),
+  ('dataclasses',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\dataclasses.py',
+   'PYMODULE'),
+  ('urllib3.contrib.emscripten.request',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\urllib3\\contrib\\emscripten\\request.py',
+   'PYMODULE'),
+  ('urllib3.contrib.emscripten.fetch',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\urllib3\\contrib\\emscripten\\fetch.py',
+   'PYMODULE'),
+  ('hashlib',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\hashlib.py',
+   'PYMODULE'),
+  ('functions.usbMonitor',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\functions\\usbMonitor.py',
+   'PYMODULE'),
+  ('functions',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\functions\\__init__.py',
+   'PYMODULE'),
+  ('wmi',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\wmi.py',
+   'PYMODULE'),
+  ('pywintypes',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\win32\\lib\\pywintypes.py',
+   'PYMODULE'),
+  ('pywin32_system32', '-', 'PYMODULE'),
+  ('win32com.client',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\win32com\\client\\__init__.py',
+   'PYMODULE'),
+  ('winerror',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\win32\\lib\\winerror.py',
+   'PYMODULE'),
+  ('win32com.client.makepy',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\win32com\\client\\makepy.py',
+   'PYMODULE'),
+  ('pywin.dialogs.status',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\Pythonwin\\pywin\\dialogs\\status.py',
+   'PYMODULE'),
+  ('pywin.mfc.thread',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\Pythonwin\\pywin\\mfc\\thread.py',
+   'PYMODULE'),
+  ('pywin.mfc.object',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\Pythonwin\\pywin\\mfc\\object.py',
+   'PYMODULE'),
+  ('pywin.mfc.dialog',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\Pythonwin\\pywin\\mfc\\dialog.py',
+   'PYMODULE'),
+  ('pywin.mfc.window',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\Pythonwin\\pywin\\mfc\\window.py',
+   'PYMODULE'),
+  ('pywin.mfc',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\Pythonwin\\pywin\\mfc\\__init__.py',
+   'PYMODULE'),
+  ('win32con',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\win32\\lib\\win32con.py',
+   'PYMODULE'),
+  ('pywin.dialogs',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\Pythonwin\\pywin\\dialogs\\__init__.py',
+   'PYMODULE'),
+  ('pywin',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\Pythonwin\\pywin\\__init__.py',
+   'PYMODULE'),
+  ('win32com.client.selecttlb',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\win32com\\client\\selecttlb.py',
+   'PYMODULE'),
+  ('pywin.dialogs.list',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\Pythonwin\\pywin\\dialogs\\list.py',
+   'PYMODULE'),
+  ('commctrl',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\win32\\lib\\commctrl.py',
+   'PYMODULE'),
+  ('win32com.client.genpy',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\win32com\\client\\genpy.py',
+   'PYMODULE'),
+  ('win32com.client.gencache',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\win32com\\client\\gencache.py',
+   'PYMODULE'),
+  ('glob',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\glob.py',
+   'PYMODULE'),
+  ('win32com.client.CLSIDToClass',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\win32com\\client\\CLSIDToClass.py',
+   'PYMODULE'),
+  ('win32com.client.dynamic',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\win32com\\client\\dynamic.py',
+   'PYMODULE'),
+  ('win32com.client.util',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\win32com\\client\\util.py',
+   'PYMODULE'),
+  ('win32com.client.build',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\win32com\\client\\build.py',
+   'PYMODULE'),
+  ('win32com',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\win32com\\__init__.py',
+   'PYMODULE'),
+  ('win32com.server.util',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\win32com\\server\\util.py',
+   'PYMODULE'),
+  ('win32com.server.dispatcher',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\win32com\\server\\dispatcher.py',
+   'PYMODULE'),
+  ('win32traceutil',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\win32\\lib\\win32traceutil.py',
+   'PYMODULE'),
+  ('win32com.util',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\win32com\\util.py',
+   'PYMODULE'),
+  ('win32com.server.exception',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\win32com\\server\\exception.py',
+   'PYMODULE'),
+  ('win32com.server.policy',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\win32com\\server\\policy.py',
+   'PYMODULE'),
+  ('win32com.server',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\win32com\\server\\__init__.py',
+   'PYMODULE'),
+  ('win32com.universal',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\win32com\\universal.py',
+   'PYMODULE'),
+  ('functions.sender',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\functions\\sender.py',
+   'PYMODULE'),
+  ('functions.license',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\functions\\license.py',
+   'PYMODULE'),
+  ('socketio',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\socketio\\__init__.py',
+   'PYMODULE'),
+  ('socketio.asgi',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\socketio\\asgi.py',
+   'PYMODULE'),
+  ('engineio',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\engineio\\__init__.py',
+   'PYMODULE'),
+  ('engineio.async_drivers.tornado',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\engineio\\async_drivers\\tornado.py',
+   'PYMODULE'),
+  ('engineio.async_drivers',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\engineio\\async_drivers\\__init__.py',
+   'PYMODULE'),
+  ('asyncio',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\asyncio\\__init__.py',
+   'PYMODULE'),
+  ('asyncio.unix_events',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\asyncio\\unix_events.py',
+   'PYMODULE'),
+  ('asyncio.log',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\asyncio\\log.py',
+   'PYMODULE'),
+  ('asyncio.windows_events',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\asyncio\\windows_events.py',
+   'PYMODULE'),
+  ('asyncio.windows_utils',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\asyncio\\windows_utils.py',
+   'PYMODULE'),
+  ('asyncio.selector_events',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\asyncio\\selector_events.py',
+   'PYMODULE'),
+  ('asyncio.proactor_events',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\asyncio\\proactor_events.py',
+   'PYMODULE'),
+  ('asyncio.base_subprocess',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\asyncio\\base_subprocess.py',
+   'PYMODULE'),
+  ('asyncio.threads',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\asyncio\\threads.py',
+   'PYMODULE'),
+  ('asyncio.subprocess',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\asyncio\\subprocess.py',
+   'PYMODULE'),
+  ('asyncio.streams',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\asyncio\\streams.py',
+   'PYMODULE'),
+  ('asyncio.queues',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\asyncio\\queues.py',
+   'PYMODULE'),
+  ('asyncio.runners',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\asyncio\\runners.py',
+   'PYMODULE'),
+  ('asyncio.base_events',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\asyncio\\base_events.py',
+   'PYMODULE'),
+  ('concurrent.futures',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\concurrent\\futures\\__init__.py',
+   'PYMODULE'),
+  ('concurrent.futures.thread',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\concurrent\\futures\\thread.py',
+   'PYMODULE'),
+  ('concurrent.futures.process',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\concurrent\\futures\\process.py',
+   'PYMODULE'),
+  ('concurrent.futures._base',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\concurrent\\futures\\_base.py',
+   'PYMODULE'),
+  ('concurrent',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\concurrent\\__init__.py',
+   'PYMODULE'),
+  ('asyncio.trsock',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\asyncio\\trsock.py',
+   'PYMODULE'),
+  ('asyncio.staggered',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\asyncio\\staggered.py',
+   'PYMODULE'),
+  ('asyncio.tasks',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\asyncio\\tasks.py',
+   'PYMODULE'),
+  ('asyncio.base_tasks',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\asyncio\\base_tasks.py',
+   'PYMODULE'),
+  ('asyncio.locks',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\asyncio\\locks.py',
+   'PYMODULE'),
+  ('asyncio.sslproto',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\asyncio\\sslproto.py',
+   'PYMODULE'),
+  ('asyncio.transports',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\asyncio\\transports.py',
+   'PYMODULE'),
+  ('asyncio.protocols',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\asyncio\\protocols.py',
+   'PYMODULE'),
+  ('asyncio.futures',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\asyncio\\futures.py',
+   'PYMODULE'),
+  ('asyncio.exceptions',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\asyncio\\exceptions.py',
+   'PYMODULE'),
+  ('asyncio.events',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\asyncio\\events.py',
+   'PYMODULE'),
+  ('asyncio.coroutines',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\asyncio\\coroutines.py',
+   'PYMODULE'),
+  ('asyncio.base_futures',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\asyncio\\base_futures.py',
+   'PYMODULE'),
+  ('asyncio.format_helpers',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\asyncio\\format_helpers.py',
+   'PYMODULE'),
+  ('asyncio.constants',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\asyncio\\constants.py',
+   'PYMODULE'),
+  ('engineio.async_drivers.asgi',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\engineio\\async_drivers\\asgi.py',
+   'PYMODULE'),
+  ('engineio.static_files',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\engineio\\static_files.py',
+   'PYMODULE'),
+  ('engineio.async_client',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\engineio\\async_client.py',
+   'PYMODULE'),
+  ('aiohttp',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\__init__.py',
+   'PYMODULE'),
+  ('aiohttp.worker',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\worker.py',
+   'PYMODULE'),
+  ('aiohttp.web_log',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\web_log.py',
+   'PYMODULE'),
+  ('aiohttp.web_response',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\web_response.py',
+   'PYMODULE'),
+  ('aiohttp.typedefs',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\typedefs.py',
+   'PYMODULE'),
+  ('yarl',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\yarl\\__init__.py',
+   'PYMODULE'),
+  ('yarl._url',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\yarl\\_url.py',
+   'PYMODULE'),
+  ('yarl._quoters',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\yarl\\_quoters.py',
+   'PYMODULE'),
+  ('yarl._quoting',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\yarl\\_quoting.py',
+   'PYMODULE'),
+  ('yarl._quoting_py',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\yarl\\_quoting_py.py',
+   'PYMODULE'),
+  ('yarl._path',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\yarl\\_path.py',
+   'PYMODULE'),
+  ('yarl._parse',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\yarl\\_parse.py',
+   'PYMODULE'),
+  ('propcache.api',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\propcache\\api.py',
+   'PYMODULE'),
+  ('propcache',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\propcache\\__init__.py',
+   'PYMODULE'),
+  ('propcache._helpers',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\propcache\\_helpers.py',
+   'PYMODULE'),
+  ('propcache._helpers_py',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\propcache\\_helpers_py.py',
+   'PYMODULE'),
+  ('yarl._query',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\yarl\\_query.py',
+   'PYMODULE'),
+  ('multidict',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\multidict\\__init__.py',
+   'PYMODULE'),
+  ('multidict._multidict_py',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\multidict\\_multidict_py.py',
+   'PYMODULE'),
+  ('multidict._compat',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\multidict\\_compat.py',
+   'PYMODULE'),
+  ('multidict._abc',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\multidict\\_abc.py',
+   'PYMODULE'),
+  ('aiohttp.web_request',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\web_request.py',
+   'PYMODULE'),
+  ('aiohttp.web_urldispatcher',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\web_urldispatcher.py',
+   'PYMODULE'),
+  ('aiohttp.web_routedef',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\web_routedef.py',
+   'PYMODULE'),
+  ('aiohttp.web_fileresponse',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\web_fileresponse.py',
+   'PYMODULE'),
+  ('aiohttp.web_protocol',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\web_protocol.py',
+   'PYMODULE'),
+  ('aiohttp.web_server',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\web_server.py',
+   'PYMODULE'),
+  ('aiohttp.tcp_helpers',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\tcp_helpers.py',
+   'PYMODULE'),
+  ('aiohttp.log',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\log.py',
+   'PYMODULE'),
+  ('aiohttp.base_protocol',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\base_protocol.py',
+   'PYMODULE'),
+  ('html',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\html\\__init__.py',
+   'PYMODULE'),
+  ('html.entities',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\html\\entities.py',
+   'PYMODULE'),
+  ('aiohttp.web_exceptions',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\web_exceptions.py',
+   'PYMODULE'),
+  ('aiohttp.http_writer',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\http_writer.py',
+   'PYMODULE'),
+  ('aiohttp.http_parser',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\http_parser.py',
+   'PYMODULE'),
+  ('aiohttp.http_exceptions',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\http_exceptions.py',
+   'PYMODULE'),
+  ('attr',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\attr\\__init__.py',
+   'PYMODULE'),
+  ('attr._version_info',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\attr\\_version_info.py',
+   'PYMODULE'),
+  ('attr._next_gen',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\attr\\_next_gen.py',
+   'PYMODULE'),
+  ('attr._make',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\attr\\_make.py',
+   'PYMODULE'),
+  ('attr._compat',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\attr\\_compat.py',
+   'PYMODULE'),
+  ('attr._funcs',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\attr\\_funcs.py',
+   'PYMODULE'),
+  ('attr._cmp',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\attr\\_cmp.py',
+   'PYMODULE'),
+  ('attr.validators',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\attr\\validators.py',
+   'PYMODULE'),
+  ('attr.filters',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\attr\\filters.py',
+   'PYMODULE'),
+  ('attr.exceptions',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\attr\\exceptions.py',
+   'PYMODULE'),
+  ('attr.converters',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\attr\\converters.py',
+   'PYMODULE'),
+  ('attr.setters',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\attr\\setters.py',
+   'PYMODULE'),
+  ('attr._config',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\attr\\_config.py',
+   'PYMODULE'),
+  ('aiohttp.abc',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\abc.py',
+   'PYMODULE'),
+  ('aiohttp.web_app',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\web_app.py',
+   'PYMODULE'),
+  ('aiohttp.web_middlewares',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\web_middlewares.py',
+   'PYMODULE'),
+  ('frozenlist',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\frozenlist\\__init__.py',
+   'PYMODULE'),
+  ('aiosignal',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiosignal\\__init__.py',
+   'PYMODULE'),
+  ('aiohttp.web',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\web.py',
+   'PYMODULE'),
+  ('aiohttp.web_ws',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\web_ws.py',
+   'PYMODULE'),
+  ('async_timeout',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\async_timeout\\__init__.py',
+   'PYMODULE'),
+  ('aiohttp.web_runner',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\web_runner.py',
+   'PYMODULE'),
+  ('aiohttp.tracing',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\tracing.py',
+   'PYMODULE'),
+  ('aiohttp.client_reqrep',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\client_reqrep.py',
+   'PYMODULE'),
+  ('aiohttp.connector',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\connector.py',
+   'PYMODULE'),
+  ('aiohttp.locks',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\locks.py',
+   'PYMODULE'),
+  ('aiohttp.client_proto',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\client_proto.py',
+   'PYMODULE'),
+  ('aiohttp.client_exceptions',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\client_exceptions.py',
+   'PYMODULE'),
+  ('aiohttp.streams',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\streams.py',
+   'PYMODULE'),
+  ('aiohttp.resolver',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\resolver.py',
+   'PYMODULE'),
+  ('aiohttp.payload_streamer',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\payload_streamer.py',
+   'PYMODULE'),
+  ('aiohttp.payload',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\payload.py',
+   'PYMODULE'),
+  ('aiohttp.helpers',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\helpers.py',
+   'PYMODULE'),
+  ('aiohttp.formdata',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\formdata.py',
+   'PYMODULE'),
+  ('aiohttp.cookiejar',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\cookiejar.py',
+   'PYMODULE'),
+  ('aiohttp.client',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\client.py',
+   'PYMODULE'),
+  ('aiohttp.http_websocket',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\http_websocket.py',
+   'PYMODULE'),
+  ('aiohttp.client_ws',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\client_ws.py',
+   'PYMODULE'),
+  ('aiohttp.http',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\http.py',
+   'PYMODULE'),
+  ('http.server',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\http\\server.py',
+   'PYMODULE'),
+  ('socketserver',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\socketserver.py',
+   'PYMODULE'),
+  ('aiohttp.multipart',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\multipart.py',
+   'PYMODULE'),
+  ('uuid',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\uuid.py',
+   'PYMODULE'),
+  ('aiohttp.hdrs',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\hdrs.py',
+   'PYMODULE'),
+  ('engineio.async_server',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\engineio\\async_server.py',
+   'PYMODULE'),
+  ('engineio.async_socket',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\engineio\\async_socket.py',
+   'PYMODULE'),
+  ('engineio.server',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\engineio\\server.py',
+   'PYMODULE'),
+  ('engineio.socket',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\engineio\\socket.py',
+   'PYMODULE'),
+  ('engineio.base_socket',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\engineio\\base_socket.py',
+   'PYMODULE'),
+  ('engineio.base_server',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\engineio\\base_server.py',
+   'PYMODULE'),
+  ('engineio.middleware',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\engineio\\middleware.py',
+   'PYMODULE'),
+  ('engineio.client',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\engineio\\client.py',
+   'PYMODULE'),
+  ('websocket',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\websocket\\__init__.py',
+   'PYMODULE'),
+  ('websocket._socket',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\websocket\\_socket.py',
+   'PYMODULE'),
+  ('websocket._utils',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\websocket\\_utils.py',
+   'PYMODULE'),
+  ('websocket._ssl_compat',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\websocket\\_ssl_compat.py',
+   'PYMODULE'),
+  ('websocket._exceptions',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\websocket\\_exceptions.py',
+   'PYMODULE'),
+  ('websocket._core',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\websocket\\_core.py',
+   'PYMODULE'),
+  ('websocket._dispatcher',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\websocket\\_dispatcher.py',
+   'PYMODULE'),
+  ('websocket._http',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\websocket\\_http.py',
+   'PYMODULE'),
+  ('websocket._url',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\websocket\\_url.py',
+   'PYMODULE'),
+  ('websocket._handshake',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\websocket\\_handshake.py',
+   'PYMODULE'),
+  ('websocket._cookiejar',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\websocket\\_cookiejar.py',
+   'PYMODULE'),
+  ('websocket._app',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\websocket\\_app.py',
+   'PYMODULE'),
+  ('websocket._logging',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\websocket\\_logging.py',
+   'PYMODULE'),
+  ('websocket._abnf',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\websocket\\_abnf.py',
+   'PYMODULE'),
+  ('engineio.json',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\engineio\\json.py',
+   'PYMODULE'),
+  ('engineio.payload',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\engineio\\payload.py',
+   'PYMODULE'),
+  ('engineio.exceptions',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\engineio\\exceptions.py',
+   'PYMODULE'),
+  ('engineio.base_client',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\engineio\\base_client.py',
+   'PYMODULE'),
+  ('engineio.packet',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\engineio\\packet.py',
+   'PYMODULE'),
+  ('socketio.async_aiopika_manager',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\socketio\\async_aiopika_manager.py',
+   'PYMODULE'),
+  ('socketio.async_pubsub_manager',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\socketio\\async_pubsub_manager.py',
+   'PYMODULE'),
+  ('socketio.async_redis_manager',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\socketio\\async_redis_manager.py',
+   'PYMODULE'),
+  ('socketio.async_namespace',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\socketio\\async_namespace.py',
+   'PYMODULE'),
+  ('socketio.async_server',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\socketio\\async_server.py',
+   'PYMODULE'),
+  ('socketio.async_admin',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\socketio\\async_admin.py',
+   'PYMODULE'),
+  ('socketio.admin',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\socketio\\admin.py',
+   'PYMODULE'),
+  ('socketio.async_manager',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\socketio\\async_manager.py',
+   'PYMODULE'),
+  ('socketio.async_simple_client',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\socketio\\async_simple_client.py',
+   'PYMODULE'),
+  ('socketio.async_client',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\socketio\\async_client.py',
+   'PYMODULE'),
+  ('socketio.tornado',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\socketio\\tornado.py',
+   'PYMODULE'),
+  ('socketio.middleware',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\socketio\\middleware.py',
+   'PYMODULE'),
+  ('socketio.namespace',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\socketio\\namespace.py',
+   'PYMODULE'),
+  ('socketio.server',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\socketio\\server.py',
+   'PYMODULE'),
+  ('socketio.base_server',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\socketio\\base_server.py',
+   'PYMODULE'),
+  ('socketio.zmq_manager',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\socketio\\zmq_manager.py',
+   'PYMODULE'),
+  ('socketio.kafka_manager',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\socketio\\kafka_manager.py',
+   'PYMODULE'),
+  ('socketio.redis_manager',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\socketio\\redis_manager.py',
+   'PYMODULE'),
+  ('socketio.kombu_manager',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\socketio\\kombu_manager.py',
+   'PYMODULE'),
+  ('socketio.pubsub_manager',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\socketio\\pubsub_manager.py',
+   'PYMODULE'),
+  ('socketio.manager',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\socketio\\manager.py',
+   'PYMODULE'),
+  ('socketio.base_manager',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\socketio\\base_manager.py',
+   'PYMODULE'),
+  ('bidict',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\bidict\\__init__.py',
+   'PYMODULE'),
+  ('bidict.metadata',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\bidict\\metadata.py',
+   'PYMODULE'),
+  ('bidict._orderedbidict',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\bidict\\_orderedbidict.py',
+   'PYMODULE'),
+  ('bidict._typing',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\bidict\\_typing.py',
+   'PYMODULE'),
+  ('bidict._orderedbase',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\bidict\\_orderedbase.py',
+   'PYMODULE'),
+  ('bidict._iter',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\bidict\\_iter.py',
+   'PYMODULE'),
+  ('bidict._frozen',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\bidict\\_frozen.py',
+   'PYMODULE'),
+  ('bidict._exc',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\bidict\\_exc.py',
+   'PYMODULE'),
+  ('bidict._dup',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\bidict\\_dup.py',
+   'PYMODULE'),
+  ('bidict._bidict',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\bidict\\_bidict.py',
+   'PYMODULE'),
+  ('bidict._base',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\bidict\\_base.py',
+   'PYMODULE'),
+  ('bidict._abc',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\bidict\\_abc.py',
+   'PYMODULE'),
+  ('socketio.simple_client',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\socketio\\simple_client.py',
+   'PYMODULE'),
+  ('socketio.client',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\socketio\\client.py',
+   'PYMODULE'),
+  ('socketio.exceptions',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\socketio\\exceptions.py',
+   'PYMODULE'),
+  ('socketio.base_client',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\socketio\\base_client.py',
+   'PYMODULE'),
+  ('socketio.msgpack_packet',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\socketio\\msgpack_packet.py',
+   'PYMODULE'),
+  ('socketio.packet',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\socketio\\packet.py',
+   'PYMODULE'),
+  ('socketio.base_namespace',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\socketio\\base_namespace.py',
+   'PYMODULE'),
+  ('platform',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\platform.py',
+   'PYMODULE'),
+  ('functions.installed_apps',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\functions\\installed_apps.py',
+   'PYMODULE'),
+  ('functions.taskmanager',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\functions\\taskmanager.py',
+   'PYMODULE'),
+  ('psutil',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\psutil\\__init__.py',
+   'PYMODULE'),
+  ('psutil._pswindows',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\psutil\\_pswindows.py',
+   'PYMODULE'),
+  ('psutil._common',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\psutil\\_common.py',
+   'PYMODULE'),
+  ('functions.ports',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\functions\\ports.py',
+   'PYMODULE'),
+  ('functions.system',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\functions\\system.py',
+   'PYMODULE'),
+  ('dotenv',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\dotenv\\__init__.py',
+   'PYMODULE'),
+  ('dotenv.ipython',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\dotenv\\ipython.py',
+   'PYMODULE'),
+  ('dotenv.main',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\dotenv\\main.py',
+   'PYMODULE'),
+  ('dotenv.variables',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\dotenv\\variables.py',
+   'PYMODULE'),
+  ('dotenv.parser',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\dotenv\\parser.py',
+   'PYMODULE'),
+  ('shutil',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\shutil.py',
+   'PYMODULE'),
+  ('tarfile',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\tarfile.py',
+   'PYMODULE'),
+  ('runpy',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\runpy.py',
+   'PYMODULE'),
+  ('json',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\json\\__init__.py',
+   'PYMODULE'),
+  ('json.encoder',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\json\\encoder.py',
+   'PYMODULE'),
+  ('json.decoder',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\json\\decoder.py',
+   'PYMODULE'),
+  ('json.scanner',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\json\\scanner.py',
+   'PYMODULE'),
+  ('subprocess',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\subprocess.py',
+   'PYMODULE'),
+  ('pythoncom',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\pythoncom.py',
+   'PYMODULE'),
+  ('threading',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\threading.py',
+   'PYMODULE'),
+  ('_threading_local',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\_threading_local.py',
+   'PYMODULE')],
+ [('python-embed\\_asyncio.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\_asyncio.pyd',
+   'BINARY'),
+  ('python-embed\\_bz2.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\_bz2.pyd',
+   'BINARY'),
+  ('python-embed\\_ctypes.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\_ctypes.pyd',
+   'BINARY'),
+  ('python-embed\\_decimal.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\_decimal.pyd',
+   'BINARY'),
+  ('python-embed\\_elementtree.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\_elementtree.pyd',
+   'BINARY'),
+  ('python-embed\\_hashlib.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\_hashlib.pyd',
+   'BINARY'),
+  ('python-embed\\_lzma.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\_lzma.pyd',
+   'BINARY'),
+  ('python-embed\\_msi.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\_msi.pyd',
+   'BINARY'),
+  ('python-embed\\_multiprocessing.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\_multiprocessing.pyd',
+   'BINARY'),
+  ('python-embed\\_overlapped.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\_overlapped.pyd',
+   'BINARY'),
+  ('python-embed\\_queue.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\_queue.pyd',
+   'BINARY'),
+  ('python-embed\\_socket.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\_socket.pyd',
+   'BINARY'),
+  ('python-embed\\_sqlite3.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\_sqlite3.pyd',
+   'BINARY'),
+  ('python-embed\\_ssl.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\_ssl.pyd',
+   'BINARY'),
+  ('python-embed\\_uuid.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\_uuid.pyd',
+   'BINARY'),
+  ('python-embed\\_zoneinfo.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\_zoneinfo.pyd',
+   'BINARY'),
+  ('python-embed\\libcrypto-1_1.dll',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\libcrypto-1_1.dll',
+   'BINARY'),
+  ('python-embed\\libffi-8.dll',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\libffi-8.dll',
+   'BINARY'),
+  ('python-embed\\libssl-1_1.dll',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\libssl-1_1.dll',
+   'BINARY'),
+  ('python-embed\\netifaces.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\netifaces.pyd',
+   'BINARY'),
+  ('python-embed\\pyexpat.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\pyexpat.pyd',
+   'BINARY'),
+  ('python-embed\\python.exe',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\python.exe',
+   'BINARY'),
+  ('python-embed\\python3.dll',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\python3.dll',
+   'BINARY'),
+  ('python-embed\\python311.dll',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\python311.dll',
+   'BINARY'),
+  ('python-embed\\pythonw.exe',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\pythonw.exe',
+   'BINARY'),
+  ('python-embed\\select.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\select.pyd',
+   'BINARY'),
+  ('python-embed\\sqlite3.dll',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\sqlite3.dll',
+   'BINARY'),
+  ('python-embed\\unicodedata.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\unicodedata.pyd',
+   'BINARY'),
+  ('python-embed\\vcruntime140.dll',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\vcruntime140.dll',
+   'BINARY'),
+  ('python-embed\\vcruntime140_1.dll',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\vcruntime140_1.dll',
+   'BINARY'),
+  ('python-embed\\winsound.pyd',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\winsound.pyd',
+   'BINARY'),
+  ('python39.dll',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\python39.dll',
+   'BINARY'),
+  ('pywin32_system32\\pywintypes39.dll',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\pywin32_system32\\pywintypes39.dll',
+   'BINARY'),
+  ('pywin32_system32\\pythoncom39.dll',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\pywin32_system32\\pythoncom39.dll',
+   'BINARY'),
+  ('unicodedata.pyd',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\DLLs\\unicodedata.pyd',
+   'EXTENSION'),
+  ('_lzma.pyd',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\DLLs\\_lzma.pyd',
+   'EXTENSION'),
+  ('_bz2.pyd',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\DLLs\\_bz2.pyd',
+   'EXTENSION'),
+  ('select.pyd',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\DLLs\\select.pyd',
+   'EXTENSION'),
+  ('_socket.pyd',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\DLLs\\_socket.pyd',
+   'EXTENSION'),
+  ('_decimal.pyd',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\DLLs\\_decimal.pyd',
+   'EXTENSION'),
+  ('_multiprocessing.pyd',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\DLLs\\_multiprocessing.pyd',
+   'EXTENSION'),
+  ('pyexpat.pyd',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\DLLs\\pyexpat.pyd',
+   'EXTENSION'),
+  ('_ssl.pyd',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\DLLs\\_ssl.pyd',
+   'EXTENSION'),
+  ('_hashlib.pyd',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\DLLs\\_hashlib.pyd',
+   'EXTENSION'),
+  ('_queue.pyd',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\DLLs\\_queue.pyd',
+   'EXTENSION'),
+  ('_ctypes.pyd',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\DLLs\\_ctypes.pyd',
+   'EXTENSION'),
+  ('charset_normalizer\\md__mypyc.cp39-win_amd64.pyd',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\charset_normalizer\\md__mypyc.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('charset_normalizer\\md.cp39-win_amd64.pyd',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\charset_normalizer\\md.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('win32\\_win32sysloader.pyd',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\win32\\_win32sysloader.pyd',
+   'EXTENSION'),
+  ('win32\\win32api.pyd',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\win32\\win32api.pyd',
+   'EXTENSION'),
+  ('Pythonwin\\win32ui.pyd',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\Pythonwin\\win32ui.pyd',
+   'EXTENSION'),
+  ('win32\\win32event.pyd',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\win32\\win32event.pyd',
+   'EXTENSION'),
+  ('win32\\win32trace.pyd',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\win32\\win32trace.pyd',
+   'EXTENSION'),
+  ('_overlapped.pyd',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\DLLs\\_overlapped.pyd',
+   'EXTENSION'),
+  ('_asyncio.pyd',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\DLLs\\_asyncio.pyd',
+   'EXTENSION'),
+  ('yarl\\_quoting_c.cp39-win_amd64.pyd',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\yarl\\_quoting_c.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('propcache\\_helpers_c.cp39-win_amd64.pyd',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\propcache\\_helpers_c.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('multidict\\_multidict.cp39-win_amd64.pyd',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\multidict\\_multidict.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('aiohttp\\_http_writer.cp39-win_amd64.pyd',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\_http_writer.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('aiohttp\\_http_parser.cp39-win_amd64.pyd',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\_http_parser.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('frozenlist\\_frozenlist.cp39-win_amd64.pyd',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\frozenlist\\_frozenlist.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('aiohttp\\_helpers.cp39-win_amd64.pyd',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\_helpers.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('aiohttp\\_websocket.cp39-win_amd64.pyd',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\aiohttp\\_websocket.cp39-win_amd64.pyd',
+   'EXTENSION'),
+  ('_uuid.pyd',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\DLLs\\_uuid.pyd',
+   'EXTENSION'),
+  ('win32\\win32process.pyd',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\win32\\win32process.pyd',
+   'EXTENSION'),
+  ('win32\\win32gui.pyd',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\win32\\win32gui.pyd',
+   'EXTENSION'),
+  ('psutil\\_psutil_windows.pyd',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\psutil\\_psutil_windows.pyd',
+   'EXTENSION'),
+  ('VCRUNTIME140.dll',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\VCRUNTIME140.dll',
+   'BINARY'),
+  ('python311.dll',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\python311.dll',
+   'BINARY'),
+  ('libffi-8.dll',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\libffi-8.dll',
+   'BINARY'),
+  ('libcrypto-1_1.dll',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\libcrypto-1_1.dll',
+   'BINARY'),
+  ('sqlite3.dll',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\sqlite3.dll',
+   'BINARY'),
+  ('libssl-1_1.dll',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\libssl-1_1.dll',
+   'BINARY'),
+  ('VCRUNTIME140_1.dll',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\VCRUNTIME140_1.dll',
+   'BINARY'),
+  ('libffi-7.dll',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\DLLs\\libffi-7.dll',
+   'BINARY'),
+  ('Pythonwin\\mfc140u.dll',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\Pythonwin\\mfc140u.dll',
+   'BINARY'),
+  ('python3.dll',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\python3.dll',
+   'BINARY')],
+ [],
+ [],
+ [('python-embed\\LICENSE.txt',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\LICENSE.txt',
+   'DATA'),
+  ('python-embed\\python.cat',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\python.cat',
+   'DATA'),
+  ('python-embed\\python311._pth',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\python311._pth',
+   'DATA'),
+  ('python-embed\\python311.zip',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\python-embed\\python311.zip',
+   'DATA'),
+  ('visualizer-scanner\\scanner_service.py',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\visualizer-scanner\\scanner_service.py',
+   'DATA'),
+  ('certifi\\py.typed',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\certifi\\py.typed',
+   'DATA'),
+  ('certifi\\cacert.pem',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\certifi\\cacert.pem',
+   'DATA'),
+  ('attrs-25.4.0.dist-info\\licenses\\LICENSE',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\attrs-25.4.0.dist-info\\licenses\\LICENSE',
+   'DATA'),
+  ('attrs-25.4.0.dist-info\\RECORD',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\attrs-25.4.0.dist-info\\RECORD',
+   'DATA'),
+  ('attrs-25.4.0.dist-info\\INSTALLER',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\attrs-25.4.0.dist-info\\INSTALLER',
+   'DATA'),
+  ('attrs-25.4.0.dist-info\\WHEEL',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\attrs-25.4.0.dist-info\\WHEEL',
+   'DATA'),
+  ('attrs-25.4.0.dist-info\\METADATA',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\site-packages\\attrs-25.4.0.dist-info\\METADATA',
+   'DATA'),
+  ('base_library.zip',
+   'e:\\GCA\\tools\\cloud\\ntool\\agent-admin\\build\\visun-agent-admin\\base_library.zip',
+   'DATA')],
+ [('reprlib',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\reprlib.py',
+   'PYMODULE'),
+  ('keyword',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\keyword.py',
+   'PYMODULE'),
+  ('heapq',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\heapq.py',
+   'PYMODULE'),
+  ('linecache',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\linecache.py',
+   'PYMODULE'),
+  ('types',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\types.py',
+   'PYMODULE'),
+  ('collections.abc',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\collections\\abc.py',
+   'PYMODULE'),
+  ('collections',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\collections\\__init__.py',
+   'PYMODULE'),
+  ('sre_parse',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\sre_parse.py',
+   'PYMODULE'),
+  ('posixpath',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\posixpath.py',
+   'PYMODULE'),
+  ('locale',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\locale.py',
+   'PYMODULE'),
+  ('_weakrefset',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\_weakrefset.py',
+   'PYMODULE'),
+  ('_bootlocale',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\_bootlocale.py',
+   'PYMODULE'),
+  ('_collections_abc',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\_collections_abc.py',
+   'PYMODULE'),
+  ('genericpath',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\genericpath.py',
+   'PYMODULE'),
+  ('encodings.zlib_codec',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\zlib_codec.py',
+   'PYMODULE'),
+  ('encodings.uu_codec',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\uu_codec.py',
+   'PYMODULE'),
+  ('encodings.utf_8_sig',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\utf_8_sig.py',
+   'PYMODULE'),
+  ('encodings.utf_8',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\utf_8.py',
+   'PYMODULE'),
+  ('encodings.utf_7',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\utf_7.py',
+   'PYMODULE'),
+  ('encodings.utf_32_le',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\utf_32_le.py',
+   'PYMODULE'),
+  ('encodings.utf_32_be',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\utf_32_be.py',
+   'PYMODULE'),
+  ('encodings.utf_32',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\utf_32.py',
+   'PYMODULE'),
+  ('encodings.utf_16_le',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\utf_16_le.py',
+   'PYMODULE'),
+  ('encodings.utf_16_be',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\utf_16_be.py',
+   'PYMODULE'),
+  ('encodings.utf_16',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\utf_16.py',
+   'PYMODULE'),
+  ('encodings.unicode_escape',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\unicode_escape.py',
+   'PYMODULE'),
+  ('encodings.undefined',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\undefined.py',
+   'PYMODULE'),
+  ('encodings.tis_620',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\tis_620.py',
+   'PYMODULE'),
+  ('encodings.shift_jisx0213',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\shift_jisx0213.py',
+   'PYMODULE'),
+  ('encodings.shift_jis_2004',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\shift_jis_2004.py',
+   'PYMODULE'),
+  ('encodings.shift_jis',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\shift_jis.py',
+   'PYMODULE'),
+  ('encodings.rot_13',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\rot_13.py',
+   'PYMODULE'),
+  ('encodings.raw_unicode_escape',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\raw_unicode_escape.py',
+   'PYMODULE'),
+  ('encodings.quopri_codec',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\quopri_codec.py',
+   'PYMODULE'),
+  ('encodings.punycode',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\punycode.py',
+   'PYMODULE'),
+  ('encodings.ptcp154',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\ptcp154.py',
+   'PYMODULE'),
+  ('encodings.palmos',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\palmos.py',
+   'PYMODULE'),
+  ('encodings.oem',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\oem.py',
+   'PYMODULE'),
+  ('encodings.mbcs',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\mbcs.py',
+   'PYMODULE'),
+  ('encodings.mac_turkish',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\mac_turkish.py',
+   'PYMODULE'),
+  ('encodings.mac_romanian',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\mac_romanian.py',
+   'PYMODULE'),
+  ('encodings.mac_roman',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\mac_roman.py',
+   'PYMODULE'),
+  ('encodings.mac_latin2',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\mac_latin2.py',
+   'PYMODULE'),
+  ('encodings.mac_iceland',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\mac_iceland.py',
+   'PYMODULE'),
+  ('encodings.mac_greek',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\mac_greek.py',
+   'PYMODULE'),
+  ('encodings.mac_farsi',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\mac_farsi.py',
+   'PYMODULE'),
+  ('encodings.mac_cyrillic',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\mac_cyrillic.py',
+   'PYMODULE'),
+  ('encodings.mac_croatian',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\mac_croatian.py',
+   'PYMODULE'),
+  ('encodings.mac_arabic',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\mac_arabic.py',
+   'PYMODULE'),
+  ('encodings.latin_1',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\latin_1.py',
+   'PYMODULE'),
+  ('encodings.kz1048',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\kz1048.py',
+   'PYMODULE'),
+  ('encodings.koi8_u',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\koi8_u.py',
+   'PYMODULE'),
+  ('encodings.koi8_t',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\koi8_t.py',
+   'PYMODULE'),
+  ('encodings.koi8_r',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\koi8_r.py',
+   'PYMODULE'),
+  ('encodings.johab',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\johab.py',
+   'PYMODULE'),
+  ('encodings.iso8859_9',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\iso8859_9.py',
+   'PYMODULE'),
+  ('encodings.iso8859_8',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\iso8859_8.py',
+   'PYMODULE'),
+  ('encodings.iso8859_7',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\iso8859_7.py',
+   'PYMODULE'),
+  ('encodings.iso8859_6',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\iso8859_6.py',
+   'PYMODULE'),
+  ('encodings.iso8859_5',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\iso8859_5.py',
+   'PYMODULE'),
+  ('encodings.iso8859_4',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\iso8859_4.py',
+   'PYMODULE'),
+  ('encodings.iso8859_3',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\iso8859_3.py',
+   'PYMODULE'),
+  ('encodings.iso8859_2',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\iso8859_2.py',
+   'PYMODULE'),
+  ('encodings.iso8859_16',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\iso8859_16.py',
+   'PYMODULE'),
+  ('encodings.iso8859_15',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\iso8859_15.py',
+   'PYMODULE'),
+  ('encodings.iso8859_14',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\iso8859_14.py',
+   'PYMODULE'),
+  ('encodings.iso8859_13',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\iso8859_13.py',
+   'PYMODULE'),
+  ('encodings.iso8859_11',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\iso8859_11.py',
+   'PYMODULE'),
+  ('encodings.iso8859_10',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\iso8859_10.py',
+   'PYMODULE'),
+  ('encodings.iso8859_1',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\iso8859_1.py',
+   'PYMODULE'),
+  ('encodings.iso2022_kr',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\iso2022_kr.py',
+   'PYMODULE'),
+  ('encodings.iso2022_jp_ext',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\iso2022_jp_ext.py',
+   'PYMODULE'),
+  ('encodings.iso2022_jp_3',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\iso2022_jp_3.py',
+   'PYMODULE'),
+  ('encodings.iso2022_jp_2004',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\iso2022_jp_2004.py',
+   'PYMODULE'),
+  ('encodings.iso2022_jp_2',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\iso2022_jp_2.py',
+   'PYMODULE'),
+  ('encodings.iso2022_jp_1',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\iso2022_jp_1.py',
+   'PYMODULE'),
+  ('encodings.iso2022_jp',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\iso2022_jp.py',
+   'PYMODULE'),
+  ('encodings.idna',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\idna.py',
+   'PYMODULE'),
+  ('encodings.hz',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\hz.py',
+   'PYMODULE'),
+  ('encodings.hp_roman8',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\hp_roman8.py',
+   'PYMODULE'),
+  ('encodings.hex_codec',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\hex_codec.py',
+   'PYMODULE'),
+  ('encodings.gbk',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\gbk.py',
+   'PYMODULE'),
+  ('encodings.gb2312',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\gb2312.py',
+   'PYMODULE'),
+  ('encodings.gb18030',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\gb18030.py',
+   'PYMODULE'),
+  ('encodings.euc_kr',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\euc_kr.py',
+   'PYMODULE'),
+  ('encodings.euc_jp',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\euc_jp.py',
+   'PYMODULE'),
+  ('encodings.euc_jisx0213',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\euc_jisx0213.py',
+   'PYMODULE'),
+  ('encodings.euc_jis_2004',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\euc_jis_2004.py',
+   'PYMODULE'),
+  ('encodings.cp950',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp950.py',
+   'PYMODULE'),
+  ('encodings.cp949',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp949.py',
+   'PYMODULE'),
+  ('encodings.cp932',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp932.py',
+   'PYMODULE'),
+  ('encodings.cp875',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp875.py',
+   'PYMODULE'),
+  ('encodings.cp874',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp874.py',
+   'PYMODULE'),
+  ('encodings.cp869',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp869.py',
+   'PYMODULE'),
+  ('encodings.cp866',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp866.py',
+   'PYMODULE'),
+  ('encodings.cp865',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp865.py',
+   'PYMODULE'),
+  ('encodings.cp864',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp864.py',
+   'PYMODULE'),
+  ('encodings.cp863',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp863.py',
+   'PYMODULE'),
+  ('encodings.cp862',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp862.py',
+   'PYMODULE'),
+  ('encodings.cp861',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp861.py',
+   'PYMODULE'),
+  ('encodings.cp860',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp860.py',
+   'PYMODULE'),
+  ('encodings.cp858',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp858.py',
+   'PYMODULE'),
+  ('encodings.cp857',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp857.py',
+   'PYMODULE'),
+  ('encodings.cp856',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp856.py',
+   'PYMODULE'),
+  ('encodings.cp855',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp855.py',
+   'PYMODULE'),
+  ('encodings.cp852',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp852.py',
+   'PYMODULE'),
+  ('encodings.cp850',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp850.py',
+   'PYMODULE'),
+  ('encodings.cp775',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp775.py',
+   'PYMODULE'),
+  ('encodings.cp737',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp737.py',
+   'PYMODULE'),
+  ('encodings.cp720',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp720.py',
+   'PYMODULE'),
+  ('encodings.cp500',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp500.py',
+   'PYMODULE'),
+  ('encodings.cp437',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp437.py',
+   'PYMODULE'),
+  ('encodings.cp424',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp424.py',
+   'PYMODULE'),
+  ('encodings.cp273',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp273.py',
+   'PYMODULE'),
+  ('encodings.cp1258',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp1258.py',
+   'PYMODULE'),
+  ('encodings.cp1257',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp1257.py',
+   'PYMODULE'),
+  ('encodings.cp1256',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp1256.py',
+   'PYMODULE'),
+  ('encodings.cp1255',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp1255.py',
+   'PYMODULE'),
+  ('encodings.cp1254',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp1254.py',
+   'PYMODULE'),
+  ('encodings.cp1253',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp1253.py',
+   'PYMODULE'),
+  ('encodings.cp1252',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp1252.py',
+   'PYMODULE'),
+  ('encodings.cp1251',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp1251.py',
+   'PYMODULE'),
+  ('encodings.cp1250',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp1250.py',
+   'PYMODULE'),
+  ('encodings.cp1140',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp1140.py',
+   'PYMODULE'),
+  ('encodings.cp1125',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp1125.py',
+   'PYMODULE'),
+  ('encodings.cp1026',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp1026.py',
+   'PYMODULE'),
+  ('encodings.cp1006',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp1006.py',
+   'PYMODULE'),
+  ('encodings.cp037',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\cp037.py',
+   'PYMODULE'),
+  ('encodings.charmap',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\charmap.py',
+   'PYMODULE'),
+  ('encodings.bz2_codec',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\bz2_codec.py',
+   'PYMODULE'),
+  ('encodings.big5hkscs',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\big5hkscs.py',
+   'PYMODULE'),
+  ('encodings.big5',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\big5.py',
+   'PYMODULE'),
+  ('encodings.base64_codec',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\base64_codec.py',
+   'PYMODULE'),
+  ('encodings.ascii',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\ascii.py',
+   'PYMODULE'),
+  ('encodings.aliases',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\aliases.py',
+   'PYMODULE'),
+  ('encodings',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\__init__.py',
+   'PYMODULE'),
+  ('io',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\io.py',
+   'PYMODULE'),
+  ('ntpath',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\ntpath.py',
+   'PYMODULE'),
+  ('warnings',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\warnings.py',
+   'PYMODULE'),
+  ('sre_constants',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\sre_constants.py',
+   'PYMODULE'),
+  ('re',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\re.py',
+   'PYMODULE'),
+  ('functools',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\functools.py',
+   'PYMODULE'),
+  ('stat',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\stat.py',
+   'PYMODULE'),
+  ('weakref',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\weakref.py',
+   'PYMODULE'),
+  ('copyreg',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\copyreg.py',
+   'PYMODULE'),
+  ('codecs',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\codecs.py',
+   'PYMODULE'),
+  ('enum',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\enum.py',
+   'PYMODULE'),
+  ('abc',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\abc.py',
+   'PYMODULE'),
+  ('operator',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\operator.py',
+   'PYMODULE'),
+  ('sre_compile',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\sre_compile.py',
+   'PYMODULE'),
+  ('os',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\os.py',
+   'PYMODULE'),
+  ('traceback',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\traceback.py',
+   'PYMODULE')])

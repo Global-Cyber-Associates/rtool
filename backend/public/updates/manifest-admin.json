@@ -1,0 +1,7 @@
+{
+  "version": "1.0.4",
+  "url": "/api/agent/update/download/agent-admin.zip",
+  "hash": "3dde95a0893c5d412303ae821fff7bdb51cfa13625f8c9275997898f740e0f4b",
+  "required": false,
+  "release_notes": "Initial release for Admin Agent"
+}

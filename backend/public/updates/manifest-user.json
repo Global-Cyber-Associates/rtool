@@ -1,0 +1,7 @@
+{
+  "version": "1.0.2",
+  "url": "/api/agent/update/download/agent-user.zip",
+  "hash": "d0462c7c16bd50bde9c096ebb406c402f4e926619d0fe244db943b8afef58c59",
+  "required": false,
+  "release_notes": "Initial release"
+}

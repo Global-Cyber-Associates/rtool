@@ -126,6 +126,9 @@ const Devices = () => {
                       <strong>IP:</strong> {agent.ip || "unknown"}
                     </p>
                     <p>
+                      <strong>Version:</strong> {agent.version || "0.0.0"}
+                    </p>
+                    <p>
                       <strong>Last Seen:</strong>{" "}
                       {agent.lastSeen
                         ? new Date(agent.lastSeen).toLocaleString()

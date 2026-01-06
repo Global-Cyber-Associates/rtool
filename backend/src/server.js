@@ -3,6 +3,7 @@ import express from "express";
 import http from "http";
 import cors from "cors";
 import fs from "fs";
+import mongoose from "mongoose";
 import path from "path";
 import { Server } from "socket.io";
 import jwt from "jsonwebtoken";
@@ -37,6 +38,7 @@ import agentRoutes from "./api/agentlist.js";
 import installedAppsRoutes from "./api/installedApps.js";
 import taskManagerRoutes from "./api/taskManager.js";
 import licenseRoutes from "./api/license.js";
+import updateRoutes from "./routes/updateRoutes.js";
 
 import { getLogsSnapshot } from "./controllers/logsController.js";
 import { isRouterIP } from "./utils/networkHelpers.js";
@@ -52,9 +54,18 @@ import runDashboardWorker from "./D-board/d-aggregator.js";
 import scanRunRouter from "./api/scanRun.js";
 
 // -----------------------------------------------------
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 // CONFIG
 // -----------------------------------------------------
-const configPath = path.resolve("./config.json");
+// Try to find config in CWD or up one level (if running from src)
+let configPath = path.resolve("./config.json");
+if (!fs.existsSync(configPath)) {
+  configPath = path.join(__dirname, "../config.json");
+}
+
 const config = JSON.parse(fs.readFileSync(configPath, "utf8"));
 
 const app = express();
@@ -76,6 +87,14 @@ app.use("/api/installed-apps", installedAppsRoutes);
 app.use("/api/task-manager", taskManagerRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/license", licenseRoutes);
+app.use("/api/agent/update", updateRoutes);
+
+// Serve static updates
+// Use __dirname to be relative to src/server.js -> ../public/updates
+// This resolves to backend/public/updates regardless of where you start node from
+const updatesPath = path.join(__dirname, '../public/updates');
+console.log(`📂 Serving updates from: ${updatesPath}`);
+app.use('/updates', express.static(updatesPath));
 
 app.get("/api/auth/debug", (_req, res) =>
   res.json({ msg: "AUTH ROUTES ACTIVE" })
@@ -137,7 +156,8 @@ io.use(async (socket, next) => {
       // Not a JWT or invalid, proceed to check as Agent Key
     }
 
-    // 2️⃣ Try as AGENT (Enrollment Key)
+
+
     const tenant = await Tenant.findOne({ enrollmentKey: cleanToken });
     if (tenant) {
       socket.tenantId = tenant._id.toString();
@@ -189,6 +209,9 @@ io.on("connection", (socket) => {
 
     if (fingerprint) {
       updateFields.fingerprint = fingerprint;
+    }
+    if (payload?.version) {
+      updateFields.version = payload.version;
     }
 
     const agent = await Agent.findOneAndUpdate(
@@ -397,12 +420,21 @@ setInterval(async () => {
 // START SERVER
 // -----------------------------------------------------
 async function start() {
-  await connectMongo(config.mongo_uri);
+  try {
+    await connectMongo(config.mongo_uri);
+  } catch (err) {
+    console.error("⚠️  Database connection failed (Scanner/Updates will still work):", err.message);
+  }
 
   // await VisualizerScanner.deleteMany({}); // Don't wipe on restart, or do? Maybe keep state.
   // await VisualizerData.deleteMany({});
 
-  await seedUsers();
+  // Only seed users if connected to DB (1 = connected)
+  if (mongoose.connection.readyState === 1) {
+    await seedUsers();
+  } else {
+    console.log("⚠️  Skipping User Seeding (No DB Connection)");
+  }
   runDashboardWorker(4000);
 
   server.listen(config.socket_port || 5000, "0.0.0.0", () =>

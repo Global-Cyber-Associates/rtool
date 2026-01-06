@@ -29,11 +29,14 @@ const AgentSchema = new mongoose.Schema(
 
     lastSeen: { type: Date, default: Date.now },
     mac: { type: String },
-    
+
     // ⭐ LICENSING FIELDS
     fingerprint: { type: String, index: true },
     isLicensed: { type: Boolean, default: false },
     licenseToken: { type: String },
+
+    // ⭐ VERSION TRACKING
+    version: { type: String },
   },
   { timestamps: true }
 );

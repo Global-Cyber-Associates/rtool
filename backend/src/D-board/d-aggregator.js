@@ -99,6 +99,7 @@ async function runDashboardWorker(interval = 4500) {
             system: sysData,
             mac: normalizeMAC(agent.mac || sysData.mac),
             timestamp: agent.lastSeen,
+            version: agent.version || "0.0.0",
             tenantId
           };
         });

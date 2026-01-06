@@ -147,6 +147,7 @@ const Dashboard = () => {
               <th>IP</th>
               <th>CPU</th>
               <th>RAM</th>
+              <th>Version</th>
               <th>OS</th>
               <th>Last Seen</th>
             </tr>
@@ -159,11 +160,12 @@ const Dashboard = () => {
                 <td>{a.ip}</td>
                 <td>{formatCPU(a.cpu)}</td>
                 <td>{formatRAM(a.memory)}</td>
+                <td>{a.version || "0.0.0"}</td>
                 <td>{formatOS(a.os)}</td>
                 <td>{formatTime(a.lastSeen)}</td>
               </tr>
             )) : (
-              <tr><td colSpan="7" style={{ textAlign: 'center', padding: '30px', color: '#64748b' }}>No active agents detected</td></tr>
+              <tr><td colSpan="8" style={{ textAlign: 'center', padding: '30px', color: '#64748b' }}>No active agents detected</td></tr>
             )}
           </tbody>
         </table>
@@ -179,6 +181,7 @@ const Dashboard = () => {
               <th>IP</th>
               <th>CPU</th>
               <th>RAM</th>
+              <th>Version</th>
               <th>OS</th>
               <th>Last Seen</th>
             </tr>
@@ -191,11 +194,12 @@ const Dashboard = () => {
                 <td>{a.ip}</td>
                 <td>{formatCPU(a.cpu)}</td>
                 <td>{formatRAM(a.memory)}</td>
+                <td>{a.version || "0.0.0"}</td>
                 <td>{formatOS(a.os)}</td>
                 <td>{formatTime(a.timestamp)}</td>
               </tr>
             )) : (
-              <tr><td colSpan="7" style={{ textAlign: 'center', padding: '30px', color: '#64748b' }}>No inactive agents recorded</td></tr>
+              <tr><td colSpan="8" style={{ textAlign: 'center', padding: '30px', color: '#64748b' }}>No inactive agents recorded</td></tr>
             )}
           </tbody>
         </table>

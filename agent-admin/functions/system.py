@@ -3,6 +3,8 @@ import platform
 import socket
 import uuid
 import getpass
+import os
+import json
 from pathlib import Path
 from typing import Dict, Any, List
 
@@ -116,12 +118,22 @@ def get_system_info() -> Dict[str, Any]:
                 "broadcast": None,
             }]
 
+        agent_version = "unknown"
+        try:
+            vpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "version.json")
+            if os.path.exists(vpath):
+                with open(vpath, "r") as f:
+                    agent_version = json.load(f).get("version", "unknown")
+        except:
+            pass
+
         data = {
             "agent_id": platform.node(),
             "hostname": socket.gethostname(),
             "os_type": platform.system(),
             "os_version": platform.version(),
             "os_release": platform.release(),
+            "agent_version": agent_version, # NEW: Report Version
             "cpu": _get_cpu_info(),
             "memory": _get_memory_info(),
             "disk": _get_disk_info(),

@@ -12,9 +12,14 @@ lerna-debug.log*
 
 # Production build
 
-build
+
+*.spec
+
+# Agent Update Archives
+
 
 # Local env files
+
 *.local
 # Editor directories and files
 .vscode/*

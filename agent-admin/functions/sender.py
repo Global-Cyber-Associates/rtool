@@ -21,6 +21,47 @@ AGENT_ID = os.getenv("AGENT_ID", platform.node())
 FINGERPRINT = generate_fingerprint()
 IS_LICENSED = False
 
+def get_local_version():
+    """
+    Finds version.json in EXE dir, Script dir, or CWD.
+    """
+    candidates = []
+    
+    # 1. EXE/Script Directory
+    if getattr(sys, 'frozen', False):
+        candidates.append(os.path.dirname(os.path.abspath(sys.executable)))
+    else:
+        # Script dir
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        if os.path.basename(script_dir) == "functions":
+            script_dir = os.path.dirname(script_dir)
+        candidates.append(script_dir)
+    
+    # 2. Current Working Directory
+    candidates.append(os.getcwd())
+    
+    # 3. Parent of script (extra safety)
+    try:
+        candidates.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+    except: pass
+
+    for base in candidates:
+        v_path = os.path.join(base, "version.json")
+        if os.path.exists(v_path):
+            try:
+                with open(v_path, "r") as f:
+                    ver = json.load(f).get("version", "0.0.0")
+                    if ver != "0.0.0":
+                        logging.info(f"[ℹ️] Found version {ver} at {v_path}")
+                        return ver
+            except Exception as e:
+                logging.debug(f"Failed to read {v_path}: {e}")
+    
+    logging.warning("[⚠️] Could not resolve local version. Defaulting to 0.0.0")
+    return "0.0.0"
+
+LOCAL_VERSION = get_local_version()
+
 
 # -----------------------------------------------------------
 # SOCKET.IO CLIENT
@@ -45,7 +86,8 @@ def connect():
     try:
         sio.emit("register_agent", {
             "agentId": AGENT_ID,
-            "fingerprint": FINGERPRINT
+            "fingerprint": FINGERPRINT,
+            "version": LOCAL_VERSION
         })
         logging.info(f"[🆔] Registered agent: {AGENT_ID} (FP: {FINGERPRINT[:8]}...)")
     except Exception as e:
