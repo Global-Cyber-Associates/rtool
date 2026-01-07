@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "./sidenav";
-import TopNav from "./topnav";
 import "./layout.css";
 
 const Layout = ({ children }) => {
@@ -23,6 +22,9 @@ const Layout = ({ children }) => {
 
     return (
         <div className={`app-layout ${isSidebarOpen ? "sidebar-open" : "sidebar-closed"}`}>
+            {isSidebarOpen && window.innerWidth < 1024 && (
+                <div className="sidebar-overlay" onClick={() => setIsSidebarOpen(false)} />
+            )}
             <Sidebar onToggle={setIsSidebarOpen} isOpen={isSidebarOpen} />
             <div className="main-wrapper">
                 <main className="content-container">

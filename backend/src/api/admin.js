@@ -7,7 +7,8 @@ import {
   getTenantAgents,
   deactivateAgentLicense,
   approveAgentLicense,
-  getDownloadLogs
+  getDownloadLogs,
+  toggleTenantStatus
 } from "../controllers/adminController.js";
 import { authMiddleware, adminOnly } from "../middleware/authMiddleware.js";
 
@@ -40,5 +41,7 @@ router.post("/agents/:id/approve", authMiddleware, adminOnly, approveAgentLicens
 
 // Get agent download logs
 router.get("/downloads", authMiddleware, adminOnly, getDownloadLogs);
+// Toggle tenant active/inactive status
+router.post("/tenants/:id/toggle", authMiddleware, adminOnly, toggleTenantStatus);
 
 export default router;

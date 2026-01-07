@@ -182,33 +182,17 @@ async function runDashboardWorker(interval = 4500) {
           }, false);
         });
 
-        // ⭐ 5. DYNAMIC SUBNET DETECTION
-        let targetSubnet = null;
+        // ⭐ 5. MAP TO ENTRIES
         const allEntries = Array.from(allDevicesMap.values());
 
-        const primaryGateway = allEntries.find(d => isRouterIP(d.ip, d.hostname, d.vendor));
-        if (primaryGateway) {
-          const pts = primaryGateway.ip.split('.');
-          if (pts.length === 4) targetSubnet = pts.slice(0, 3).join('.') + '.';
-        }
-
-        if (!targetSubnet) {
-          const firstOnline = rawAgentsFormatted.find(a => a.status === 'online' && a.ip !== 'unknown');
-          if (firstOnline) {
-            const pts = firstOnline.ip.split('.');
-            if (pts.length === 4) targetSubnet = pts.slice(0, 3).join('.') + '.';
-          }
-        }
-
-        // ⭐ 6. FILTER: LAN-Only stable view
-        const filteredDevices = (targetSubnet
-          ? allEntries.filter(d => d.ip && d.ip.startsWith(targetSubnet))
-          : allEntries)
-          .sort((a, b) => {
-            // Stable sort by IP
-            const ipToNum = (ip) => ip.split('.').reduce((acc, octet) => (acc << 8) + parseInt(octet, 10), 0) >>> 0;
-            return ipToNum(a.ip) - ipToNum(b.ip);
-          });
+        // ⭐ 6. SORT: Stable sort by IP (defensive against "unknown" or missing IPs)
+        const filteredDevices = allEntries.sort((a, b) => {
+          const ipToNum = (ip) => {
+            if (!ip || ip === "unknown") return 0xFFFFFFFF;
+            return ip.split('.').reduce((acc, octet) => (acc << 8) + (parseInt(octet, 10) || 0), 0) >>> 0;
+          };
+          return ipToNum(a.ip) - ipToNum(b.ip);
+        });
 
         // 7. Classify (Now pre-sorted)
         const routers = [];
@@ -260,26 +244,32 @@ async function runDashboardWorker(interval = 4500) {
           }
 
           // 9. Save Snapshot (Uses the exact same vizItems count)
+          const finalSummary = {
+            active: activeAgents.length,
+            inactive: inactiveAgents.length,
+            routers: routers.length,
+            unknown: unknownDevices.length,
+          };
+          // Explicitly sum all categories for the master 'all' count
+          finalSummary.all = finalSummary.active + finalSummary.inactive + finalSummary.routers + finalSummary.unknown;
+
           const snapshot = {
             tenantId,
             track: Date.now(),
             timestamp: new Date(),
-            summary: {
-              all: vizItems.length,
-              active: activeAgents.length,
-              inactive: inactiveAgents.length,
-              unknown: unknownDevices.length,
-              routers: routers.length,
-            },
+            summary: finalSummary,
             allDevices: filteredDevices,
             activeAgents,
             inactiveAgents,
-            routers,
             unknownDevices,
+            routers,
           };
 
           await Dashboard.findOneAndUpdate({ tenantId }, { $set: snapshot }, { upsert: true });
-          console.log(`📡 [${tStr}] Change detected: ${vizItems.length} devices. Broadcasting...`);
+          console.log(`📡 [${tStr}] Dashboard update: All:${finalSummary.all} (Active:${finalSummary.active}, Inactive:${finalSummary.inactive}, Routers:${finalSummary.routers}, Unknown:${finalSummary.unknown})`);
+          if (unknownDevices.length > 0) {
+            console.log(`🔍 [DEBUG] Snapshot Summary for ${tStr}:`, JSON.stringify(snapshot.summary));
+          }
 
           // ⭐ 10. BROADCAST
           try {

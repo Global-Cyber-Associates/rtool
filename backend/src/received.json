@@ -1,11 +1,11 @@
 {
-  "agentId": "Rama",
-  "timestamp": "2025-12-29T12:09:40.073Z",
+  "agentId": "admin-test",
+  "timestamp": "2026-01-07T07:44:57.193Z",
   "devices": [
     {
-      "drive_letter": "E",
+      "drive_letter": "F",
       "vendor_id": "USBSTOR\\DISK&VEN_SMI&PROD_USB_DISK&REV_1100\\CCYYMMDDHHMMSSDGEO23&0",
-      "product_id": "\\\\.\\PHYSICALDRIVE1",
+      "product_id": "\\\\.\\PHYSICALDRIVE2",
       "description": "SMI USB DISK USB Device",
       "serial_number": "AA00000000000489"
     }

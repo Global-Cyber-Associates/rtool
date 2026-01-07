@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "../../utils/authService";
 import { updateSocketToken } from "../../utils/socket";
+import { toast } from "../../utils/toast";
 import logo from "../../assets/gca.png";
 import "./login.css";
 
@@ -10,7 +11,6 @@ function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,10 +21,12 @@ function Login() {
       const role = sessionStorage.getItem("role");
       updateSocketToken(res.token);
 
+      toast.success("Welcome back! Authentication successful.");
+
       if (role === "admin") navigate("/admin/dashboard");
       else navigate("/dashboard");
     } else {
-      setError(res.message || "Login failed");
+      toast.error(res.message || "Authentication failed. Please check your credentials.");
     }
   };
 
@@ -36,8 +38,6 @@ function Login() {
         <h2 className="login-title">VisuN</h2>
         <h4 className="login-title2"> @ powered by AI</h4>
         <p className="login-subtitle">Please login to continue</p>
-
-        {error && <div className="login-error">{error}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">

@@ -14,6 +14,7 @@ import {
     Info,
     Zap
 } from "lucide-react";
+import { toast } from "../../utils/toast";
 import "./LicenseManager.css";
 
 function LicenseManager() {
@@ -23,7 +24,6 @@ function LicenseManager() {
     const [searchTerm, setSearchTerm] = useState("");
     const [loading, setLoading] = useState(true);
     const [seatInput, setSeatInput] = useState(5);
-    const [toast, setToast] = useState("");
 
     useEffect(() => {
         fetchTenants();
@@ -42,6 +42,7 @@ function LicenseManager() {
             }
         } catch (err) {
             console.error("Failed to fetch tenants", err);
+            toast.error("Endpoint Authority: Failed to fetch verified tenants.");
         } finally {
             setLoading(false);
         }
@@ -57,6 +58,7 @@ function LicenseManager() {
             }
         } catch (err) {
             console.error("Failed to fetch agents", err);
+            toast.error("Sync Error: Failed to retrieve fleet inventory.");
         }
     };
 
@@ -65,14 +67,13 @@ function LicenseManager() {
         try {
             const res = await apiPost(`/api/admin/tenants/${selectedTenant.id}/seats`, { maxSeats: seatInput });
             if (res.ok) {
-                setToast("Infrastructure seat allocation updated successfully");
+                toast.success("Infrastructure seat allocation updated successfully.");
                 const updatedTenants = tenants.map(t => t.id === selectedTenant.id ? { ...t, maxSeats: seatInput } : t);
                 setTenants(updatedTenants);
                 setSelectedTenant({ ...selectedTenant, maxSeats: seatInput });
-                setTimeout(() => setToast(""), 4000);
             }
         } catch (err) {
-            alert("Error updating seats");
+            toast.error("Provisioning Error: Could not update seat limit.");
         }
     };
 
@@ -81,12 +82,11 @@ function LicenseManager() {
         try {
             const res = await apiPost(`/api/admin/agents/${agentId}/deactivate`);
             if (res.ok) {
-                setToast("License revoked successfully");
+                toast.success("License revoked successfully.");
                 handleSelectTenant(selectedTenant);
-                setTimeout(() => setToast(""), 4000);
             }
         } catch (err) {
-            alert("Error revoking license");
+            toast.error("Revocation Error: Action failed on security server.");
         }
     };
 
@@ -94,15 +94,14 @@ function LicenseManager() {
         try {
             const res = await apiPost(`/api/admin/agents/${agentId}/approve`);
             if (res.ok) {
-                setToast("License approved successfully");
+                toast.success("License approved successfully.");
                 handleSelectTenant(selectedTenant);
-                setTimeout(() => setToast(""), 4000);
             } else {
                 const data = await res.json();
-                alert(data.message || "Approval failed");
+                toast.error(data.message || "Approval failed.");
             }
         } catch (err) {
-            alert("Error approving license");
+            toast.error("Activation Error: Network error during approval.");
         }
     };
 
@@ -284,12 +283,6 @@ function LicenseManager() {
                 )}
             </div>
 
-            {toast && (
-                <div className="toast-container">
-                    <CheckCircle size={20} />
-                    {toast}
-                </div>
-            )}
         </div>
     );
 }

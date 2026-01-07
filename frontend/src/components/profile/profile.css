@@ -1,125 +1,361 @@
-/* Profile content wrapper */
 .profile-content-wrapper {
+  padding: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: calc(100vh - 100px);
+}
+
+.profile-container {
+  width: 100%;
+  max-width: 650px;
+  background: #132639;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  border: 1px solid #1e3b52;
+  overflow: hidden;
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.profile-header {
+  padding: 30px;
+  background: linear-gradient(135deg, #1d3557 0%, #132639 100%);
+  border-bottom: 1px solid #1e3b52;
+  text-align: center;
+}
+
+.profile-avatar-circle {
+  width: 80px;
+  height: 80px;
+  background: #00b4d8;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 15px;
+  font-size: 32px;
+  font-weight: 700;
+  box-shadow: 0 0 20px rgba(0, 180, 216, 0.3);
+}
+
+.profile-header h2 {
+  color: #a8dadc;
+  font-size: 24px;
+  margin: 0;
+  font-weight: 600;
+}
+
+.profile-header p {
+  color: #8ca8b3;
+  font-size: 14px;
+  margin: 5px 0 0;
+}
+
+.profile-body {
   padding: 30px;
 }
 
-/* Profile card */
-.profile-container {
-  max-width: 520px;
-  margin: 0 auto;
-  background: #ffffff; /* white card */
-  color: #1e1e1e; /* DARK TEXT */
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+.profile-section {
+  margin-bottom: 35px;
 }
 
-/* Title */
-.profile-container h2 {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #0b274b;
-}
-
-/* Profile rows */
-.profile-row {
+.profile-section-title {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 14px;
+  gap: 10px;
+  color: #f1faee;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 20px;
   padding-bottom: 10px;
-  border-bottom: 1px solid #e6e6e6;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.profile-row span {
-  font-size: 14px;
-  color: #555;
+.profile-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
 }
 
-.profile-row strong {
-  font-size: 14px;
-  color: #111;
+.profile-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
-/* Status badges */
-.status-active {
-  color: #27ae60;
+.profile-info-item label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #8ca8b3;
   font-weight: 600;
 }
 
-.status-disabled {
-  color: #c0392b;
-  font-weight: 600;
+.profile-info-content {
+  color: #f1faee;
+  font-size: 15px;
+  font-weight: 500;
 }
 
-/* Messages */
-.error-msg {
-  background: #ffe5e5;
-  color: #c0392b;
-  padding: 10px;
-  border-radius: 6px;
-  margin-bottom: 12px;
+.security-controls {
+    background: rgba(29, 53, 87, 0.3);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(30, 180, 216, 0.1);
 }
 
-.success-msg {
-  background: #e7f9ee;
-  color: #27ae60;
-  padding: 10px;
-  border-radius: 6px;
-  margin-bottom: 12px;
+.security-btn {
+    width: auto;
+    padding: 10px 24px;
+    font-size: 14px;
 }
 
-/* Form styling */
-.profile-form {
-  margin-top: 20px;
+/* Modal Styling */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+    animation: fadeIn 0.2s ease-out;
 }
 
+.modal-content {
+    background: #132639;
+    width: 100%;
+    max-width: 450px;
+    border-radius: 16px;
+    border: 1px solid #1e3b52;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+    animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUp {
+    from { transform: translateY(30px) scale(0.95); opacity: 0; }
+    to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.modal-header {
+    padding: 20px 24px;
+    background: #1d3557;
+    border-bottom: 1px solid #1e3b52;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: #a8dadc;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.close-btn {
+    background: transparent;
+    border: none;
+    color: #8ca8b3;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    display: flex;
+    transition: all 0.2s;
+}
+
+.close-btn:hover {
+    color: #f1faee;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.modal-body {
+    padding: 24px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.cancel-btn {
+    background: transparent;
+    border: 1px solid #1e3b52;
+    color: #f1faee;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.cancel-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Common form components */
 .form-group {
-  margin-bottom: 18px;
+    margin-bottom: 15px;
 }
 
 .form-group label {
-  display: block;
-  margin-bottom: 6px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #333;
+    display: block;
+    font-size: 13px;
+    color: #8ca8b3;
+    margin-bottom: 6px;
+    font-weight: 500;
 }
 
-.form-group input {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 14px;
-  transition: border-color 0.3s ease;
+.password-input-wrapper input {
+    width: 100%;
+    padding: 11px 16px;
+    background: #0d1b2a;
+    border: 1px solid #1e3b52;
+    border-radius: 8px;
+    color: #f1faee;
+    font-size: 14px;
+    transition: all 0.2s;
 }
 
-.form-group input:focus {
-  outline: none;
-  border-color: #0077b6;
-  box-shadow: 0 0 0 3px rgba(0, 119, 182, 0.1);
+.password-input-wrapper input:focus {
+    outline: none;
+    border-color: #00b4d8;
+    background: #112233;
 }
 
 .primary-btn {
-  width: 100%;
-  padding: 12px;
-  background: linear-gradient(135deg, #0077b6 0%, #457b9d 100%);
+  background: #00b4d8;
   color: #fff;
   border: none;
+  padding: 10px 20px;
   border-radius: 8px;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .primary-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 119, 182, 0.3);
+  background: #0096c7;
+  transform: translateY(-1px);
 }
 
-.primary-btn:active {
-  transform: translateY(0);
+.primary-btn:disabled {
+    background: #1e3b52;
+    color: #8ca8b3;
+    cursor: not-allowed;
+    transform: none;
 }
 
+/* Feedback */
+.error-msg {
+  background: rgba(231, 76, 60, 0.1);
+  color: #e74c3c;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(231, 76, 60, 0.2);
+  margin-bottom: 15px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.success-msg {
+  background: rgba(46, 204, 113, 0.1);
+  color: #2ecc71;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(46, 204, 113, 0.2);
+  margin-bottom: 15px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Status Pill */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.status-pill.active {
+  background: rgba(46, 204, 113, 0.1);
+  color: #2ecc71;
+  border: 1px solid rgba(46, 204, 113, 0.2);
+}
+
+.status-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #2ecc71;
+  box-shadow: 0 0 8px #2ecc71;
+}
+
+@media (max-width: 768px) {
+  .profile-content-wrapper {
+    padding: 20px 10px;
+  }
+  
+  .profile-header {
+    padding: 25px 15px;
+  }
+  
+  .profile-body {
+    padding: 20px 15px;
+  }
+  
+  .profile-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .security-btn {
+      width: 100%;
+  }
+
+  .modal-content {
+      max-width: 95%;
+  }
+}
+
+@media (max-width: 480px) {
+    .modal-body {
+        padding: 15px;
+    }
+    .modal-footer {
+        flex-direction: column;
+    }
+    .modal-footer button {
+        width: 100%;
+    }
+}

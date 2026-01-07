@@ -1,6 +1,6 @@
 // frontend/src/App.jsx
 import React from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 
 // USER PAGES
 import Dashboard from "./components/dashboard/dashboard.jsx";
@@ -14,7 +14,6 @@ import Scan from "./components/scan/scan.jsx";
 import TaskManager from "./components/devices/Taskmanager/taskmanager.jsx";
 import UsbControl from "./components/usb/usb.jsx";
 import InstalledApps from "./components/devices/installedApps/installedapps.jsx";
-import ChangePassword from "./components/profile/ChangePassword.jsx";
 import Profile from "./components/profile/Profile.jsx";
 
 // AUTH & ADMIN
@@ -22,7 +21,7 @@ import Login from "./components/navigation/Login.jsx";
 import Register from "./components/navigation/Register.jsx";
 import CreateUser from "./components/admin/CreateUser.jsx";
 import AdminDashboard from "./components/admin/AdminDashboard.jsx";
-import ManageUsers from "./components/admin/ManageUsers.jsx";
+import ManageTenants from "./components/admin/ManageTenants.jsx";
 import LicenseManager from "./components/admin/LicenseManager.jsx";
 // import ManageUsers from "./components/admin/ManageUsers.jsx"; // create later
 
@@ -34,6 +33,9 @@ import { getToken, getRole } from "./utils/authService.js";
 
 // LAYOUT WRAPPER
 import Layout from "./components/navigation/Layout.jsx";
+import { apiGet } from "./utils/api.js";
+import { Toaster } from "./utils/toast.jsx";
+import "./utils/toast.css";
 
 // ------------------------------------------------------
 // 🔐 PROTECTED ROUTES
@@ -68,12 +70,53 @@ function AdminRoute({ children }) {
   );
 }
 
+// Block access if feature is lead-locked
+function FeatureGate({ children, featureId }) {
+  const [unlockedFeatures, setUnlockedFeatures] = React.useState({});
+  const [checking, setChecking] = React.useState(true);
+
+  // Re-check on every mount to ensure fresh state from DB
+  React.useEffect(() => {
+    let isMounted = true;
+    const verifyAccess = async () => {
+      try {
+        const response = await apiGet("/api/features");
+        if (response.ok && isMounted) {
+          const data = await response.json();
+          const unlockedMap = {};
+          if (data && data.unlockedFeatures) {
+            data.unlockedFeatures.forEach(id => unlockedMap[id] = true);
+          }
+          setUnlockedFeatures(unlockedMap);
+        }
+      } catch (err) {
+        console.error("Access verification failed:", err);
+      } finally {
+        if (isMounted) setChecking(false);
+      }
+    };
+    verifyAccess();
+    return () => { isMounted = false; };
+  }, []);
+
+  if (getRole() === "admin") return children; // Admins see everything
+
+  if (checking) return null; // or a loading spinner
+
+  if (!unlockedFeatures[featureId]) {
+    return <Navigate to="/features" replace />;
+  }
+
+  return children;
+}
+
 // ------------------------------------------------------
 // 🌐 MAIN APP ROUTER
 // ------------------------------------------------------
 function App() {
   return (
     <BrowserRouter>
+      <Toaster />
       <Routes>
         {/* LOGIN */}
         <Route path="/login" element={<Login />} />
@@ -107,10 +150,10 @@ function App() {
         />
         {/* ADMIN: MANAGE USERS */}
         <Route
-          path="/admin/users"
+          path="/admin/tenants"
           element={
             <ProtectedLayout adminOnly={true}>
-              <ManageUsers />
+              <ManageTenants />
             </ProtectedLayout>
           }
         />
@@ -137,16 +180,9 @@ function App() {
           path="/visualizer"
           element={
             <ProtectedLayout>
-              <Visualizer />
-            </ProtectedLayout>
-          }
-        />
-
-        <Route
-          path="/profile/change-password"
-          element={
-            <ProtectedLayout>
-              <ChangePassword />
+              <FeatureGate featureId="visualizer">
+                <Visualizer />
+              </FeatureGate>
             </ProtectedLayout>
           }
         />
@@ -155,7 +191,9 @@ function App() {
           path="/devices"
           element={
             <ProtectedLayout>
-              <Devices />
+              <FeatureGate featureId="devices">
+                <Devices />
+              </FeatureGate>
             </ProtectedLayout>
           }
         />
@@ -163,7 +201,9 @@ function App() {
           path="/devices/:id"
           element={
             <ProtectedLayout>
-              <DeviceDetail />
+              <FeatureGate featureId="devices">
+                <DeviceDetail />
+              </FeatureGate>
             </ProtectedLayout>
           }
         />
@@ -171,7 +211,9 @@ function App() {
           path="/tasks/:id"
           element={
             <ProtectedLayout>
-              <TaskManager />
+              <FeatureGate featureId="tasks">
+                <TaskManager />
+              </FeatureGate>
             </ProtectedLayout>
           }
         />
@@ -179,7 +221,9 @@ function App() {
           path="/apps/:id"
           element={
             <ProtectedLayout>
-              <InstalledApps />
+              <FeatureGate featureId="apps">
+                <InstalledApps />
+              </FeatureGate>
             </ProtectedLayout>
           }
         />
@@ -187,7 +231,9 @@ function App() {
           path="/logs"
           element={
             <ProtectedLayout>
-              <Logs />
+              <FeatureGate featureId="logs">
+                <Logs />
+              </FeatureGate>
             </ProtectedLayout>
           }
         />
@@ -204,7 +250,9 @@ function App() {
           path="/scan"
           element={
             <ProtectedLayout>
-              <Scan />
+              <FeatureGate featureId="scan">
+                <Scan />
+              </FeatureGate>
             </ProtectedLayout>
           }
         />
@@ -212,7 +260,9 @@ function App() {
           path="/usb"
           element={
             <ProtectedLayout>
-              <UsbControl />
+              <FeatureGate featureId="usb">
+                <UsbControl />
+              </FeatureGate>
             </ProtectedLayout>
           }
         />

@@ -1,5 +1,5 @@
-// src/components/UsbControl.jsx
 import React, { useState, useEffect } from "react";
+import { toast } from "../../utils/toast";
 import "./usb.css";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -79,8 +79,10 @@ const UsbControl = () => {
             : agent
         )
       );
+      toast.success(`Access policy updated: ${newStatus} for ${username}`);
     } catch (err) {
       console.error("Failed to update status:", err);
+      toast.error("Policy Update Failed: Could not synchronize with endpoint.");
     }
   };
 

@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
+import Tenant from "../models/Tenant.js";
 
-export function authMiddleware(req, res, next) {
+export async function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -20,10 +21,23 @@ export function authMiddleware(req, res, next) {
       tenantId: decoded.tenantId,
     };
 
+    // Skip tenant status check for global admins who might not have a tenantId
+    if (req.user.role === "admin") {
+      return next();
+    }
+
     // ⭐ Enforce tenant context
     if (!req.user.tenantId) {
       return res.status(403).json({
         message: "Tenant context missing in token",
+      });
+    }
+
+    // ⭐ Enforce tenant status
+    const tenant = await Tenant.findById(req.user.tenantId);
+    if (!tenant || !tenant.isActive) {
+      return res.status(403).json({
+        message: "Access denied. Your company account is inactive.",
       });
     }
 

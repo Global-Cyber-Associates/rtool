@@ -39,6 +39,7 @@ import installedAppsRoutes from "./api/installedApps.js";
 import taskManagerRoutes from "./api/taskManager.js";
 import licenseRoutes from "./api/license.js";
 import updateRoutes from "./routes/updateRoutes.js";
+import featuresRoutes from "./api/features.js";
 
 import { getLogsSnapshot } from "./controllers/logsController.js";
 import { isRouterIP } from "./utils/networkHelpers.js";
@@ -93,6 +94,7 @@ app.use("/api/agent/update", updateRoutes);
 const updatesPath = path.join(__dirname, '../public/updates');
 console.log(`📂 Updates managed via Controller. Static path: ${updatesPath}`);
 // app.use('/updates', express.static(updatesPath)); // Disabled for security;ZIPs now tracked via /download
+app.use("/api/features", featuresRoutes);
 
 app.get("/api/auth/debug", (_req, res) =>
   res.json({ msg: "AUTH ROUTES ACTIVE" })
@@ -145,6 +147,11 @@ io.use(async (socket, next) => {
     try {
       const decoded = jwt.verify(cleanToken, process.env.JWT_SECRET);
       if (decoded && decoded.tenantId) {
+        // Enforce active tenant for Users too
+        const tenant = await Tenant.findById(decoded.tenantId);
+        if (!tenant || !tenant.isActive) {
+          return next(new Error("Authentication error: Company account is deactivated."));
+        }
         socket.user = decoded;
         socket.tenantId = decoded.tenantId;
         socket.isAgent = false;
@@ -158,6 +165,9 @@ io.use(async (socket, next) => {
 
     const tenant = await Tenant.findOne({ enrollmentKey: cleanToken });
     if (tenant) {
+      if (!tenant.isActive) {
+        return next(new Error("Authentication error: Tenant account deactivated or expired."));
+      }
       socket.tenantId = tenant._id.toString();
       socket.isAgent = true;
       return next();
@@ -323,7 +333,16 @@ io.on("connection", (socket) => {
         return;
       }
 
-      // 🔐 LICENSE ENFORCEMENT
+      // 🔐 TENANT & LICENSE ENFORCEMENT
+      const tenant = await Tenant.findById(socket.tenantId);
+      if (!tenant || !tenant.isActive) {
+        console.warn(`[DENIED] Blocked data from inactive tenant: ${socket.tenantId}`);
+        return socket.emit("agent_response", {
+          success: false,
+          message: "Tenant membership deactivated. Operation canceled.",
+        });
+      }
+
       const agent = await Agent.findOne({ agentId: payload.agentId, tenantId: socket.tenantId });
       if (!agent || !agent.isLicensed) {
         console.warn(`[DENIED] Data from unlicensed/revoked agent: ${payload.agentId} (Tenant: ${socket.tenantId})`);

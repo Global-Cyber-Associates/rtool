@@ -197,3 +197,23 @@ export async function getDownloadLogs(req, res) {
     res.status(500).json({ message: "Failed to fetch download logs", error: err.message });
   }
 }
+
+// --------------------------------------------------
+// ⭐ TOGGLE TENANT STATUS (Enable/Disable)
+// --------------------------------------------------
+export async function toggleTenantStatus(req, res) {
+  try {
+    const { id } = req.params;
+    const { isActive } = req.body;
+
+    const tenant = await Tenant.findByIdAndUpdate(id, { $set: { isActive } }, { new: true });
+    if (!tenant) return res.status(404).json({ message: "Tenant not found" });
+
+    res.json({
+      message: `Tenant ${tenant.isActive ? "enabled" : "disabled"} successfully`,
+      isActive: tenant.isActive
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Toggle failed", error: err.message });
+  }
+}

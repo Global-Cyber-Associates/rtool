@@ -1,8 +1,7 @@
 // frontend/src/components/admin/CreateUser.jsx
 import React, { useState } from "react";
 import { apiPost } from "../../utils/api";
-import Sidebar from "../navigation/sidenav.jsx";
-import TopNav from "../navigation/topnav.jsx";
+import { toast } from "../../utils/toast";
 
 function CreateUser() {
   const [name, setName] = useState("");
@@ -10,28 +9,30 @@ function CreateUser() {
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("client");
 
-  const [message, setMessage] = useState("");
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await apiPost("/api/users/create", {
-      name,
-      email,
-      password,
-      role,
-    });
+    try {
+      const res = await apiPost("/api/users/create", {
+        name,
+        email,
+        password,
+        role,
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (res.ok) {
-      setMessage("User created successfully!");
-      setName("");
-      setEmail("");
-      setPassword("");
-      setRole("client");
-    } else {
-      setMessage(data.message || "Failed to create user");
+      if (res.ok) {
+        toast.success("User created successfully!");
+        setName("");
+        setEmail("");
+        setPassword("");
+        setRole("client");
+      } else {
+        toast.error(data.message || "Failed to create user");
+      }
+    } catch (err) {
+      toast.error("Network error during user creation.");
     }
   };
 
@@ -40,9 +41,6 @@ function CreateUser() {
       <div className="create-user-form-container" style={{ maxWidth: 500, margin: "50px auto", padding: 20, background: "#112d4e", borderRadius: 12 }}>
         <h2>Create New User</h2>
 
-        {message && (
-          <div style={{ marginBottom: 10, color: "green" }}>{message}</div>
-        )}
 
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: 15 }}>

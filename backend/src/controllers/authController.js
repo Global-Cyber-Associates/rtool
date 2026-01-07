@@ -23,6 +23,16 @@ export async function login(req, res) {
       });
     }
 
+    // ⭐ 2.1️⃣ Check if tenant is active
+    if (user.tenantId) {
+      const tenant = await Tenant.findById(user.tenantId);
+      if (tenant && !tenant.isActive) {
+        return res.status(403).json({
+          message: "Your company account has been deactivated or expired. Contact support.",
+        });
+      }
+    }
+
     // 2.5️⃣ Block unapproved clients
     if (user.role === "client" && !user.isApproved) {
       return res.status(403).json({
