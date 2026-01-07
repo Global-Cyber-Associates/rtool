@@ -89,12 +89,10 @@ app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/license", licenseRoutes);
 app.use("/api/agent/update", updateRoutes);
 
-// Serve static updates
-// Use __dirname to be relative to src/server.js -> ../public/updates
-// This resolves to backend/public/updates regardless of where you start node from
+// Serve static updates (Deprecated: Use /api/agent/update/download for tracked/secure ZIPs)
 const updatesPath = path.join(__dirname, '../public/updates');
-console.log(`📂 Serving updates from: ${updatesPath}`);
-app.use('/updates', express.static(updatesPath));
+console.log(`📂 Updates managed via Controller. Static path: ${updatesPath}`);
+// app.use('/updates', express.static(updatesPath)); // Disabled for security;ZIPs now tracked via /download
 
 app.get("/api/auth/debug", (_req, res) =>
   res.json({ msg: "AUTH ROUTES ACTIVE" })

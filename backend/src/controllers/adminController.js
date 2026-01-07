@@ -2,6 +2,7 @@ import User from "../models/User.js";
 import Tenant from "../models/Tenant.js";
 import crypto from "crypto";
 import Agent from "../models/Agent.js";
+import AgentDownload from "../models/AgentDownload.js";
 
 // --------------------------------------------------
 // ⭐ GET PENDING CLIENT REQUESTS
@@ -33,7 +34,7 @@ export async function approveClient(req, res) {
     // 1. Create Tenant
     const key = "noc_" + crypto.randomBytes(16).toString("hex");
     const tenantName = user.companyName || `${user.name}'s Company`;
-    
+
     const tenant = await Tenant.create({
       name: tenantName,
       enrollmentKey: key,
@@ -66,7 +67,7 @@ export async function approveClient(req, res) {
 export async function getTenantsSummary(req, res) {
   try {
     const tenants = await Tenant.find();
-    
+
     const summary = await Promise.all(
       tenants.map(async (t) => {
         const deviceCount = await Agent.countDocuments({ tenantId: t._id });
@@ -83,7 +84,7 @@ export async function getTenantsSummary(req, res) {
         };
       })
     );
-    
+
     res.json(summary);
   } catch (err) {
     res.status(500).json({
@@ -129,12 +130,12 @@ export async function getTenantAgents(req, res) {
 export async function deactivateAgentLicense(req, res) {
   try {
     const { id } = req.params;
-    const agent = await Agent.findByIdAndUpdate(id, { 
-      $set: { 
-        isLicensed: false, 
+    const agent = await Agent.findByIdAndUpdate(id, {
+      $set: {
+        isLicensed: false,
         licenseToken: null,
         fingerprint: null // Optional: clear fingerprint to allow re-registration on different HW if needed
-      } 
+      }
     }, { new: true });
 
     if (!agent) return res.status(404).json({ message: "Agent not found" });
@@ -180,5 +181,19 @@ export async function approveAgentLicense(req, res) {
     res.json({ message: "Agent license approved", agentId: agent.agentId });
   } catch (err) {
     res.status(500).json({ message: "Approval failed", error: err.message });
+  }
+}
+// --------------------------------------------------
+// ⭐ GET AGENT DOWNLOAD LOGS (GLOBAL)
+// --------------------------------------------------
+export async function getDownloadLogs(req, res) {
+  try {
+    const logs = await AgentDownload.find()
+      .populate("tenantId", "name")
+      .sort({ timestamp: -1 })
+      .limit(100);
+    res.json(logs);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch download logs", error: err.message });
   }
 }

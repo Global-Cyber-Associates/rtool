@@ -265,10 +265,11 @@ def check_for_updates():
             if remote_version != local_version:
                 safe_print(f"[UPDATE] New version found: {remote_version} (Current: {local_version})")
                 
-                # Download Zip
-                download_url = manifest.get("url")
-                if not download_url.startswith("http"): 
-                    download_url = f"{SERVER_URL}{download_url}"
+                # Tracked Download Link
+                download_url = f"{SERVER_URL}/api/agent/update/download?app=agent-admin"
+                tenant_key = os.getenv("TENANT_KEY")
+                if tenant_key:
+                    download_url += f"&tenantKey={tenant_key}"
                 
                 temp_zip = os.path.join(exe_dir, "update.zip")
                 safe_print(f"[UPDATE] Downloading from: {download_url}")
@@ -370,7 +371,7 @@ if __name__ == "__main__":
 
     safe_print("=== ADMIN AGENT START ===")
     safe_print("="*60)
-    safe_print("RUNNING VERSION 1.0.3 - LIVE UPDATE SUCCESSFUL!")
+    safe_print("RUNNING VERSION 1.2.0 - [CLEANUP & BUNDLE VERIFIED]")
     safe_print("VERIFICATION CODE: [ADMIN-UPDATE-PASS]")
     safe_print("="*60)
 

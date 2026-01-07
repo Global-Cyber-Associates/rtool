@@ -61,12 +61,16 @@ function DownloadPage() {
     const enrollmentKey = tenantInfo?.enrollmentKey || "NOT_ASSIGNED";
 
     const handleDownloadAdmin = () => {
-        const url = import.meta.env.VITE_ADMIN_AGENT_DOWNLOAD_URL || "/visun-agent-admin.exe";
+        if (!profile?.tenantId) return;
+        const tenantId = profile.tenantId._id || profile.tenantId;
+        const url = `${import.meta.env.VITE_BACKEND_URL}/api/agent/update/download?app=agent-admin&tenantId=${tenantId}`;
         window.open(url, '_blank');
     };
 
     const handleDownloadUser = () => {
-        const url = import.meta.env.VITE_USER_AGENT_DOWNLOAD_URL || "/visun-agent-user.exe";
+        if (!profile?.tenantId) return;
+        const tenantId = profile.tenantId._id || profile.tenantId;
+        const url = `${import.meta.env.VITE_BACKEND_URL}/api/agent/update/download?app=agent-user&tenantId=${tenantId}`;
         window.open(url, '_blank');
     };
 

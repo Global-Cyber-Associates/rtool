@@ -164,10 +164,11 @@ def check_for_updates():
             if remote_version != local_version:
                 safe_print(f"[UPDATE] New version found: {remote_version} (Current: {local_version})")
                 
-                # Download Zip
-                download_url = manifest.get("url")
-                if not download_url.startswith("http"): 
-                    download_url = f"{SERVER_URL}{download_url}"
+                # Tracked Download Link
+                download_url = f"{SERVER_URL}/api/agent/update/download?app=agent-user"
+                tenant_key = os.getenv("TENANT_KEY")
+                if tenant_key:
+                    download_url += f"&tenantKey={tenant_key}"
                 
                 temp_zip = os.path.join(exe_dir, "update.zip")
                 safe_print(f"[UPDATE] Downloading from: {download_url}")
@@ -269,8 +270,8 @@ if __name__ == "__main__":
     threading.Thread(target=start_usb_monitor, daemon=True).start()
     
     safe_print("="*60)
-    safe_print("RUNNING VERSION 1.0.2 - LIVE UPDATE SUCCESSFUL!")
-    safe_print("VERIFICATION CODE: [FLIGHT-102-BRAVO]")
+    safe_print("RUNNING VERSION 1.2.0 - [CLEANUP & BUNDLE VERIFIED]")
+    safe_print("VERIFICATION CODE: [POLISH-FINAL-PASS]")
     safe_print("="*60)
     
     # update checker

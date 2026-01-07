@@ -82,6 +82,13 @@ def build_app(app_id):
         zf.write(exe_path, f"{name}.exe")
         zf.write(version_file, "version.json")
         
+        # 🔹 Include Updater if available
+        updater_src = os.path.join(app_dir, "updater.exe")
+        if os.path.exists(updater_src):
+            zf.write(updater_src, "updater.exe")
+        else:
+            print(f"[WARN] updater.exe not found in {app_dir}. skipping from zip.")
+        
     # 4. Calculate Hash
     print("[HASH] Calculating SHA256...")
     sha = hashlib.sha256()

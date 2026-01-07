@@ -244,14 +244,6 @@ def main():
         if not health_check(root_dir, target_exe):
             # 5. ROLLBACK on Failure
             log("Triggering rollback due to health check failure...")
-            
-            # Kill the failed process (logic inside health_check handles clean exit check, 
-            # effectively if it returns False, the process is likely dead or we assume it's bad.
-            # If it's a "zombie" (stuck but health check timed out? No, we wait 10s and check poll).
-            # If poll is None, it means it IS running. 
-            # Wait, my logic: "if process.poll() is not None: return False". 
-            # So if it returns False, it CRASHED. We don't need to kill it.
-            
             success = restore_backup(root_dir)
             if success:
                 # Try to launch the backup
@@ -266,6 +258,13 @@ def main():
                     log(f"[x] Critical: Failed to launch restored backup: {launch_err}")
             else:
                 log("[x] FATAL: Rollback failed. Agent is dead.")
+        else:
+            # 6. Cleanup update file on success
+            log(f"Finalizing update. Removing {zip_path}...")
+            try:
+                os.remove(zip_path)
+            except Exception as e:
+                log(f"Warning: Could not remove {zip_path}: {e}")
 
     except Exception as e:
         log(f"[x] Update failed validation/install: {traceback.format_exc()}")
@@ -276,7 +275,7 @@ def main():
              subprocess.Popen(
                 [os.path.join(root_dir, AGENT_DIR_NAME, target_exe)],
                 cwd=os.path.join(root_dir, AGENT_DIR_NAME),
-                creationflags=subprocess.CREATE_NEW_CONSOLE | subprocess.DETACHED_PROCESS
+                creationflags=subprocess.CREATE_NEW_CONSOLE
             )
         except:
             pass

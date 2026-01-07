@@ -1,5 +1,5 @@
-(['e:\\GCA\\tools\\cloud\\ntool\\agent-user\\updater.py'],
- ['e:\\GCA\\tools\\cloud\\ntool\\agent-user'],
+(['E:\\GCA\\tools\\cloud\\ntool\\agent-user\\updater.py'],
+ ['E:\\GCA\\tools\\cloud\\ntool\\agent-user'],
  [],
  [('C:\\Users\\RAHUL '
    'VENKAT\\AppData\\Local\\Programs\\Python\\Python39\\Lib\\site-packages\\numpy\\_pyinstaller',
@@ -26,22 +26,6 @@
  [('copy',
    'c:\\users\\rahul '
    'venkat\\appdata\\local\\programs\\python\\python39\\lib\\copy.py',
-   'PYMODULE'),
-  ('typing',
-   'c:\\users\\rahul '
-   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\typing.py',
-   'PYMODULE'),
-  ('contextlib',
-   'c:\\users\\rahul '
-   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\contextlib.py',
-   'PYMODULE'),
-  ('_py_abc',
-   'c:\\users\\rahul '
-   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\_py_abc.py',
-   'PYMODULE'),
-  ('string',
-   'c:\\users\\rahul '
-   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\string.py',
    'PYMODULE'),
   ('quopri',
    'c:\\users\\rahul '
@@ -75,6 +59,10 @@
    'c:\\users\\rahul '
    'venkat\\appdata\\local\\programs\\python\\python39\\lib\\_threading_local.py',
    'PYMODULE'),
+  ('contextlib',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\contextlib.py',
+   'PYMODULE'),
   ('_compression',
    'c:\\users\\rahul '
    'venkat\\appdata\\local\\programs\\python\\python39\\lib\\_compression.py',
@@ -82,14 +70,6 @@
   ('base64',
    'c:\\users\\rahul '
    'venkat\\appdata\\local\\programs\\python\\python39\\lib\\base64.py',
-   'PYMODULE'),
-  ('tokenize',
-   'c:\\users\\rahul '
-   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\tokenize.py',
-   'PYMODULE'),
-  ('token',
-   'c:\\users\\rahul '
-   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\token.py',
    'PYMODULE'),
   ('tracemalloc',
    'c:\\users\\rahul '
@@ -110,6 +90,26 @@
   ('fnmatch',
    'c:\\users\\rahul '
    'venkat\\appdata\\local\\programs\\python\\python39\\lib\\fnmatch.py',
+   'PYMODULE'),
+  ('typing',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\typing.py',
+   'PYMODULE'),
+  ('tokenize',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\tokenize.py',
+   'PYMODULE'),
+  ('token',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\token.py',
+   'PYMODULE'),
+  ('string',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\string.py',
+   'PYMODULE'),
+  ('_py_abc',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\_py_abc.py',
    'PYMODULE'),
   ('ctypes',
    'c:\\users\\rahul '
@@ -408,69 +408,37 @@
  [('base_library.zip',
    'E:\\GCA\\tools\\cloud\\ntool\\agent-user\\build\\updater\\base_library.zip',
    'DATA')],
- [('reprlib',
-   'c:\\users\\rahul '
-   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\reprlib.py',
-   'PYMODULE'),
-  ('_bootlocale',
-   'c:\\users\\rahul '
-   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\_bootlocale.py',
-   'PYMODULE'),
-  ('codecs',
-   'c:\\users\\rahul '
-   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\codecs.py',
-   'PYMODULE'),
-  ('_collections_abc',
-   'c:\\users\\rahul '
-   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\_collections_abc.py',
-   'PYMODULE'),
-  ('sre_compile',
-   'c:\\users\\rahul '
-   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\sre_compile.py',
-   'PYMODULE'),
-  ('enum',
+ [('enum',
    'c:\\users\\rahul '
    'venkat\\appdata\\local\\programs\\python\\python39\\lib\\enum.py',
    'PYMODULE'),
-  ('stat',
+  ('re',
    'c:\\users\\rahul '
-   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\stat.py',
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\re.py',
    'PYMODULE'),
-  ('locale',
+  ('reprlib',
    'c:\\users\\rahul '
-   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\locale.py',
-   'PYMODULE'),
-  ('functools',
-   'c:\\users\\rahul '
-   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\functools.py',
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\reprlib.py',
    'PYMODULE'),
   ('posixpath',
    'c:\\users\\rahul '
    'venkat\\appdata\\local\\programs\\python\\python39\\lib\\posixpath.py',
    'PYMODULE'),
-  ('operator',
+  ('sre_constants',
    'c:\\users\\rahul '
-   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\operator.py',
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\sre_constants.py',
    'PYMODULE'),
-  ('abc',
+  ('sre_compile',
    'c:\\users\\rahul '
-   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\abc.py',
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\sre_compile.py',
+   'PYMODULE'),
+  ('codecs',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\codecs.py',
    'PYMODULE'),
   ('copyreg',
    'c:\\users\\rahul '
    'venkat\\appdata\\local\\programs\\python\\python39\\lib\\copyreg.py',
-   'PYMODULE'),
-  ('ntpath',
-   'c:\\users\\rahul '
-   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\ntpath.py',
-   'PYMODULE'),
-  ('keyword',
-   'c:\\users\\rahul '
-   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\keyword.py',
-   'PYMODULE'),
-  ('io',
-   'c:\\users\\rahul '
-   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\io.py',
    'PYMODULE'),
   ('encodings.zlib_codec',
    'c:\\users\\rahul '
@@ -960,6 +928,22 @@
    'c:\\users\\rahul '
    'venkat\\appdata\\local\\programs\\python\\python39\\lib\\encodings\\__init__.py',
    'PYMODULE'),
+  ('keyword',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\keyword.py',
+   'PYMODULE'),
+  ('warnings',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\warnings.py',
+   'PYMODULE'),
+  ('heapq',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\heapq.py',
+   'PYMODULE'),
+  ('_weakrefset',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\_weakrefset.py',
+   'PYMODULE'),
   ('collections.abc',
    'c:\\users\\rahul '
    'venkat\\appdata\\local\\programs\\python\\python39\\lib\\collections\\abc.py',
@@ -968,45 +952,61 @@
    'c:\\users\\rahul '
    'venkat\\appdata\\local\\programs\\python\\python39\\lib\\collections\\__init__.py',
    'PYMODULE'),
-  ('sre_parse',
+  ('stat',
    'c:\\users\\rahul '
-   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\sre_parse.py',
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\stat.py',
    'PYMODULE'),
-  ('sre_constants',
+  ('functools',
    'c:\\users\\rahul '
-   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\sre_constants.py',
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\functools.py',
    'PYMODULE'),
-  ('types',
+  ('_bootlocale',
    'c:\\users\\rahul '
-   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\types.py',
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\_bootlocale.py',
+   'PYMODULE'),
+  ('_collections_abc',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\_collections_abc.py',
    'PYMODULE'),
   ('genericpath',
    'c:\\users\\rahul '
    'venkat\\appdata\\local\\programs\\python\\python39\\lib\\genericpath.py',
    'PYMODULE'),
-  ('weakref',
+  ('operator',
    'c:\\users\\rahul '
-   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\weakref.py',
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\operator.py',
    'PYMODULE'),
   ('linecache',
    'c:\\users\\rahul '
    'venkat\\appdata\\local\\programs\\python\\python39\\lib\\linecache.py',
    'PYMODULE'),
-  ('heapq',
+  ('sre_parse',
    'c:\\users\\rahul '
-   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\heapq.py',
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\sre_parse.py',
    'PYMODULE'),
-  ('re',
+  ('locale',
    'c:\\users\\rahul '
-   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\re.py',
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\locale.py',
    'PYMODULE'),
-  ('warnings',
+  ('types',
    'c:\\users\\rahul '
-   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\warnings.py',
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\types.py',
    'PYMODULE'),
-  ('_weakrefset',
+  ('io',
    'c:\\users\\rahul '
-   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\_weakrefset.py',
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\io.py',
+   'PYMODULE'),
+  ('weakref',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\weakref.py',
+   'PYMODULE'),
+  ('ntpath',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\ntpath.py',
+   'PYMODULE'),
+  ('abc',
+   'c:\\users\\rahul '
+   'venkat\\appdata\\local\\programs\\python\\python39\\lib\\abc.py',
    'PYMODULE'),
   ('traceback',
    'c:\\users\\rahul '
