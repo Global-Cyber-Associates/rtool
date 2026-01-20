@@ -7,6 +7,7 @@ import PortScanData from "./models/PortScan.js";
 import TaskInfo from "./models/TaskInfo.js";
 import VisualizerScanner from "./models/VisualizerScanner.js";
 import ScanResult from "./models/ScanResult.js";
+import EventLog from "./models/EventLog.js";
 import { extractIPs, resolveBestIP } from "./utils/networkHelpers.js";
 
 // (DEFAULT TENANT REMOVED)
@@ -71,8 +72,8 @@ export async function saveAgentData(payload, tenantId) {
     // If it's system_info, try to find the "real" LAN IP from wlan_info etc.
     let resolvedIP = payload.ip || "unknown";
     if (type === "system_info") {
-        const candidates = extractIPs(data);
-        resolvedIP = resolveBestIP(candidates, resolvedIP);
+      const candidates = extractIPs(data);
+      resolvedIP = resolveBestIP(candidates, resolvedIP);
     }
 
     // 2️⃣ Update agent heartbeat (tenant-safe)
@@ -94,7 +95,31 @@ export async function saveAgentData(payload, tenantId) {
       { $set: updateObj }
     );
 
-    // 3️⃣ USB handled elsewhere
+    // 3️⃣ Event logs (file monitor events) - handle separately
+    if (type === "event_logs") {
+      const events = data.events || [];
+      if (events.length > 0) {
+        const eventDocs = events.map(event => ({
+          agentId,
+          tenantKey: finalTenantId.toString(),
+          eventId: event.eventId || Date.now(),
+          eventType: event.eventType || "unknown",
+          timestamp: new Date(event.timestamp || Date.now()),
+          source: event.source || "watchdog",
+          computer: event.computer || "",
+          category: event.category || 0,
+          severity: event.severity || "info",
+          description: event.description || "",
+          details: event.details || {},
+          receivedAt: new Date(),
+        }));
+        await EventLog.insertMany(eventDocs, { ordered: false });
+        console.log(`📁 Stored ${eventDocs.length} file events from ${agentId}`);
+      }
+      return;
+    }
+
+    // 4️⃣ USB handled elsewhere
     if (type === "usb_devices") return;
 
     // 4️⃣ Resolve model

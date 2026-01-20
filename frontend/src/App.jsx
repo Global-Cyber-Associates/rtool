@@ -15,6 +15,7 @@ import TaskManager from "./components/devices/Taskmanager/taskmanager.jsx";
 import UsbControl from "./components/usb/usb.jsx";
 import InstalledApps from "./components/devices/installedApps/installedapps.jsx";
 import Profile from "./components/profile/Profile.jsx";
+import FileMonitor from "./components/FileMonitor/filemonitor.jsx";
 
 // AUTH & ADMIN
 import Login from "./components/navigation/Login.jsx";
@@ -271,6 +272,16 @@ function App() {
           element={
             <ProtectedLayout>
               <Profile />
+            </ProtectedLayout>
+          }
+        />
+        <Route
+          path="/file-monitor"
+          element={
+            <ProtectedLayout>
+              <FeatureGate featureId="filemonitor">
+                <FileMonitor />
+              </FeatureGate>
             </ProtectedLayout>
           }
         />

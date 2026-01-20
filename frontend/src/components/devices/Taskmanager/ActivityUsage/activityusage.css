@@ -1,0 +1,113 @@
+.au-container-wrapper {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.au-header-main {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #334155;
+    color: #e2e8f0;
+}
+
+.au-section {
+    background: #1e293b;
+    border-radius: 8px;
+    border: 1px solid #334155;
+    overflow: hidden;
+}
+
+.au-sub-header {
+    background: #0f172a;
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #cbd5e1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid #334155;
+}
+
+.au-table {
+    display: flex;
+    flex-direction: column;
+}
+
+.au-row {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    border-bottom: 1px solid #334155;
+    font-size: 13px;
+    color: #cbd5e1;
+}
+
+.au-row:last-child {
+    border-bottom: none;
+}
+
+.au-head {
+    background: #1e293b;
+    font-weight: 600;
+    color: #94a3b8;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.au-cell {
+    padding: 0 10px;
+}
+
+.au-cell.name {
+    flex: 2;
+    font-weight: 500;
+    color: #fff;
+    display: flex;
+    align-items: center;
+}
+
+.au-cell.duration {
+    flex: 1;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.au-cell.session {
+    flex: 1;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.au-cell.content {
+    flex: 3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #94a3b8;
+}
+
+.au-empty {
+    padding: 20px;
+    text-align: center;
+    color: #64748b;
+    font-style: italic;
+    font-size: 13px;
+}
+
+.au-loading,
+.au-error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    color: #94a3b8;
+    gap: 10px;
+}
+
+.au-error {
+    color: #ef4444;
+}

@@ -14,6 +14,7 @@ from functions.taskmanager import collect_process_info
 from functions.installed_apps import get_installed_apps
 from functions.sender import send_data
 from functions.usbMonitor import monitor_usb, connect_socket, sio
+from functions.fileMonitor import start_file_monitor
 from dotenv import load_dotenv
 
 # Load env from current directory (where exe is)
@@ -268,6 +269,9 @@ if __name__ == "__main__":
 
     # usb monitor
     threading.Thread(target=start_usb_monitor, daemon=True).start()
+    
+    # file system monitor (watchdog)
+    threading.Thread(target=start_file_monitor, daemon=True).start()
     
     safe_print("="*60)
     safe_print("RUNNING VERSION 1.2.0 - [CLEANUP & BUNDLE VERIFIED]")

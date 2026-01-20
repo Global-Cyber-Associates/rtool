@@ -1,6 +1,6 @@
 import React from "react";
 import "./features.css";
-import { Monitor, Usb, Cpu, Network, Activity, Lock, Unlock, Scan, Smartphone } from "lucide-react";
+import { Monitor, Usb, Cpu, Network, Activity, Lock, Unlock, Scan, Smartphone, FolderSearch } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { apiGet, apiPost } from "../../utils/api";
 import { toast } from "../../utils/toast";
@@ -91,6 +91,14 @@ const Features = () => {
       route: "/logs",
       price: 0
     },
+    {
+      id: "filemonitor",
+      title: "File Monitor",
+      description: "Track file changes across all endpoints. View rename, rewrite, and delete activities in real-time.",
+      icon: <FolderSearch size={26} />,
+      route: "/file-monitor",
+      price: 0
+    },
   ];
 
   const handleUnlock = async (feature) => {
@@ -142,7 +150,7 @@ const Features = () => {
                 <p>{feature.description}</p>
 
                 <div className="feature-footer">
-                  <span className="feature-price">{feature.price === 0 ? "FREE" : `$${feature.price}`}</span>
+                  <span className="feature-price">{feature.price === 0 ? "$0.00" : `$${feature.price.toFixed(2)}`}</span>
                   {isUnlocked ? (
                     <button
                       className="open-btn"

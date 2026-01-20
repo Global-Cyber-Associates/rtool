@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import {
   Menu, X, LayoutDashboard, Monitor, Smartphone,
   Usb, Scan, ClipboardList, Star, ShieldCheck, Users,
-  Download, LogOut, User as UserIcon, Lock, Key
+  Download, LogOut, User as UserIcon, Key, FolderSearch
 } from "lucide-react";
 
 import "./sidenav.css";
@@ -79,21 +79,19 @@ const Sidebar = ({ onToggle, isOpen: controlledIsOpen }) => {
     { label: "USB Control", path: "/usb", icon: <Usb size={20} />, id: "usb" },
     { label: "Scanner", path: "/scan", icon: <Scan size={20} />, id: "scan" },
     { label: "Logs", path: "/logs", icon: <ClipboardList size={20} />, id: "logs" },
+    { label: "File Monitor", path: "/file-monitor", icon: <FolderSearch size={20} />, id: "filemonitor" },
     { label: "Features", path: "/features", icon: <Star size={20} />, alwaysShow: true },
     { label: "Download", path: "/download", icon: <Download size={20} />, alwaysShow: true },
   ];
 
-  // Logic to handle click on possibly locked items
-  const handleProtectedNavigation = (e, item) => {
-    if (role === "admin" || item.alwaysShow || unlockedFeatures[item.id]) {
-      // Allow navigation
-      if (window.innerWidth < 1024) setIsOpen(false);
-      return;
-    }
+  // Filter navigation items to only show unlocked features
+  const getVisibleNavItems = (items) => {
+    if (role === "admin") return items;
+    return items.filter(item => item.alwaysShow || unlockedFeatures[item.id]);
+  };
 
-    // Locked: Prevent default navigation and go to features
-    e.preventDefault();
-    navigate("/features");
+  // Handle navigation click (close sidebar on mobile)
+  const handleNavClick = () => {
     if (window.innerWidth < 1024) setIsOpen(false);
   };
 
@@ -140,27 +138,22 @@ const Sidebar = ({ onToggle, isOpen: controlledIsOpen }) => {
 
           {/* NAV LINKS */}
           <ul className="sidebar-nav">
-            {(role === "admin" ? adminNavItems : clientNavItems).map((item, idx) => {
-              const isLocked = role !== "admin" && !item.alwaysShow && !unlockedFeatures[item.id];
-              return (
-                <li key={idx}>
-                  <NavLink
-                    to={item.path}
-                    onClick={(e) => handleProtectedNavigation(e, item)}
-                    className={({ isActive }) =>
-                      `nav-link ${isActive ? "active" : ""} ${!isOpen ? "mini" : ""} ${isLocked ? "nav-locked" : ""}`
-                    }
-                    title={!isOpen ? item.label : ""}
-                    end
-                  >
-                    <span className="nav-icon">
-                      {isLocked ? <Lock size={16} className="sidebar-lock-icon" /> : item.icon}
-                    </span>
-                    {isOpen && <span className="nav-label">{item.label}</span>}
-                  </NavLink>
-                </li>
-              );
-            })}
+            {getVisibleNavItems(role === "admin" ? adminNavItems : clientNavItems).map((item, idx) => (
+              <li key={idx}>
+                <NavLink
+                  to={item.path}
+                  onClick={handleNavClick}
+                  className={({ isActive }) =>
+                    `nav-link ${isActive ? "active" : ""} ${!isOpen ? "mini" : ""}`
+                  }
+                  title={!isOpen ? item.label : ""}
+                  end
+                >
+                  <span className="nav-icon">{item.icon}</span>
+                  {isOpen && <span className="nav-label">{item.label}</span>}
+                </NavLink>
+              </li>
+            ))}
           </ul>
         </div>
 

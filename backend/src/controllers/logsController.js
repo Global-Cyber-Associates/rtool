@@ -1,6 +1,7 @@
 import SystemInfo from "../models/SystemInfo.js";
 import VisualizerData from "../models/VisualizerData.js";
 import UsbDevice from "../models/usbdevices.js";
+import EventLog from "../models/EventLog.js";
 
 // ✅ Router detection (expanded)
 function isRouter(ip = "") {
@@ -86,18 +87,34 @@ export async function getLogsSnapshot(tenantId) {
       })),
     }));
 
-    // ✅ 4. Server info
+    // ✅ 4. File events (from watchdog/file logger)
+    const recentFileEvents = await EventLog.find({ tenantKey: tenantId })
+      .sort({ timestamp: -1 })
+      .limit(50)
+      .lean();
+
+    const fileEvents = recentFileEvents.map(event => ({
+      timestamp: event.timestamp,
+      eventType: event.eventType,
+      description: event.description,
+      details: event.details,
+      agentId: event.agentId,
+      severity: event.severity,
+    }));
+
+    // ✅ 5. Server info
     const server = {
       status: "online",
       message: "Server running OK",
     };
 
-    // ✅ 5. Build snapshot object
+    // ✅ 6. Build snapshot object
     const snapshot = {
       agents: agentSnapshots,
       server,
       unknownDevices,
       usbDevices,
+      fileEvents,
       timestamp: new Date(),
     };
 
@@ -109,6 +126,7 @@ export async function getLogsSnapshot(tenantId) {
       server: { status: "error", message: err.message },
       unknownDevices: [],
       usbDevices: [],
+      fileEvents: [],
       timestamp: new Date(),
     };
   }

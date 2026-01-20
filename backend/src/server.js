@@ -40,6 +40,7 @@ import taskManagerRoutes from "./api/taskManager.js";
 import licenseRoutes from "./api/license.js";
 import updateRoutes from "./routes/updateRoutes.js";
 import featuresRoutes from "./api/features.js";
+import fileMonitorRoutes from "./api/fileMonitor.js";
 
 import { getLogsSnapshot } from "./controllers/logsController.js";
 import { isRouterIP } from "./utils/networkHelpers.js";
@@ -95,6 +96,7 @@ const updatesPath = path.join(__dirname, '../public/updates');
 console.log(`📂 Updates managed via Controller. Static path: ${updatesPath}`);
 // app.use('/updates', express.static(updatesPath)); // Disabled for security;ZIPs now tracked via /download
 app.use("/api/features", featuresRoutes);
+app.use("/api/file-monitor", fileMonitorRoutes);
 
 app.get("/api/auth/debug", (_req, res) =>
   res.json({ msg: "AUTH ROUTES ACTIVE" })
